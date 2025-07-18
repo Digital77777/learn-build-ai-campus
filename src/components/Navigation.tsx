@@ -1,4 +1,4 @@
-import { BookOpen, Brain, Coins, Home, User, LogOut, Menu } from "lucide-react";
+import { BookOpen, Brain, Store, Home, User, LogOut, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ const Navigation = () => {
     { icon: Home, label: "Home", path: "/" },
     { icon: BookOpen, label: "Learning Paths", path: "/learning-paths" },
     { icon: Brain, label: "AI Tools", path: "/ai-tools" },
-    { icon: Coins, label: "Earn", path: "/earn" },
+    { icon: Store, label: "Marketplace", path: "/marketplace" },
   ];
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
