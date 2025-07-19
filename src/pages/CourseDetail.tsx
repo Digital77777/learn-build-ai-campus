@@ -61,14 +61,14 @@ const courseData = {
       {
         title: "Text Processing",
         description: "Preprocessing and analyzing text data",
-        videoId: "fNxaJsNG3-s", // NLP Text Processing
+        videoId: "8S3qHHUKqYk", // NLP Text Processing
         duration: "35 min",
         completed: false
       },
       {
         title: "Language Models",
         description: "Understanding and building language models",
-        videoId: "kCc8FmEb1nY", // Language Models Explained
+        videoId: "zjkBMFhNj_g", // Language Models Explained
         duration: "42 min",
         completed: false
       },
@@ -115,7 +115,7 @@ const courseData = {
       {
         title: "Face Recognition",
         description: "Building facial recognition systems",
-        videoId: "OPiumb_n__c", // Face Recognition
+        videoId: "FgakZw6K1QQ", // Face Recognition
         duration: "38 min",
         completed: false
       },
@@ -148,21 +148,21 @@ const courseData = {
       {
         title: "ROI Analysis",
         description: "Measuring return on investment for AI projects",
-        videoId: "pAhbzDKtklY", // AI ROI Analysis
+        videoId: "RSKlSkgV_gI", // AI ROI Analysis
         duration: "32 min",
         completed: false
       },
       {
         title: "Implementation",
         description: "Best practices for AI implementation",
-        videoId: "TQHs7Gd7F4s", // AI Implementation
+        videoId: "SN5KToeTfUY", // AI Implementation
         duration: "50 min",
         completed: false
       },
       {
         title: "Client Consulting",
         description: "Consulting clients on AI solutions",
-        videoId: "dFdsIfrC2T4", // AI Consulting
+        videoId: "wjZofJX0v4M", // AI Consulting
         duration: "39 min",
         completed: false
       }
@@ -205,7 +205,7 @@ const CourseDetail = () => {
                 <CardContent className="p-0">
                   <div className="aspect-video relative bg-black rounded-lg overflow-hidden">
                     <iframe
-                      src={`https://www.youtube.com/embed/${currentVideo.videoId}?rel=0&modestbranding=1&showinfo=0&controls=1&disablekb=1&fs=0&autoplay=1`}
+                      src={`https://www.youtube.com/embed/${currentVideo.videoId}?rel=0&modestbranding=1&showinfo=0&controls=1`}
                       title={currentVideo.title}
                       className="w-full h-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
