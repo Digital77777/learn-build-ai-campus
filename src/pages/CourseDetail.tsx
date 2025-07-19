@@ -82,7 +82,7 @@ const courseData = {
       {
         title: "Sentiment Analysis",
         description: "Analyzing emotions and opinions in text",
-        videoId: "O_wJa2fMxnE", // Sentiment Analysis
+        videoId: "AJXLS3XjnDM", // Sentiment Analysis
         duration: "33 min",
         completed: false
       }
@@ -101,7 +101,7 @@ const courseData = {
       {
         title: "Image Processing",
         description: "Fundamentals of digital image processing",
-        videoId: "SiPiVLcVJI8", // Image Processing Basics
+        videoId: "C_zFhWdM4ic", // Image Processing Basics
         duration: "40 min",
         completed: false
       },
@@ -115,7 +115,7 @@ const courseData = {
       {
         title: "Face Recognition",
         description: "Building facial recognition systems",
-        videoId: "1nZnytjlXMQ", // Face Recognition
+        videoId: "OPiumb_n__c", // Face Recognition
         duration: "38 min",
         completed: false
       },
@@ -148,21 +148,21 @@ const courseData = {
       {
         title: "ROI Analysis",
         description: "Measuring return on investment for AI projects",
-        videoId: "mTZ24dSr4wE", // AI ROI Analysis
+        videoId: "pAhbzDKtklY", // AI ROI Analysis
         duration: "32 min",
         completed: false
       },
       {
         title: "Implementation",
         description: "Best practices for AI implementation",
-        videoId: "Qvj2YCrJhJg", // AI Implementation
+        videoId: "TQHs7Gd7F4s", // AI Implementation
         duration: "50 min",
         completed: false
       },
       {
         title: "Client Consulting",
         description: "Consulting clients on AI solutions",
-        videoId: "yv0ky5zNV-s", // AI Consulting
+        videoId: "dFdsIfrC2T4", // AI Consulting
         duration: "39 min",
         completed: false
       }
