@@ -2,9 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, Trophy, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const learningPaths = [
   {
+    id: "ai-fundamentals",
     title: "AI Fundamentals",
     description: "Master the basics of artificial intelligence, machine learning, and neural networks",
     duration: "4-6 weeks",
@@ -15,6 +17,7 @@ const learningPaths = [
     gradient: "bg-gradient-learning"
   },
   {
+    id: "nlp",
     title: "Natural Language Processing",
     description: "Build chatbots, language models, and text analysis applications",
     duration: "6-8 weeks", 
@@ -25,6 +28,7 @@ const learningPaths = [
     gradient: "bg-gradient-ai"
   },
   {
+    id: "computer-vision",
     title: "Computer Vision",
     description: "Create image recognition systems, object detection, and visual AI applications",
     duration: "8-10 weeks",
@@ -35,6 +39,7 @@ const learningPaths = [
     gradient: "bg-gradient-earn"
   },
   {
+    id: "ai-business",
     title: "AI for Business",
     description: "Learn to implement AI solutions for real-world business problems",
     duration: "6-8 weeks",
@@ -47,6 +52,8 @@ const learningPaths = [
 ];
 
 const LearningPaths = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">
@@ -107,7 +114,11 @@ const LearningPaths = () => {
                   </div>
                 </div>
 
-                <Button className="w-full group" variant="default">
+                <Button 
+                  className="w-full group" 
+                  variant="default"
+                  onClick={() => navigate(`/course/${path.id}`)}
+                >
                   Start Learning Path
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>

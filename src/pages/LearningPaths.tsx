@@ -3,11 +3,14 @@ import { BookOpen, Clock, Star, Users, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 const LearningPaths = () => {
+  const navigate = useNavigate();
+  
   const paths = [
     {
-      id: 1,
+      id: "ai-fundamentals",
       title: "AI Fundamentals",
       description: "Master the basics of artificial intelligence and machine learning",
       duration: "6 weeks",
@@ -19,40 +22,40 @@ const LearningPaths = () => {
       skills: ["Python", "Neural Networks", "Data Science"]
     },
     {
-      id: 2,
-      title: "Deep Learning Mastery",
-      description: "Advanced deep learning techniques and neural architectures",
-      duration: "10 weeks",
-      level: "Advanced",
-      students: 1200,
-      rating: 4.9,
-      image: "🧠",
-      lessons: 45,
-      skills: ["TensorFlow", "PyTorch", "Computer Vision"]
-    },
-    {
-      id: 3,
-      title: "AI Ethics & Society",
-      description: "Understanding the ethical implications of AI in modern society",
-      duration: "4 weeks",
-      level: "Intermediate",
-      students: 800,
-      rating: 4.7,
-      image: "⚖️",
-      lessons: 16,
-      skills: ["Ethics", "Policy", "Philosophy"]
-    },
-    {
-      id: 4,
+      id: "nlp",
       title: "Natural Language Processing",
-      description: "Build intelligent systems that understand human language",
-      duration: "8 weeks",
+      description: "Build chatbots, language models, and text analysis applications",
+      duration: "6-8 weeks",
       level: "Intermediate",
-      students: 1800,
+      students: 1847,
       rating: 4.8,
       image: "💬",
       lessons: 32,
       skills: ["NLP", "Transformers", "BERT"]
+    },
+    {
+      id: "computer-vision",
+      title: "Computer Vision",
+      description: "Create image recognition systems, object detection, and visual AI applications",
+      duration: "8-10 weeks",
+      level: "Intermediate",
+      students: 1234,
+      rating: 4.7,
+      image: "👁️",
+      lessons: 28,
+      skills: ["OpenCV", "Object Detection", "Image Processing"]
+    },
+    {
+      id: "ai-business",
+      title: "AI for Business",
+      description: "Learn to implement AI solutions for real-world business problems",
+      duration: "6-8 weeks",
+      level: "Advanced",
+      students: 987,
+      rating: 4.8,
+      image: "💼",
+      lessons: 24,
+      skills: ["Strategy", "ROI", "Implementation"]
     }
   ];
 
@@ -142,7 +145,10 @@ const LearningPaths = () => {
                       <Users className="h-4 w-4" />
                       <span>{path.students.toLocaleString()} students</span>
                     </div>
-                    <Button className="group/btn">
+                    <Button 
+                      className="group/btn"
+                      onClick={() => navigate(`/course/${path.id}`)}
+                    >
                       <Play className="h-4 w-4 mr-2" />
                       Start Learning
                       <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
