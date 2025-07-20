@@ -1,9 +1,10 @@
 
-import * as Sentry from "@sentry/react";
-import "./sentry.client";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
 
 createRoot(document.getElementById("root")!).render(
-  <Sentry.ErrorBoundary fallback={<p>Something went wrong. Our team has been notified.</p>}>
+  <React.StrictMode>
     <App />
-  </Sentry.ErrorBoundary>
+  </React.StrictMode>
 );

@@ -10,7 +10,6 @@ interface Props {
 
 
 import { memo, useCallback } from "react";
-import * as Sentry from "@sentry/react";
 
 const EarningsInfo: FC<{ earnings: string; timeframe: string; color: string }> = memo(({ earnings, timeframe, color }) => (
   <div className="text-center p-4 bg-background rounded-lg border-2 border-success/20" aria-label="Earnings info">
@@ -68,15 +67,10 @@ const EarningOpportunityCard: FC<Props> = memo(({ opportunity }) => {
 
   const handleGetStarted = useCallback(() => {
     try {
-      Sentry.addBreadcrumb({
-        category: "marketplace.action",
-        message: `Get Started clicked for: ${title}`,
-        level: "info",
-      });
       logAnalyticsEvent("marketplace_get_started", { title });
       // Place your actual click logic here (e.g., navigation, modal, etc.)
     } catch (err) {
-      Sentry.captureException(err);
+      console.error("Error in handleGetStarted:", err);
     }
   }, [title]);
 
