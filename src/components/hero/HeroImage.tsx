@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Trophy } from "lucide-react";
-import heroImage from "@/assets/hero-ai-education.jpg";
+import heroImage from "@/assets/hero-ai-professional.jpg";
 
 const HeroImage = () => {
   return (
@@ -8,7 +8,7 @@ const HeroImage = () => {
       <div className="relative rounded-2xl overflow-hidden shadow-ai">
         <img 
           src={heroImage} 
-          alt="Students learning with AI tools"
+          alt="Professionals learning AI and data science"
           className="w-full h-[500px] object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />

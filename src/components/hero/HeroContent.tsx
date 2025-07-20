@@ -16,10 +16,10 @@ const HeroContent = () => {
           <br />with AI
         </h1>
         
-        <p className="text-xl text-muted-foreground leading-relaxed">
-          Master artificial intelligence through hands-on learning paths, 
-          build real projects with embedded AI tools, and create income 
-          opportunities while studying.
+        <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
+          Master artificial intelligence through structured learning paths, 
+          build industry-ready projects with professional AI tools, and 
+          advance your career in the growing AI field.
         </p>
       </div>
 
