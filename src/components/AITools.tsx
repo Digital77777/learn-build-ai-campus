@@ -2,75 +2,90 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Code, FileText, Image, MessageSquare, Sparkles } from "lucide-react";
+import { Brain, Code, FileText, Image, MessageSquare, Sparkles, BarChart3, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { AITool } from "@/types/aiTools";
 
 const aiTools: AITool[] = [
   {
     id: 1,
-    name: "AI Writing Assistant",
-    title: "AI Writing Assistant",
-    description: "Generate essays, research papers, and creative content with advanced language models",
-    icon: FileText,
-    category: "Research",
-    features: ["Essay generation", "Research assistance", "Grammar checking", "Citation help"],
+    name: "AI Code Assistant",
+    title: "AI Code Assistant",
+    description: "Intelligent code completion and debugging powered by advanced language models",
+    icon: Code,
+    category: "Development",
+    features: ["Code completion", "Bug detection", "Refactoring"],
     usage: "Free unlimited",
     pricing: "Free",
-    gradient: "bg-gradient-learning"
+    gradient: "from-blue-500 to-cyan-500"
   },
   {
     id: 2,
-    name: "Code Generator",
-    title: "Code Generator",
-    description: "Generate, debug, and explain code in multiple programming languages",
-    icon: Code,
-    category: "Development",
-    features: ["Code generation", "Bug fixing", "Code explanation", "Multiple languages"],
-    usage: "Free unlimited",
-    pricing: "Free",
-    gradient: "bg-gradient-ai"
+    name: "Neural Image Generator",
+    title: "Neural Image Generator",
+    description: "Create stunning visuals and artwork using state-of-the-art image generation AI",
+    icon: Image,
+    category: "Creative",
+    features: ["Text-to-image", "Style transfer", "Image editing"],
+    usage: "50 images/day",
+    pricing: "Premium",
+    gradient: "from-purple-500 to-pink-500"
   },
   {
     id: 3,
-    name: "Research Assistant",
-    title: "Research Assistant",
-    description: "Analyze academic papers, summarize content, and find credible sources",
-    icon: Brain,
-    category: "Research",
-    features: ["Paper analysis", "Source finding", "Content summarization", "Citation generation"],
-    usage: "Free unlimited",
-    pricing: "Free",
-    gradient: "bg-gradient-earn"
+    name: "Smart Analytics",
+    title: "Smart Analytics",
+    description: "Automated data analysis and insights generation for your business metrics",
+    icon: BarChart3,
+    category: "Analytics",
+    features: ["Predictive analytics", "Report generation", "Data visualization"],
+    usage: "Pro plan",
+    pricing: "Pro",
+    gradient: "from-emerald-500 to-teal-500"
   },
   {
     id: 4,
-    name: "Image Creator",
-    title: "Image Creator",
-    description: "Generate stunning visuals, diagrams, and illustrations for your projects",
-    icon: Image,
-    category: "Creative",
-    features: ["Image generation", "Diagram creation", "Style customization", "High resolution"],
-    usage: "50 images/day",
-    pricing: "Premium",
-    gradient: "bg-gradient-learning"
+    name: "Conversational AI",
+    title: "Conversational AI",
+    description: "Build intelligent chatbots and virtual assistants for customer support",
+    icon: MessageSquare,
+    category: "Communication",
+    features: ["Natural language", "Multi-language", "Integration APIs"],
+    usage: "Enterprise plan",
+    pricing: "Enterprise",
+    gradient: "from-orange-500 to-red-500"
   },
   {
     id: 5,
-    name: "Study Buddy",
-    title: "Study Buddy",
-    description: "Interactive Q&A, flashcards, and personalized tutoring for any subject",
-    icon: MessageSquare,
-    category: "Communication",
-    features: ["Interactive Q&A", "Flashcard creation", "Subject tutoring", "Progress tracking"],
-    usage: "Free unlimited",
-    pricing: "Free",
-    gradient: "bg-gradient-ai"
+    name: "AI Research Lab",
+    title: "AI Research Lab",
+    description: "Experiment with cutting-edge AI models and research tools",
+    icon: Brain,
+    category: "Research",
+    features: ["Model training", "Experiment tracking", "Collaboration"],
+    usage: "Academic plan",
+    pricing: "Academic",
+    gradient: "from-indigo-500 to-purple-500"
+  },
+  {
+    id: 6,
+    name: "AutoML Platform",
+    title: "AutoML Platform",
+    description: "Automated machine learning pipeline for rapid model development",
+    icon: Zap,
+    category: "Machine Learning",
+    features: ["Auto feature engineering", "Model selection", "Deployment"],
+    usage: "Pro plan",
+    pricing: "Pro",
+    gradient: "from-yellow-500 to-orange-500"
   }
 ];
 
 const AITools = () => {
+  const navigate = useNavigate();
+
   const handleToolAccess = () => {
-    console.log("Accessing AI tools");
+    navigate('/ai-tools');
   };
 
   return (
@@ -79,7 +94,7 @@ const AITools = () => {
         <div className="text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full">
             <Sparkles className="h-4 w-4 text-accent-foreground" />
-            <span className="text-sm font-medium text-accent-foreground">5 Powerful AI Tools</span>
+            <span className="text-sm font-medium text-accent-foreground">6 Powerful AI Tools</span>
           </div>
           <h2 className="text-4xl font-bold">Embedded AI Tools</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -89,13 +104,13 @@ const AITools = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {aiTools.map((tool) => (
+          {aiTools.slice(0, 6).map((tool) => (
             <Card key={tool.id} className="hover:shadow-ai transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
-              <div className={`absolute top-0 left-0 right-0 h-1 ${tool.gradient}`} />
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${tool.gradient}`} />
               
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className={`p-3 rounded-lg ${tool.gradient}`}>
+                  <div className={`p-3 rounded-lg bg-gradient-to-r ${tool.gradient}`}>
                     <tool.icon className="h-6 w-6 text-white" />
                   </div>
                   <Badge variant="secondary" className="text-xs">
@@ -119,7 +134,7 @@ const AITools = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" variant="outline">
+                <Button className="w-full" variant="outline" onClick={() => navigate('/ai-tools')}>
                   Try {tool.title}
                 </Button>
               </CardContent>

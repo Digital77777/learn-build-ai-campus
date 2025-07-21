@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Coins, TrendingUp, Users, DollarSign, Star, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const earningOpportunities = [
   {
@@ -61,6 +62,8 @@ const successStories = [
 ];
 
 const EarningsSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">
@@ -113,7 +116,7 @@ const EarningsSection = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" variant="earn">
+                <Button className="w-full" variant="earn" onClick={() => navigate('/marketplace')}>
                   Get Started
                 </Button>
               </CardContent>
@@ -154,7 +157,7 @@ const EarningsSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="earn" size="lg" className="px-8 group">
+          <Button variant="earn" size="lg" className="px-8 group" onClick={() => navigate('/marketplace')}>
             Start Earning Today
             <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>

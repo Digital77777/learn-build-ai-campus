@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, Brain, Coins, Zap, Users, Trophy } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-ai-education.jpg";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative py-20 overflow-hidden">
       {/* Background with gradient */}
@@ -33,11 +36,11 @@ const HeroSection = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="hero" size="lg" className="flex items-center gap-2">
+              <Button variant="hero" size="lg" className="flex items-center gap-2" onClick={() => navigate('/learning-paths')}>
                 <BookOpen className="h-5 w-5" />
                 Start Learning Free
               </Button>
-              <Button variant="outline" size="lg" className="flex items-center gap-2">
+              <Button variant="outline" size="lg" className="flex items-center gap-2" onClick={() => navigate('/ai-tools')}>
                 <Brain className="h-5 w-5" />
                 Explore AI Tools
               </Button>
@@ -46,7 +49,7 @@ const HeroSection = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">5</div>
+                <div className="text-2xl font-bold text-primary">6</div>
                 <div className="text-sm text-muted-foreground">AI Tools</div>
               </div>
               <div className="text-center">
