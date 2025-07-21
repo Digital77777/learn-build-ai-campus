@@ -1,8 +1,72 @@
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
-import AIToolCard from "@/components/ai/AIToolCard";
-import { aiTools } from "@/components/ai/data";
+import { Badge } from "@/components/ui/badge";
+import { Brain, Code, FileText, Image, MessageSquare, Sparkles } from "lucide-react";
+import { AITool } from "@/types/aiTools";
+
+const aiTools: AITool[] = [
+  {
+    id: 1,
+    name: "AI Writing Assistant",
+    title: "AI Writing Assistant",
+    description: "Generate essays, research papers, and creative content with advanced language models",
+    icon: FileText,
+    category: "Research",
+    features: ["Essay generation", "Research assistance", "Grammar checking", "Citation help"],
+    usage: "Free unlimited",
+    pricing: "Free",
+    gradient: "bg-gradient-learning"
+  },
+  {
+    id: 2,
+    name: "Code Generator",
+    title: "Code Generator",
+    description: "Generate, debug, and explain code in multiple programming languages",
+    icon: Code,
+    category: "Development",
+    features: ["Code generation", "Bug fixing", "Code explanation", "Multiple languages"],
+    usage: "Free unlimited",
+    pricing: "Free",
+    gradient: "bg-gradient-ai"
+  },
+  {
+    id: 3,
+    name: "Research Assistant",
+    title: "Research Assistant",
+    description: "Analyze academic papers, summarize content, and find credible sources",
+    icon: Brain,
+    category: "Research",
+    features: ["Paper analysis", "Source finding", "Content summarization", "Citation generation"],
+    usage: "Free unlimited",
+    pricing: "Free",
+    gradient: "bg-gradient-earn"
+  },
+  {
+    id: 4,
+    name: "Image Creator",
+    title: "Image Creator",
+    description: "Generate stunning visuals, diagrams, and illustrations for your projects",
+    icon: Image,
+    category: "Creative",
+    features: ["Image generation", "Diagram creation", "Style customization", "High resolution"],
+    usage: "50 images/day",
+    pricing: "Premium",
+    gradient: "bg-gradient-learning"
+  },
+  {
+    id: 5,
+    name: "Study Buddy",
+    title: "Study Buddy",
+    description: "Interactive Q&A, flashcards, and personalized tutoring for any subject",
+    icon: MessageSquare,
+    category: "Communication",
+    features: ["Interactive Q&A", "Flashcard creation", "Subject tutoring", "Progress tracking"],
+    usage: "Free unlimited",
+    pricing: "Free",
+    gradient: "bg-gradient-ai"
+  }
+];
 
 const AITools = () => {
   const handleToolAccess = () => {
@@ -26,7 +90,40 @@ const AITools = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {aiTools.map((tool) => (
-            <AIToolCard key={tool.id} tool={tool} />
+            <Card key={tool.id} className="hover:shadow-ai transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+              <div className={`absolute top-0 left-0 right-0 h-1 ${tool.gradient}`} />
+              
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className={`p-3 rounded-lg ${tool.gradient}`}>
+                    <tool.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {tool.usage}
+                  </Badge>
+                </div>
+                <CardTitle className="text-lg">{tool.title}</CardTitle>
+                <p className="text-muted-foreground text-sm">{tool.description}</p>
+              </CardHeader>
+              
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">Features:</h4>
+                  <div className="space-y-1">
+                    {tool.features.map((feature, idx) => (
+                      <div key={idx} className="text-sm text-muted-foreground flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Button className="w-full" variant="outline">
+                  Try {tool.title}
+                </Button>
+              </CardContent>
+            </Card>
           ))}
         </div>
 
