@@ -1,87 +1,58 @@
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
-import { Store, Briefcase, Users, Code, DollarSign, ArrowRight, Star, MapPin, Clock, TrendingUp, Shield } from "lucide-react";
+import { Store, Briefcase, Users, Code, DollarSign, ArrowRight, Star, MapPin, TrendingUp, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 
 const MarketplacePage = () => {
-  const marketplaceCategories = [
-    {
-      id: 1,
-      title: "Sell Your Creations",
-      description: "Monetize your AI tools, templates, courses, and digital products",
-      feature: "No listing fees",
-      icon: <Store className="h-8 w-8" />,
-      category: "Products",
-      gradient: "from-emerald-500 to-teal-500"
-    },
-    {
-      id: 2,
-      title: "Freelance Services",
-      description: "Offer your AI expertise, consulting, and specialized skills to clients",
-      feature: "Set your rates",
-      icon: <Briefcase className="h-8 w-8" />,
-      category: "Services",
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
-      id: 3,
-      title: "Post Job Opportunities",
-      description: "Find talented AI professionals and hire for your projects",
-      feature: "Verified profiles",
-      icon: <Users className="h-8 w-8" />,
-      category: "Jobs",
-      gradient: "from-purple-500 to-pink-500"
-    },
-    {
-      id: 4,
-      title: "AI Development",
-      description: "Custom AI solutions, model training, and integration services",
-      feature: "Enterprise ready",
-      icon: <Code className="h-8 w-8" />,
-      category: "Development",
-      gradient: "from-orange-500 to-red-500"
-    }
-  ];
+  const [marketplaceCategories, setMarketplaceCategories] = useState<any[]>([]);
+  const [featuredListings, setFeaturedListings] = useState<any[]>([]);
+  const [stats, setStats] = useState<any[]>([]);
 
-  const featuredListings = [
-    {
-      id: 1,
-      title: "GPT-4 Prompt Templates Pack",
-      seller: "AI_Expert_Pro",
-      price: "$29",
-      rating: 4.9,
-      sales: "1.2k",
-      type: "product",
-      category: "Templates"
-    },
-    {
-      id: 2,
-      title: "Machine Learning Consulting",
-      seller: "DataScience_Guru",
-      price: "$150/hr",
-      rating: 4.8,
-      reviews: "89",
-      type: "service",
-      category: "Consulting"
-    },
-    {
-      id: 3,
-      title: "Senior AI Engineer - Remote",
-      company: "TechInnovate Co.",
-      salary: "$120k-180k",
-      location: "Remote",
-      type: "job",
-      category: "Full-time"
-    }
-  ];
+  const icons: { [key: string]: React.ComponentType<any> } = {
+    Store,
+    Briefcase,
+    Users,
+    Code,
+    DollarSign,
+    TrendingUp,
+  };
 
-  const stats = [
-    { label: "Active Sellers", value: "8,500+", icon: <Store className="h-5 w-5" /> },
-    { label: "Total Sales", value: "$2.8M+", icon: <DollarSign className="h-5 w-5" /> },
-    { label: "Jobs Posted", value: "1,200+", icon: <Briefcase className="h-5 w-5" /> },
-    { label: "Success Rate", value: "94%", icon: <TrendingUp className="h-5 w-5" /> }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: categories, error: categoriesError } = await supabase
+        .from("marketplace_categories")
+        .select("*");
+      if (categoriesError) console.error("Error fetching categories:", categoriesError);
+      else setMarketplaceCategories(categories);
+
+      const { data: listings, error: listingsError } = await supabase
+        .from("featured_listings")
+        .select("*");
+      if (listingsError) console.error("Error fetching listings:", listingsError);
+      else setFeaturedListings(listings);
+
+      const { data: statsData, error: statsError } = await supabase
+        .from("marketplace_stats")
+        .select("*");
+      if (statsError) console.error("Error fetching stats:", statsError);
+      else setStats(statsData);
+    };
+
+    fetchData();
+  }, []);
+
+  const renderIcon = (iconName: string) => {
+    const Icon = icons[iconName];
+    return Icon ? <Icon className="h-8 w-8" /> : null;
+  };
+
+  const renderStatIcon = (iconName: string) => {
+    const Icon = icons[iconName];
+    return Icon ? <Icon className="h-5 w-5" /> : null;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -124,7 +95,7 @@ const MarketplacePage = () => {
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <div className="text-primary">{stat.icon}</div>
+                  <div className="text-primary">{renderStatIcon(stat.icon)}</div>
                   <span className="text-2xl font-bold">{stat.value}</span>
                 </div>
                 <p className="text-sm text-muted-foreground">{stat.label}</p>
@@ -149,7 +120,7 @@ const MarketplacePage = () => {
               <Card key={category.id} className="group hover:shadow-ai transition-all duration-300 border-border/50">
                 <CardHeader className="pb-4">
                   <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${category.gradient} flex items-center justify-center text-white mb-4`}>
-                    {category.icon}
+                    {renderIcon(category.icon)}
                   </div>
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="secondary" className="text-xs">
