@@ -12,6 +12,8 @@ import AIToolsPage from "./pages/AIToolsPage";
 import MarketplacePage from "./pages/MarketplacePage";
 import CourseDetail from "./pages/CourseDetail";
 import SellPage from "./pages/SellPage";
+import MyCreationsPage from "./pages/MyCreationsPage";
+import NewCreationPage from "./pages/NewCreationPage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,8 @@ const App = () => (
             <Route path="/course/:courseId" element={<CourseDetail />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/sell" element={<SellPage />} />
+            <Route path="/my-creations" element={<MyCreationsPage />} />
+            <Route path="/sell/new" element={<NewCreationPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

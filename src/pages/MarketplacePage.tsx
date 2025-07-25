@@ -25,7 +25,19 @@ const MarketplacePage = () => {
         .from("featured_listings")
         .select("*");
       if (listingsError) console.error("Error fetching listings:", listingsError);
-      else setFeaturedListings(listings);
+
+      const { data: creations, error: creationsError } = await supabase
+        .from("user_creations")
+        .select("*");
+      if (creationsError) console.error("Error fetching creations:", creationsError);
+
+      if (listings && creations) {
+        setFeaturedListings([...listings, ...creations]);
+      } else if (listings) {
+        setFeaturedListings(listings);
+      } else if (creations) {
+        setFeaturedListings(creations);
+      }
 
       const { data: statsData, error: statsError } = await supabase
         .from("marketplace_stats")
