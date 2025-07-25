@@ -5,26 +5,32 @@ import { Link } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 const Navigation = () => {
-  const { user, signOut, loading } = useAuth();
+  const {
+    user,
+    signOut,
+    loading
+  } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const navigationItems = [
-    { icon: Home, label: "Home", path: "/" },
-    { icon: BookOpen, label: "Learning Paths", path: "/learning-paths" },
-    { icon: Brain, label: "AI Tools", path: "/ai-tools" },
-    { icon: Store, label: "Marketplace", path: "/marketplace" },
-  ];
-  return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+  const navigationItems = [{
+    icon: Home,
+    label: "Home",
+    path: "/"
+  }, {
+    icon: BookOpen,
+    label: "Learning Paths",
+    path: "/learning-paths"
+  }, {
+    icon: Brain,
+    label: "AI Tools",
+    path: "/ai-tools"
+  }, {
+    icon: Store,
+    label: "Marketplace",
+    path: "/marketplace"
+  }];
+  return <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -35,14 +41,12 @@ const Navigation = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-6">
-            {navigationItems.map((item) => (
-              <Link key={item.path} to={item.path}>
+            {navigationItems.map(item => <Link key={item.path} to={item.path}>
                 <Button variant="ghost" size="sm" className="flex items-center gap-2">
                   <item.icon className="h-4 w-4" />
                   {item.label}
                 </Button>
-              </Link>
-            ))}
+              </Link>)}
           </div>
 
           <div className="flex items-center space-x-3">
@@ -66,31 +70,19 @@ const Navigation = () => {
                   
                   <ScrollArea className="flex-1 px-4">
                     <div className="py-6 space-y-2">
-                      {navigationItems.map((item) => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          <Button
-                            variant="ghost"
-                            className="w-full justify-start gap-3 h-12 px-4 text-left"
-                          >
+                      {navigationItems.map(item => <Link key={item.path} to={item.path} onClick={() => setIsMobileMenuOpen(false)}>
+                          <Button variant="ghost" className="w-full justify-start gap-3 h-12 px-4 text-left">
                             <item.icon className="h-5 w-5" />
                             <span className="font-medium">{item.label}</span>
                           </Button>
-                        </Link>
-                      ))}
+                        </Link>)}
                     </div>
                     
                     {/* Mobile User Section */}
                     <div className="py-4 border-t border-border">
-                      {loading ? (
-                        <div className="px-4">
+                      {loading ? <div className="px-4">
                           <div className="w-full h-12 animate-pulse bg-muted rounded" />
-                        </div>
-                      ) : user ? (
-                        <div className="px-4 space-y-3">
+                        </div> : user ? <div className="px-4 space-y-3">
                           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                             <User className="h-5 w-5 text-muted-foreground" />
                             <div className="flex-1 min-w-0">
@@ -98,20 +90,14 @@ const Navigation = () => {
                               <p className="text-xs text-muted-foreground">Student Account</p>
                             </div>
                           </div>
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              signOut();
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="w-full justify-start gap-3"
-                          >
+                          <Button variant="outline" onClick={() => {
+                        signOut();
+                        setIsMobileMenuOpen(false);
+                      }} className="w-full justify-start gap-3">
                             <LogOut className="h-4 w-4" />
                             Log out
                           </Button>
-                        </div>
-                      ) : (
-                        <div className="px-4 space-y-3">
+                        </div> : <div className="px-4 space-y-3">
                           <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
                             <Button variant="outline" className="w-full">
                               Sign In
@@ -122,17 +108,13 @@ const Navigation = () => {
                               Get Started Free
                             </Button>
                           </Link>
-                        </div>
-                      )}
+                        </div>}
                     </div>
                   </ScrollArea>
                 </div>
               </SheetContent>
             </Sheet>
-            {loading ? (
-              <div className="w-20 h-8 animate-pulse bg-muted rounded" />
-            ) : user ? (
-              <DropdownMenu>
+            {loading ? <div className="w-20 h-8 animate-pulse bg-muted rounded" /> : user ? <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="flex items-center gap-2">
                     <User className="h-4 w-4" />
@@ -152,26 +134,21 @@ const Navigation = () => {
                     <span>Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <>
+              </DropdownMenu> : <>
                 <Link to="/auth">
                   <Button variant="outline" size="sm">
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button variant="ai" size="sm">
+                  <Button variant="ai" size="sm" className="mx-0 px-0 py-[2px] my-[10px]">
                     Get Started Free
                   </Button>
                 </Link>
-              </>
-            )}
+              </>}
           </div>
         </div>
       </div>
-    </nav>
-  );
+    </nav>;
 };
-
 export default Navigation;
