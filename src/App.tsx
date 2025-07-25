@@ -11,6 +11,7 @@ import LearningPaths from "./pages/LearningPaths";
 import AIToolsPage from "./pages/AIToolsPage";
 import MarketplacePage from "./pages/MarketplacePage";
 import CourseDetail from "./pages/CourseDetail";
+import SellPage from "./pages/SellPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/course/:courseId" element={<CourseDetail />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/sell" element={<SellPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
