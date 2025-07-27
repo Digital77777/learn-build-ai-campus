@@ -4,178 +4,31 @@ import { ArrowLeft, Clock, Users, Star, BookOpen, CheckCircle } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-
-// Course data with YouTube video IDs
-const courseData = {
-  "ai-fundamentals": {
-    id: "ai-fundamentals",
-    title: "AI Fundamentals",
-    description: "Master the basics of artificial intelligence, machine learning, and neural networks",
-    instructor: "Dr. Sarah Chen",
-    duration: "4-6 weeks",
-    students: "2,341",
-    level: "Beginner",
-    rating: 4.8,
-    modules: [
-      {
-        title: "Introduction to AI",
-        description: "Understanding what AI is and its applications",
-        videoId: "JMUxmLyrhSk", // Introduction to Artificial Intelligence
-        duration: "45 min",
-        completed: false
-      },
-      {
-        title: "Machine Learning Basics",
-        description: "Core concepts of machine learning algorithms",
-        videoId: "ukzFI9rgwfU", // Machine Learning Explained
-        duration: "38 min",
-        completed: false
-      },
-      {
-        title: "Neural Networks",
-        description: "How neural networks work and their applications",
-        videoId: "aircAruvnKk", // Neural Networks Explained
-        duration: "52 min",
-        completed: false
-      },
-      {
-        title: "Python for AI",
-        description: "Programming fundamentals for AI development",
-        videoId: "kqtD5dpn9C8", // Python for AI
-        duration: "41 min",
-        completed: false
-      }
-    ]
-  },
-  "nlp": {
-    id: "nlp",
-    title: "Natural Language Processing",
-    description: "Build chatbots, language models, and text analysis applications",
-    instructor: "Prof. Michael Rodriguez",
-    duration: "6-8 weeks",
-    students: "1,847",
-    level: "Intermediate",
-    rating: 4.9,
-    modules: [
-      {
-        title: "Text Processing",
-        description: "Preprocessing and analyzing text data",
-        videoId: "8S3qHHUKqYk", // NLP Text Processing
-        duration: "35 min",
-        completed: false
-      },
-      {
-        title: "Language Models",
-        description: "Understanding and building language models",
-        videoId: "zjkBMFhNj_g", // Language Models Explained
-        duration: "42 min",
-        completed: false
-      },
-      {
-        title: "Chatbot Development",
-        description: "Creating intelligent conversational AI",
-        videoId: "1lwddP0KUEg", // Chatbot Development
-        duration: "48 min",
-        completed: false
-      },
-      {
-        title: "Sentiment Analysis",
-        description: "Analyzing emotions and opinions in text",
-        videoId: "AJXLS3XjnDM", // Sentiment Analysis
-        duration: "33 min",
-        completed: false
-      }
-    ]
-  },
-  "computer-vision": {
-    id: "computer-vision",
-    title: "Computer Vision",
-    description: "Create image recognition systems, object detection, and visual AI applications",
-    instructor: "Dr. Lisa Zhang",
-    duration: "8-10 weeks",
-    students: "1,234",
-    level: "Intermediate",
-    rating: 4.7,
-    modules: [
-      {
-        title: "Image Processing",
-        description: "Fundamentals of digital image processing",
-        videoId: "C_zFhWdM4ic", // Image Processing Basics
-        duration: "40 min",
-        completed: false
-      },
-      {
-        title: "Object Detection",
-        description: "Detecting and classifying objects in images",
-        videoId: "9s_FpMpdYW8", // Object Detection
-        duration: "45 min",
-        completed: false
-      },
-      {
-        title: "Face Recognition",
-        description: "Building facial recognition systems",
-        videoId: "FgakZw6K1QQ", // Face Recognition
-        duration: "38 min",
-        completed: false
-      },
-      {
-        title: "AI Art Generation",
-        description: "Creating art using AI algorithms",
-        videoId: "SVcsDDABEkM", // AI Art Generation
-        duration: "36 min",
-        completed: false
-      }
-    ]
-  },
-  "ai-business": {
-    id: "ai-business",
-    title: "AI for Business",
-    description: "Learn to implement AI solutions for real-world business problems",
-    instructor: "James Wilson, MBA",
-    duration: "6-8 weeks",
-    students: "987",
-    level: "Advanced",
-    rating: 4.8,
-    modules: [
-      {
-        title: "Business AI Strategy",
-        description: "Developing AI strategies for business growth",
-        videoId: "t4kyRyKyOpo", // AI Business Strategy
-        duration: "44 min",
-        completed: false
-      },
-      {
-        title: "ROI Analysis",
-        description: "Measuring return on investment for AI projects",
-        videoId: "RSKlSkgV_gI", // AI ROI Analysis
-        duration: "32 min",
-        completed: false
-      },
-      {
-        title: "Implementation",
-        description: "Best practices for AI implementation",
-        videoId: "SN5KToeTfUY", // AI Implementation
-        duration: "50 min",
-        completed: false
-      },
-      {
-        title: "Client Consulting",
-        description: "Consulting clients on AI solutions",
-        videoId: "wjZofJX0v4M", // AI Consulting
-        duration: "39 min",
-        completed: false
-      }
-    ]
-  }
-};
+import { useState, useEffect } from "react";
+import { getCourseById } from "@/integrations/supabase";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
   const [currentModule, setCurrentModule] = useState(0);
-  
-  const course = courseData[courseId as keyof typeof courseData];
-  
+  const [course, setCourse] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      if (courseId) {
+        const courseData = await getCourseById(courseId);
+        setCourse(courseData);
+      }
+      setLoading(false);
+    };
+
+    fetchCourse();
+  }, [courseId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (!course) {
     return <Navigate to="/learning-paths" replace />;
   }
