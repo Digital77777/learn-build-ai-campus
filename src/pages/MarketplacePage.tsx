@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import { Store, Briefcase, Users, Code, DollarSign, ArrowRight, Star, MapPin, Clock, TrendingUp, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -104,10 +105,12 @@ const MarketplacePage = () => {
               Buy, sell, and hire in the world's largest AI marketplace. Connect with experts, showcase your skills, and grow your business
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
-                <Store className="h-5 w-5 mr-2" />
-                Start Selling
-              </Button>
+              <Link to="/start-selling">
+                <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+                  <Store className="h-5 w-5 mr-2" />
+                  Start Selling
+                </Button>
+              </Link>
               <Button size="lg" variant="outline">
                 Browse Marketplace
                 <ArrowRight className="h-5 w-5 ml-2" />
