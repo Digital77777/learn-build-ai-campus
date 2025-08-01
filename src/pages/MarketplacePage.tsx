@@ -111,10 +111,12 @@ const MarketplacePage = () => {
                   Start Selling
                 </Button>
               </Link>
-              <Button size="lg" variant="outline">
-                Browse Marketplace
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
+              <Link to="/marketplace/browse">
+                <Button size="lg" variant="outline">
+                  Browse Marketplace
+                  <ArrowRight className="h-5 w-5 ml-2" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -171,10 +173,17 @@ const MarketplacePage = () => {
                 </CardHeader>
                 
                 <CardContent className="space-y-4">
-                  <Button className="w-full group/btn">
-                    Get Started
-                    <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
+                  <Link to={
+                    category.title === "Sell Your Creations" ? "/marketplace/sell-products" :
+                    category.title === "Freelance Services" ? "/marketplace/freelance-services" :
+                    category.title === "Post Job Opportunities" ? "/marketplace/post-jobs" :
+                    "/marketplace/ai-development"
+                  }>
+                    <Button className="w-full group/btn">
+                      Get Started
+                      <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
