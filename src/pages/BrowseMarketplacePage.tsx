@@ -1,85 +1,69 @@
 import Navigation from "@/components/Navigation";
-import { Search, Filter, Grid, List, Star, Clock, MapPin, DollarSign } from "lucide-react";
+import { Search, Filter, Grid, List, Star, Clock, MapPin, DollarSign, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useMarketplace, MarketplaceFilters } from "@/hooks/useMarketplace";
+import { ListingCard } from "@/components/marketplace/ListingCard";
+import { toast } from "sonner";
 
 const BrowseMarketplacePage = () => {
+  const { listings, categories, loading, error, fetchListings, addToFavorites, removeFromFavorites } = useMarketplace();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
-  const listings = [
-    {
-      id: 1,
-      title: "GPT-4 Prompt Templates Pack",
-      seller: "AI_Expert_Pro",
-      price: "$29",
-      rating: 4.9,
-      sales: "1.2k",
-      type: "product",
-      category: "Templates",
-      image: "/placeholder.svg"
-    },
-    {
-      id: 2,
-      title: "Machine Learning Consulting",
-      seller: "DataScience_Guru",
-      price: "$150/hr",
-      rating: 4.8,
-      reviews: "89",
-      type: "service",
-      category: "Consulting"
-    },
-    {
-      id: 3,
-      title: "Senior AI Engineer - Remote",
-      company: "TechInnovate Co.",
-      salary: "$120k-180k",
-      location: "Remote",
-      type: "job",
-      category: "Full-time"
-    },
-    {
-      id: 4,
-      title: "AI Chatbot Development",
-      seller: "ChatBot_Masters",
-      price: "$500",
-      rating: 4.7,
-      sales: "324",
-      type: "service",
-      category: "Development"
-    },
-    {
-      id: 5,
-      title: "Computer Vision Course",
-      seller: "VisionAI_Academy",
-      price: "$199",
-      rating: 4.9,
-      sales: "856",
-      type: "product",
-      category: "Education"
-    },
-    {
-      id: 6,
-      title: "AI Product Manager",
-      company: "StartupXYZ",
-      salary: "$100k-150k",
-      location: "San Francisco",
-      type: "job",
-      category: "Full-time"
+  useEffect(() => {
+    const filters: MarketplaceFilters = {
+      search: searchQuery || undefined,
+      category: selectedCategory || undefined,
+      type: selectedType as any || undefined,
+      sortBy: sortBy as any || 'newest',
+    };
+    fetchListings(filters);
+  }, [searchQuery, selectedCategory, selectedType, sortBy]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleFavorite = async (listingId: string) => {
+    try {
+      if (favorites.has(listingId)) {
+        await removeFromFavorites(listingId);
+        setFavorites(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(listingId);
+          return newSet;
+        });
+        toast.success("Removed from favorites");
+      } else {
+        await addToFavorites(listingId);
+        setFavorites(prev => new Set(prev).add(listingId));
+        toast.success("Added to favorites");
+      }
+    } catch (error) {
+      toast.error("Failed to update favorites");
     }
+  };
+
+  const handleContact = (listing: any) => {
+    // TODO: Implement contact/messaging functionality
+    toast.info("Contact functionality coming soon!");
+  };
+
+  const sortOptions = [
+    { value: "newest", label: "Newest" },
+    { value: "price_low", label: "Price: Low to High" },
+    { value: "price_high", label: "Price: High to Low" },
+    { value: "rating", label: "Highest Rated" },
+    { value: "popular", label: "Most Popular" }
   ];
-
-  const categories = ["All", "Templates", "Consulting", "Development", "Education", "Full-time"];
-  const sortOptions = ["Newest", "Price: Low to High", "Price: High to Low", "Highest Rated", "Most Popular"];
-
-  const filteredListings = listings.filter(listing =>
-    listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    listing.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -102,30 +86,42 @@ const BrowseMarketplacePage = () => {
               <Input
                 placeholder="Search products, services, or jobs..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="pl-10"
               />
             </div>
             <Select>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="">All Categories</SelectItem>
                 {categories.map((category) => (
-                  <SelectItem key={category} value={category.toLowerCase()}>
-                    {category}
+                  <SelectItem key={category.id} value={category.slug}>
+                    {category.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <Select>
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="All Types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="product">Products</SelectItem>
+                <SelectItem value="service">Services</SelectItem>
+                <SelectItem value="job">Jobs</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
                 {sortOptions.map((option) => (
-                  <SelectItem key={option} value={option.toLowerCase().replace(/\s+/g, '-')}>
-                    {option}
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -153,70 +149,80 @@ const BrowseMarketplacePage = () => {
               <Filter className="h-4 w-4 mr-2" />
               More Filters
             </Button>
-            <Badge variant="secondary">Products (450)</Badge>
-            <Badge variant="secondary">Services (280)</Badge>
-            <Badge variant="secondary">Jobs (120)</Badge>
+            <Badge variant="secondary">
+              {listings.filter(l => l.listing_type === 'product').length} Products
+            </Badge>
+            <Badge variant="secondary">
+              {listings.filter(l => l.listing_type === 'service').length} Services
+            </Badge>
+            <Badge variant="secondary">
+              {listings.filter(l => l.listing_type === 'job').length} Jobs
+            </Badge>
           </div>
         </div>
 
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-muted-foreground">
-            Showing {filteredListings.length} results
+            Showing {listings.length} results
           </p>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="text-muted-foreground mt-2">Loading listings...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-destructive">Error loading listings: {error}</p>
+            <Button onClick={() => fetchListings()} className="mt-4">
+              Try Again
+            </Button>
+          </div>
+        )}
+
         {/* Listings Grid */}
-        <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
-          {filteredListings.map((listing) => (
-            <Card key={listing.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <Badge variant="outline" className="text-xs">
-                    {listing.category}
-                  </Badge>
-                  {listing.type === "product" && (
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium">{listing.rating}</span>
-                    </div>
-                  )}
-                  {listing.type === "service" && (
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium">{listing.rating}</span>
-                    </div>
-                  )}
-                  {listing.type === "job" && (
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{listing.location}</span>
-                    </div>
-                  )}
-                </div>
-                
-                <h3 className="font-semibold mb-2 line-clamp-2">{listing.title}</h3>
-                
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm text-muted-foreground">
-                    {listing.type === "job" ? listing.company : `by ${listing.seller || listing.company}`}
-                  </span>
-                  <span className="font-bold text-primary">
-                    {listing.price || listing.salary}
-                  </span>
-                </div>
-                
-                {(listing.sales || listing.reviews) && (
-                  <p className="text-xs text-muted-foreground mb-4">
-                    {listing.sales ? `${listing.sales} sales` : `${listing.reviews} reviews`}
-                  </p>
-                )}
-                
-                <Button size="sm" className="w-full">
-                  {listing.type === "job" ? "Apply Now" : "View Details"}
-                </Button>
-              </CardContent>
-            </Card>
+        {!loading && !error && (
+          <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
+            {listings.map((listing) => (
+              <ListingCard
+                key={listing.id}
+                listing={listing}
+                onFavorite={handleFavorite}
+                onContact={handleContact}
+                isFavorited={favorites.has(listing.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && listings.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">No listings found</p>
+            <p className="text-muted-foreground">Try adjusting your search criteria</p>
+          </div>
+        )}
+
+        {/* Load More */}
+        {!loading && !error && listings.length > 0 && (
+          <div className="text-center mt-12">
+            <Button variant="outline" size="lg">
+              Load More Results
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default BrowseMarketplacePage;
           ))}
         </div>
 

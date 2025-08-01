@@ -17,6 +17,8 @@ import SellProductsPage from "./pages/SellProductsPage";
 import FreelanceServicesPage from "./pages/FreelanceServicesPage";
 import PostJobsPage from "./pages/PostJobsPage";
 import AIDevelopmentPage from "./pages/AIDevelopmentPage";
+import CreateListingPage from "./pages/CreateListingPage";
+import MyListingsPage from "./pages/MyListingsPage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +39,8 @@ const App = () => (
             <Route path="/marketplace/freelance-services" element={<FreelanceServicesPage />} />
             <Route path="/marketplace/post-jobs" element={<PostJobsPage />} />
             <Route path="/marketplace/ai-development" element={<AIDevelopmentPage />} />
+            <Route path="/marketplace/create" element={<CreateListingPage />} />
+            <Route path="/marketplace/my-listings" element={<MyListingsPage />} />
             <Route path="/start-selling" element={<StartSellingPage />} />
             <Route path="/course/:courseId" element={<CourseDetail />} />
             <Route path="/auth" element={<Auth />} />
