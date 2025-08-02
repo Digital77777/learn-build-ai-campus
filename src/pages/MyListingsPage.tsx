@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useMarketplace, MarketplaceListing } from '@/hooks/useMarketplace';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { Plus, Edit, Trash2, Eye, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -31,15 +32,12 @@ const MyListingsPage = () => {
     try {
       const { data, error } = await supabase
         .from('marketplace_listings')
-        .select(`
-          *,
-          marketplace_categories(name, slug)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setListings(data || []);
+      setListings((data || []) as MarketplaceListing[]);
     } catch (error) {
       console.error('Error fetching listings:', error);
       toast.error('Failed to load your listings');
@@ -161,17 +159,17 @@ const MyListingsPage = () => {
                         </div>
                       )}
                       <div className="text-xs text-muted-foreground">
-                        {listing.marketplace_categories?.name}
+                        General Category
                       </div>
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Eye className="h-3 w-3" />
-                        {listing.views_count}
+                        0
                       </div>
                       <div className="flex items-center gap-1">
                         <Heart className="h-3 w-3" />
-                        {listing.favorites_count}
+                        0
                       </div>
                     </div>
                   </div>

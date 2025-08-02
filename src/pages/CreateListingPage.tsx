@@ -66,7 +66,6 @@ const CreateListingPage = () => {
       <Navigation />
       <div className="container mx-auto px-6 pt-24 pb-12">
         <ListingForm
-          categories={categories}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
           isLoading={isLoading}

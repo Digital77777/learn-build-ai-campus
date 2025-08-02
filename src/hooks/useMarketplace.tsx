@@ -5,43 +5,25 @@ import { useAuth } from '@/hooks/useAuth';
 export interface MarketplaceListing {
   id: string;
   user_id: string;
-  category_id: string;
+  category_id?: string;
   title: string;
   description: string;
   listing_type: 'product' | 'service' | 'job';
   status: 'draft' | 'active' | 'paused' | 'sold' | 'expired';
-  price: number;
-  currency: string;
-  images: string[];
-  tags: string[];
-  location?: string;
-  is_remote: boolean;
-  delivery_time?: string;
+  price?: number;
+  currency?: string;
+  images?: string[];
+  tags?: string[];
   requirements?: string;
-  features?: any;
-  metadata?: any;
-  views_count: number;
-  favorites_count: number;
+  delivery_time?: number;
+  is_featured?: boolean;
   created_at: string;
   updated_at: string;
-  expires_at?: string;
-  user_profiles?: {
-    username: string;
-    full_name: string;
-    avatar_url: string;
-    seller_rating: number;
-    total_reviews: number;
-  };
-  marketplace_categories?: {
-    name: string;
-    slug: string;
-  };
 }
 
 export interface MarketplaceCategory {
   id: string;
   name: string;
-  slug: string;
   description: string;
   icon: string;
 }
@@ -69,9 +51,8 @@ export const useMarketplace = () => {
     try {
       const { data, error } = await supabase
         .from('marketplace_categories')
-        .select('*')
-        .eq('is_active', true)
-        .order('sort_order', { ascending: true });
+        .select('id, name, description, icon')
+        .eq('is_active', true);
 
       if (error) throw error;
       setCategories(data || []);
@@ -88,16 +69,12 @@ export const useMarketplace = () => {
     try {
       let query = supabase
         .from('marketplace_listings')
-        .select(`
-          *,
-          user_profiles!inner(username, full_name, avatar_url, seller_rating, total_reviews),
-          marketplace_categories(name, slug)
-        `)
+        .select('*')
         .eq('status', 'active');
 
       // Apply filters
       if (filters.category) {
-        query = query.eq('marketplace_categories.slug', filters.category);
+        query = query.eq('category_id', filters.category);
       }
       if (filters.type) {
         query = query.eq('listing_type', filters.type);
@@ -107,12 +84,6 @@ export const useMarketplace = () => {
       }
       if (filters.maxPrice) {
         query = query.lte('price', filters.maxPrice);
-      }
-      if (filters.location) {
-        query = query.ilike('location', `%${filters.location}%`);
-      }
-      if (filters.isRemote !== undefined) {
-        query = query.eq('is_remote', filters.isRemote);
       }
       if (filters.search) {
         query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
@@ -126,12 +97,6 @@ export const useMarketplace = () => {
         case 'price_high':
           query = query.order('price', { ascending: false });
           break;
-        case 'rating':
-          query = query.order('user_profiles.seller_rating', { ascending: false });
-          break;
-        case 'popular':
-          query = query.order('views_count', { ascending: false });
-          break;
         default:
           query = query.order('created_at', { ascending: false });
       }
@@ -139,7 +104,7 @@ export const useMarketplace = () => {
       const { data, error } = await query;
 
       if (error) throw error;
-      setListings(data || []);
+      setListings((data || []) as MarketplaceListing[]);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -154,12 +119,12 @@ export const useMarketplace = () => {
     try {
       const { data, error } = await supabase
         .from('marketplace_listings')
-        .insert([{ ...listingData, user_id: user.id }])
+        .insert([{ ...listingData, user_id: user.id } as any])
         .select()
         .single();
 
       if (error) throw error;
-      return data;
+      return data as MarketplaceListing;
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -212,10 +177,7 @@ export const useMarketplace = () => {
     try {
       const { data, error } = await supabase
         .from('marketplace_listings')
-        .select(`
-          *,
-          marketplace_categories(name, slug)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
@@ -270,11 +232,7 @@ export const useMarketplace = () => {
         .from('marketplace_favorites')
         .select(`
           listing_id,
-          marketplace_listings(
-            *,
-            user_profiles(username, full_name, avatar_url, seller_rating),
-            marketplace_categories(name, slug)
-          )
+          marketplace_listings(*)
         `)
         .eq('user_id', user.id);
 
