@@ -1,11 +1,14 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Store, Upload, DollarSign, Users, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { SellingModal } from "@/components/marketplace/selling/SellingModal";
 
 const SellProductsPage = () => {
+  const [showSellingModal, setShowSellingModal] = useState(false);
   const benefits = [
     {
       icon: <DollarSign className="h-6 w-6" />,
@@ -133,7 +136,11 @@ const SellProductsPage = () => {
               Turn your AI expertise into profit. Sell prompts, models, courses, tools, and more to a global community of AI enthusiasts.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+              <Button 
+                size="lg" 
+                className="bg-gradient-earn text-white hover:opacity-90"
+                onClick={() => setShowSellingModal(true)}
+              >
                 <Store className="h-5 w-5 mr-2" />
                 Start Selling Now
               </Button>
@@ -268,13 +275,23 @@ const SellProductsPage = () => {
             <p className="text-muted-foreground mb-8">
               Join our community of successful AI product sellers and start earning from your expertise today.
             </p>
-            <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+            <Button 
+              size="lg" 
+              className="bg-gradient-earn text-white hover:opacity-90"
+              onClick={() => setShowSellingModal(true)}
+            >
               <Upload className="h-5 w-5 mr-2" />
               Create Your Store
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Selling Modal */}
+      <SellingModal 
+        isOpen={showSellingModal} 
+        onClose={() => setShowSellingModal(false)} 
+      />
     </div>
   );
 };
