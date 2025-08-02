@@ -12,6 +12,7 @@ export interface AITool {
   pricing: PricingTier;
   usage: string;
   gradient: GradientVariant;
+  route?: string;
 }
 
 export type AIToolCategory = 

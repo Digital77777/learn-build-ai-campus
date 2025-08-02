@@ -5,8 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AITool, AIToolCategory, FeatureHighlight } from "@/types/aiTools";
+import { useNavigate } from "react-router-dom";
 
 const AIToolsPage = () => {
+  const navigate = useNavigate();
+
   const tools: AITool[] = [
     {
       id: 1,
@@ -18,7 +21,8 @@ const AIToolsPage = () => {
       features: ["Code completion", "Bug detection", "Refactoring"],
       pricing: "Free",
       usage: "Free unlimited",
-      gradient: "from-blue-500 to-cyan-500"
+      gradient: "from-blue-500 to-cyan-500",
+      route: "/tools/ai-code-assistant"
     },
     {
       id: 2,
@@ -30,7 +34,8 @@ const AIToolsPage = () => {
       features: ["Text-to-image", "Style transfer", "Image editing"],
       pricing: "Premium",
       usage: "50 images/day",
-      gradient: "from-purple-500 to-pink-500"
+      gradient: "from-purple-500 to-pink-500",
+      route: "/tools/neural-image-generator"
     },
     {
       id: 3,
@@ -42,7 +47,8 @@ const AIToolsPage = () => {
       features: ["Predictive analytics", "Report generation", "Data visualization"],
       pricing: "Pro",
       usage: "Pro plan",
-      gradient: "from-emerald-500 to-teal-500"
+      gradient: "from-emerald-500 to-teal-500",
+      route: "/tools/smart-analytics"
     },
     {
       id: 4,
@@ -54,7 +60,8 @@ const AIToolsPage = () => {
       features: ["Natural language", "Multi-language", "Integration APIs"],
       pricing: "Enterprise",
       usage: "Enterprise plan",
-      gradient: "from-orange-500 to-red-500"
+      gradient: "from-orange-500 to-red-500",
+      route: "/tools/conversational-ai"
     },
     {
       id: 5,
@@ -66,7 +73,8 @@ const AIToolsPage = () => {
       features: ["Model training", "Experiment tracking", "Collaboration"],
       pricing: "Academic",
       usage: "Academic plan",
-      gradient: "from-indigo-500 to-purple-500"
+      gradient: "from-indigo-500 to-purple-500",
+      route: "/tools/ai-research-lab"
     },
     {
       id: 6,
@@ -78,7 +86,8 @@ const AIToolsPage = () => {
       features: ["Auto feature engineering", "Model selection", "Deployment"],
       pricing: "Pro",
       usage: "Pro plan",
-      gradient: "from-yellow-500 to-orange-500"
+      gradient: "from-yellow-500 to-orange-500",
+      route: "/tools/automl-platform"
     }
   ];
 
@@ -110,8 +119,12 @@ const AIToolsPage = () => {
     console.log("View pricing clicked");
   };
 
-  const handleTryTool = (toolId: number) => {
-    console.log(`Try tool ${toolId} clicked`);
+  const handleTryTool = (tool: AITool) => {
+    if (tool.route) {
+      navigate(tool.route);
+    } else {
+      console.log(`Try tool ${tool.id} clicked`);
+    }
   };
 
   const handleLearnMore = (toolId: number) => {
@@ -210,7 +223,7 @@ const AIToolsPage = () => {
                   </div>
                   
                   <div className="flex gap-2 pt-2">
-                    <Button className="flex-1 group/btn" onClick={() => handleTryTool(tool.id)}>
+                    <Button className="flex-1 group/btn" onClick={() => handleTryTool(tool)}>
                       Try Now
                       <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                     </Button>

@@ -17,7 +17,8 @@ const aiTools: AITool[] = [
     features: ["Code completion", "Bug detection", "Refactoring"],
     usage: "Free unlimited",
     pricing: "Free",
-    gradient: "from-blue-500 to-cyan-500"
+    gradient: "from-blue-500 to-cyan-500",
+    route: "/tools/ai-code-assistant"
   },
   {
     id: 2,
@@ -29,7 +30,8 @@ const aiTools: AITool[] = [
     features: ["Text-to-image", "Style transfer", "Image editing"],
     usage: "50 images/day",
     pricing: "Premium",
-    gradient: "from-purple-500 to-pink-500"
+    gradient: "from-purple-500 to-pink-500",
+    route: "/tools/neural-image-generator"
   },
   {
     id: 3,
@@ -41,7 +43,8 @@ const aiTools: AITool[] = [
     features: ["Predictive analytics", "Report generation", "Data visualization"],
     usage: "Pro plan",
     pricing: "Pro",
-    gradient: "from-emerald-500 to-teal-500"
+    gradient: "from-emerald-500 to-teal-500",
+    route: "/tools/smart-analytics"
   },
   {
     id: 4,
@@ -53,7 +56,8 @@ const aiTools: AITool[] = [
     features: ["Natural language", "Multi-language", "Integration APIs"],
     usage: "Enterprise plan",
     pricing: "Enterprise",
-    gradient: "from-orange-500 to-red-500"
+    gradient: "from-orange-500 to-red-500",
+    route: "/tools/conversational-ai"
   },
   {
     id: 5,
@@ -65,7 +69,8 @@ const aiTools: AITool[] = [
     features: ["Model training", "Experiment tracking", "Collaboration"],
     usage: "Academic plan",
     pricing: "Academic",
-    gradient: "from-indigo-500 to-purple-500"
+    gradient: "from-indigo-500 to-purple-500",
+    route: "/tools/ai-research-lab"
   },
   {
     id: 6,
@@ -77,7 +82,8 @@ const aiTools: AITool[] = [
     features: ["Auto feature engineering", "Model selection", "Deployment"],
     usage: "Pro plan",
     pricing: "Pro",
-    gradient: "from-yellow-500 to-orange-500"
+    gradient: "from-yellow-500 to-orange-500",
+    route: "/tools/automl-platform"
   }
 ];
 
@@ -134,8 +140,8 @@ const AITools = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" variant="outline" onClick={() => navigate('/ai-tools')}>
-                  Try {tool.title}
+                <Button className="w-full" variant="outline" onClick={() => navigate(tool.route || '/ai-tools')}>
+                  Try {tool.name}
                 </Button>
               </CardContent>
             </Card>
