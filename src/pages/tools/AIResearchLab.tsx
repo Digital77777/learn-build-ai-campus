@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { Brain, Flask, Database, Users, Play, Pause, Download, Share } from 'lucide-react';
+import { Brain, FlaskRound as Flask, Database, Users, Play, Pause, Download, Share } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AIResearchLab = () => {
