@@ -13,6 +13,8 @@ export interface MarketplaceListing {
   price?: number;
   currency?: string;
   images?: string[];
+  videos?: string[];
+  creation_link?: string;
   tags?: string[];
   requirements?: string;
   delivery_time?: number;

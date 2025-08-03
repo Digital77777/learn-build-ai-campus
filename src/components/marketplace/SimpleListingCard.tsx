@@ -9,12 +9,14 @@ interface SimpleListingCardProps {
   listing: MarketplaceListing;
   onFavorite?: (listingId: string) => void;
   isFavorited?: boolean;
+  onViewDetails?: (listing: MarketplaceListing) => void;
 }
 
 export const SimpleListingCard: React.FC<SimpleListingCardProps> = ({
   listing,
   onFavorite,
-  isFavorited = false
+  isFavorited = false,
+  onViewDetails
 }) => {
   const formatPrice = (price: number, currency: string = 'USD') => {
     return new Intl.NumberFormat('en-US', {
@@ -96,7 +98,11 @@ export const SimpleListingCard: React.FC<SimpleListingCardProps> = ({
           )}
         </div>
         
-        <Button className="w-full mt-3" variant="outline">
+        <Button 
+          className="w-full mt-3" 
+          variant="outline"
+          onClick={() => onViewDetails?.(listing)}
+        >
           View Details
         </Button>
       </CardContent>

@@ -5,16 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, Filter, Heart, Star } from 'lucide-react';
-import { useMarketplace } from '@/hooks/useMarketplace';
+import { useMarketplace, MarketplaceListing } from '@/hooks/useMarketplace';
 import { SimpleListingCard } from '@/components/marketplace/SimpleListingCard';
+import { ListingDetailsModal } from '@/components/marketplace/ListingDetailsModal';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function BrowseMarketplacePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
-  const { listings, categories, fetchListings, addToFavorites, removeFromFavorites } = useMarketplace();
+  const [selectedListing, setSelectedListing] = useState<MarketplaceListing | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const { listings, categories, fetchListings, addToFavorites, removeFromFavorites, getUserFavorites } = useMarketplace();
   const { user } = useAuth();
+  const [userFavorites, setUserFavorites] = useState<any[]>([]);
 
   const priceRanges = [
     { value: 'all', label: 'All Prices' },
@@ -33,14 +37,28 @@ export default function BrowseMarketplacePage() {
     });
   }, [searchQuery, selectedCategory, priceRange, fetchListings]);
 
-  const handleFavorite = async (listingId: string, isFavorited: boolean) => {
+  useEffect(() => {
+    if (user) {
+      getUserFavorites().then(setUserFavorites);
+    }
+  }, [user, getUserFavorites]);
+
+  const handleFavorite = async (listingId: string) => {
     if (!user) return;
     
+    const isFavorited = userFavorites.some(fav => fav.listing_id === listingId);
     if (isFavorited) {
       await removeFromFavorites(listingId);
     } else {
       await addToFavorites(listingId);
     }
+    // Refresh favorites
+    getUserFavorites().then(setUserFavorites);
+  };
+
+  const handleViewDetails = (listing: MarketplaceListing) => {
+    setSelectedListing(listing);
+    setIsDetailsModalOpen(true);
   };
 
   return (
@@ -114,8 +132,9 @@ export default function BrowseMarketplacePage() {
             <SimpleListingCard 
               key={listing.id} 
               listing={listing}
-              onFavorite={user ? (listingId) => handleFavorite(listingId, false) : undefined}
-              isFavorited={false}
+              onFavorite={user ? handleFavorite : undefined}
+              isFavorited={userFavorites.some(fav => fav.listing_id === listing.id)}
+              onViewDetails={handleViewDetails}
             />
           ))}
         </div>
@@ -129,6 +148,14 @@ export default function BrowseMarketplacePage() {
             </div>
           </div>
         )}
+
+        <ListingDetailsModal
+          listing={selectedListing}
+          isOpen={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          onFavorite={user ? handleFavorite : undefined}
+          isFavorited={selectedListing ? userFavorites.some(fav => fav.listing_id === selectedListing.id) : false}
+        />
       </div>
     </div>
   );
