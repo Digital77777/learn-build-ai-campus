@@ -24,9 +24,12 @@ export interface ProductFormData {
   price?: number;
   currency: string;
   images?: string[];
+  videos?: string[];
   tags?: string[];
   requirements?: string;
   delivery_time?: number;
+  productType?: string;
+  creationLink?: string;
 }
 
 const STEPS = [

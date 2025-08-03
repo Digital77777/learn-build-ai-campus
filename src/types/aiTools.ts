@@ -6,7 +6,7 @@ export interface AITool {
   name: string;
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: typeof LucideIcon;
   category: AIToolCategory;
   features: string[];
   pricing: PricingTier;
@@ -63,7 +63,7 @@ export interface CategoryFilterProps {
 export interface FeatureHighlight {
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: typeof LucideIcon;
 }
 
 export interface AIToolsHeroProps {
