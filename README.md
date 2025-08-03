@@ -59,6 +59,25 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (Database & Auth)
+- Hugging Face Inference API (AI Code Assistant)
+- CodeMirror (Code Editor)
+- Recharts (Data Visualization)
+
+## AI Code Assistant Setup
+
+The AI Code Assistant uses Hugging Face's free inference API for code analysis. To enable full functionality:
+
+1. Get a free API key from [Hugging Face](https://huggingface.co/settings/tokens)
+2. Copy `.env.example` to `.env.local`
+3. Add your API key: `VITE_HUGGINGFACE_API_KEY=your_key_here`
+
+Features:
+- **Real-time Code Analysis**: Powered by CodeLlama-7B model
+- **Multi-language Support**: JavaScript, TypeScript, Python, React JSX
+- **Advanced Code Editor**: Syntax highlighting, auto-completion, file upload
+- **Code Metrics**: Complexity analysis, maintainability scores
+- **Smart Features**: Bug detection, code explanation, test generation
 
 ## How can I deploy this project?
 
