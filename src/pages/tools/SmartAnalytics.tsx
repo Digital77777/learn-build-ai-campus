@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -314,10 +313,4 @@ const SmartAnalytics = () => {
   );
 };
 
-export default function SmartAnalyticsWithBoundary(props) {
-  return (
-    <ErrorBoundary>
-      <SmartAnalytics {...props} />
-    </ErrorBoundary>
-  );
-}
+export default SmartAnalytics;

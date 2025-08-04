@@ -20,12 +20,12 @@ import AIDevelopmentPage from "./pages/AIDevelopmentPage";
 import CreateListingPage from "./pages/CreateListingPage";
 import EditListingPage from "./pages/EditListingPage";
 import MyListingsPage from "./pages/MyListingsPage";
-import { default as AICodeAssistantWithBoundary } from "./pages/tools/AICodeAssistant";
-import { default as NeuralImageGeneratorWithBoundary } from "./pages/tools/NeuralImageGenerator";
-import { default as SmartAnalyticsWithBoundary } from "./pages/tools/SmartAnalytics";
-import { default as ConversationalAIWithBoundary } from "./pages/tools/ConversationalAI";
-import { default as AIResearchLabWithBoundary } from "./pages/tools/AIResearchLab";
-import { default as AutoMLPlatformWithBoundary } from "./pages/tools/AutoMLPlatform";
+import AICodeAssistant from "./pages/tools/AICodeAssistant";
+import NeuralImageGenerator from "./pages/tools/NeuralImageGenerator";
+import SmartAnalytics from "./pages/tools/SmartAnalytics";
+import ConversationalAI from "./pages/tools/ConversationalAI";
+import AIResearchLab from "./pages/tools/AIResearchLab";
+import AutoMLPlatform from "./pages/tools/AutoMLPlatform";
 
 const queryClient = new QueryClient();
 
@@ -49,12 +49,12 @@ const App = () => (
             <Route path="/marketplace/create" element={<CreateListingPage />} />
             <Route path="/marketplace/edit/:id" element={<EditListingPage />} />
             <Route path="/marketplace/my-listings" element={<MyListingsPage />} />
-            <Route path="/tools/ai-code-assistant" element={<AICodeAssistantWithBoundary />} />
-            <Route path="/tools/neural-image-generator" element={<NeuralImageGeneratorWithBoundary />} />
-            <Route path="/tools/smart-analytics" element={<SmartAnalyticsWithBoundary />} />
-            <Route path="/tools/conversational-ai" element={<ConversationalAIWithBoundary />} />
-            <Route path="/tools/ai-research-lab" element={<AIResearchLabWithBoundary />} />
-            <Route path="/tools/automl-platform" element={<AutoMLPlatformWithBoundary />} />
+            <Route path="/tools/ai-code-assistant" element={<AICodeAssistant />} />
+            <Route path="/tools/neural-image-generator" element={<NeuralImageGenerator />} />
+            <Route path="/tools/smart-analytics" element={<SmartAnalytics />} />
+            <Route path="/tools/conversational-ai" element={<ConversationalAI />} />
+            <Route path="/tools/ai-research-lab" element={<AIResearchLab />} />
+            <Route path="/tools/automl-platform" element={<AutoMLPlatform />} />
             <Route path="/start-selling" element={<StartSellingPage />} />
             <Route path="/course/:courseId" element={<CourseDetail />} />
             <Route path="/auth" element={<Auth />} />

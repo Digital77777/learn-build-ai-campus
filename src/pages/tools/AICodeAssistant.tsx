@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import Navigation from '@/components/Navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -295,10 +294,4 @@ function example() {
   );
 };
 
-export default function AICodeAssistantWithBoundary(props) {
-  return (
-    <ErrorBoundary>
-      <AICodeAssistant {...props} />
-    </ErrorBoundary>
-  );
-}
+export default AICodeAssistant;

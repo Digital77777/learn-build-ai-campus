@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -260,10 +259,4 @@ const NeuralImageGenerator = () => {
   );
 };
 
-export default function NeuralImageGeneratorWithBoundary(props) {
-  return (
-    <ErrorBoundary>
-      <NeuralImageGenerator {...props} />
-    </ErrorBoundary>
-  );
-}
+export default NeuralImageGenerator;

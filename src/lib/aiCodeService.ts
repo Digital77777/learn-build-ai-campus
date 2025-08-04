@@ -1,10 +1,3 @@
-function sanitizeInput(input: string): string {
-  // Remove script tags and dangerous HTML
-  return input.replace(/<script.*?>.*?<\/script>/gi, '')
-    .replace(/<.*?on\w+=.*?>/gi, '')
-    .replace(/[<>]/g, '')
-    .trim();
-}
 // Simplified AI service without external dependencies
 
 export interface CodeAnalysisResult {
@@ -21,56 +14,9 @@ export interface CodeCompletionResult {
   confidence: number;
 }
 
-const HUGGINGFACE_API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-
 class AICodeService {
   private async makeRequest(prompt: string, maxTokens: number = 500): Promise<string> {
-    // Try Hugging Face first
-    if (HUGGINGFACE_API_KEY) {
-      try {
-        const response = await fetch('https://api-inference.huggingface.co/models/bigcode/starcoder', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${HUGGINGFACE_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ inputs: prompt, parameters: { max_new_tokens: maxTokens } })
-        });
-        const data = await response.json();
-        if (data && data[0] && data[0].generated_text) {
-          return data[0].generated_text;
-        }
-      } catch (err) {
-        console.error('Hugging Face API error:', err);
-      }
-    }
-
-    // Fallback to OpenAI if available
-    if (OPENAI_API_KEY) {
-      try {
-        const response = await fetch('https://api.openai.com/v1/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${OPENAI_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'gpt-3.5-turbo-instruct',
-            prompt,
-            max_tokens: maxTokens
-          })
-        });
-        const data = await response.json();
-        if (data && data.choices && data.choices[0] && data.choices[0].text) {
-          return data.choices[0].text;
-        }
-      } catch (err) {
-        console.error('OpenAI API error:', err);
-      }
-    }
-
-    // Fallback to mock response if no API keys or error
+    // Using mock responses for demo
     return this.getMockResponse(prompt);
   }
 
@@ -113,11 +59,10 @@ function calculateFactorial(n) {
   }
 
   async analyzeCode(code: string, analysisType: 'completion' | 'debug' | 'refactor'): Promise<CodeAnalysisResult> {
-    const sanitizedCode = sanitizeInput(code);
     const prompts = {
-      completion: `Complete and improve this code with best practices:\n\n${sanitizedCode}\n\nProvide the complete improved version:`,
-      debug: `Analyze this code for bugs, security issues, and potential problems:\n\n${sanitizedCode}\n\nList specific issues and solutions:`,
-      refactor: `Refactor this code for better readability, performance, and maintainability:\n\n${sanitizedCode}\n\nProvide refactoring suggestions:`
+      completion: `Complete and improve this code with best practices:\n\n${code}\n\nProvide the complete improved version:`,
+      debug: `Analyze this code for bugs, security issues, and potential problems:\n\n${code}\n\nList specific issues and solutions:`,
+      refactor: `Refactor this code for better readability, performance, and maintainability:\n\n${code}\n\nProvide refactoring suggestions:`
     };
 
     const result = await this.makeRequest(prompts[analysisType]);
@@ -133,8 +78,8 @@ function calculateFactorial(n) {
   }
 
   async getCodeCompletion(code: string, cursorPosition: number): Promise<CodeCompletionResult> {
-    const beforeCursor = sanitizeInput(code.substring(0, cursorPosition));
-    const afterCursor = sanitizeInput(code.substring(cursorPosition));
+    const beforeCursor = code.substring(0, cursorPosition);
+    const afterCursor = code.substring(cursorPosition);
     
     const prompt = `Complete this code at the cursor position:\n\nBefore cursor:\n${beforeCursor}\n\nAfter cursor:\n${afterCursor}\n\nProvide completion:`;
     

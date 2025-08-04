@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -423,10 +422,4 @@ const AutoMLPlatform = () => {
   );
 };
 
-export default function AutoMLPlatformWithBoundary(props) {
-  return (
-    <ErrorBoundary>
-      <AutoMLPlatform {...props} />
-    </ErrorBoundary>
-  );
-}
+export default AutoMLPlatform;
