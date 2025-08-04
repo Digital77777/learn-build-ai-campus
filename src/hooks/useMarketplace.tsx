@@ -115,13 +115,32 @@ export const useMarketplace = () => {
   };
 
   // Create a new listing
-  const createListing = async (listingData: Partial<MarketplaceListing>) => {
+  const createListing = async (listingData: any) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
+      // Map camelCase fields to snake_case database columns and ensure required fields
+      const dbData = {
+        title: listingData.title || '',
+        description: listingData.description || '',
+        listing_type: listingData.listing_type || 'product',
+        user_id: user.id,
+        status: 'active',
+        category_id: listingData.category_id,
+        price: listingData.price,
+        currency: listingData.currency || 'USD',
+        images: listingData.images || [],
+        videos: listingData.videos || [],
+        creation_link: listingData.creationLink || listingData.creation_link,
+        tags: listingData.tags || [],
+        requirements: listingData.requirements,
+        delivery_time: listingData.delivery_time,
+        is_featured: false,
+      };
+
       const { data, error } = await supabase
         .from('marketplace_listings')
-        .insert([{ ...listingData, user_id: user.id } as any])
+        .insert([dbData])
         .select()
         .single();
 
