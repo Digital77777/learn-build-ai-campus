@@ -3,12 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, Brain, Coins, Zap, Users, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-ai-education.jpg";
-
 const HeroSection = () => {
   const navigate = useNavigate();
-
-  return (
-    <section className="relative py-20 overflow-hidden">
+  return <section className="relative py-20 overflow-hidden">
       {/* Background with gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-accent/20 to-primary/10" />
       
@@ -53,7 +50,7 @@ const HeroSection = () => {
                 <div className="text-sm text-muted-foreground">AI Tools</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary">12</div>
+                <div className="text-2xl font-bold text-primary">4</div>
                 <div className="text-sm text-muted-foreground">Learning Paths</div>
               </div>
               <div className="text-center">
@@ -66,11 +63,7 @@ const HeroSection = () => {
           {/* Right Content - Hero Image */}
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden shadow-ai">
-              <img 
-                src={heroImage} 
-                alt="Students learning with AI tools"
-                className="w-full h-[500px] object-cover"
-              />
+              <img src={heroImage} alt="Students learning with AI tools" className="w-full h-[500px] object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
             </div>
             
@@ -105,8 +98,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
