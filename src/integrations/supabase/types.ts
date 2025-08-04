@@ -166,6 +166,7 @@ export type Database = {
         Row: {
           category_id: string | null
           created_at: string
+          creation_link: string | null
           currency: string | null
           delivery_time: number | null
           description: string
@@ -180,10 +181,12 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          videos: string[] | null
         }
         Insert: {
           category_id?: string | null
           created_at?: string
+          creation_link?: string | null
           currency?: string | null
           delivery_time?: number | null
           description: string
@@ -198,10 +201,12 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          videos?: string[] | null
         }
         Update: {
           category_id?: string | null
           created_at?: string
+          creation_link?: string | null
           currency?: string | null
           delivery_time?: number | null
           description?: string
@@ -216,6 +221,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          videos?: string[] | null
         }
         Relationships: [
           {

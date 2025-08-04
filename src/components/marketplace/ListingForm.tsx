@@ -32,6 +32,8 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     price: initialData?.price || 0,
     currency: initialData?.currency || 'USD',
     images: initialData?.images || [],
+    videos: initialData?.videos || [],
+    creation_link: initialData?.creation_link || '',
     tags: initialData?.tags || [],
     requirements: initialData?.requirements || '',
     delivery_time: initialData?.delivery_time || 1,
@@ -39,6 +41,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
 
   const [newTag, setNewTag] = useState('');
   const [imagePreview, setImagePreview] = useState<string[]>(initialData?.images || []);
+  const [videoPreview, setVideoPreview] = useState<string[]>(initialData?.videos || []);
 
   useEffect(() => {
     if (initialData) {
@@ -50,11 +53,14 @@ export const ListingForm: React.FC<ListingFormProps> = ({
         price: initialData.price || 0,
         currency: initialData.currency || 'USD',
         images: initialData.images || [],
+        videos: initialData.videos || [],
+        creation_link: initialData.creation_link || '',
         tags: initialData.tags || [],
         requirements: initialData.requirements || '',
         delivery_time: initialData.delivery_time || 1,
       });
       setImagePreview(initialData.images || []);
+      setVideoPreview(initialData.videos || []);
     }
   }, [initialData]);
 
@@ -97,11 +103,33 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     }
   };
 
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          setVideoPreview(prev => [...prev, result]);
+          handleInputChange('videos', [...formData.videos, result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
   const removeImage = (index: number) => {
     const updatedImages = formData.images.filter((_, i) => i !== index);
     const updatedPreviews = imagePreview.filter((_, i) => i !== index);
     setImagePreview(updatedPreviews);
     handleInputChange('images', updatedImages);
+  };
+
+  const removeVideo = (index: number) => {
+    const updatedVideos = formData.videos.filter((_, i) => i !== index);
+    const updatedPreviews = videoPreview.filter((_, i) => i !== index);
+    setVideoPreview(updatedPreviews);
+    handleInputChange('videos', updatedVideos);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -227,6 +255,16 @@ export const ListingForm: React.FC<ListingFormProps> = ({
               </div>
 
               <div>
+                <Label htmlFor="creation_link">Creation Link</Label>
+                <Input
+                  id="creation_link"
+                  value={formData.creation_link}
+                  onChange={(e) => handleInputChange('creation_link', e.target.value)}
+                  placeholder="https://your-creation-link.com"
+                />
+              </div>
+
+              <div>
                 <Label htmlFor="delivery_time">Delivery Time (days)</Label>
                 <Input
                   id="delivery_time"
@@ -275,6 +313,55 @@ export const ListingForm: React.FC<ListingFormProps> = ({
               onChange={(e) => handleInputChange('requirements', e.target.value)}
               placeholder="List any specific requirements for this listing"
             />
+          </div>
+
+          {/* Videos Upload */}
+          <div>
+            <Label>Demo Videos</Label>
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <div className="text-center">
+                  <Video className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="mt-2">
+                    <label className="cursor-pointer">
+                      <span className="text-sm text-gray-600">
+                        Click to upload videos or drag and drop
+                      </span>
+                      <input
+                        type="file"
+                        className="hidden"
+                        multiple
+                        accept="video/*"
+                        onChange={handleVideoUpload}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {videoPreview.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {videoPreview.map((video, index) => (
+                    <div key={index} className="relative">
+                      <video
+                        src={video}
+                        controls
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-1 right-1 h-6 w-6 p-0"
+                        onClick={() => removeVideo(index)}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Image Upload */}
