@@ -1,9 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
-import { python } from '@codemirror/lang-python';
-import { oneDark } from '@codemirror/theme-one-dark';
-import { EditorView } from '@codemirror/view';
+// Simplified code editor without CodeMirror dependencies
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -22,10 +18,10 @@ interface CodeEditorProps {
 }
 
 const languages = [
-  { value: 'javascript', label: 'JavaScript', extension: javascript() },
-  { value: 'typescript', label: 'TypeScript', extension: javascript() },
-  { value: 'python', label: 'Python', extension: python() },
-  { value: 'jsx', label: 'React JSX', extension: javascript() },
+  { value: 'javascript', label: 'JavaScript' },
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'python', label: 'Python' },
+  { value: 'jsx', label: 'React JSX' },
 ];
 
 const sampleCode = {
@@ -99,22 +95,6 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
 
   const currentLanguage = languages.find(lang => lang.value === language) || languages[0];
-
-  const extensions = [
-    currentLanguage.extension,
-    EditorView.theme({
-      '&': {
-        fontSize: '14px',
-      },
-      '.cm-content': {
-        padding: '16px',
-        minHeight: '300px',
-      },
-      '.cm-focused': {
-        outline: 'none',
-      },
-    }),
-  ];
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(value);
@@ -241,24 +221,13 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       
       <CardContent className="p-0">
         <div className="border rounded-lg overflow-hidden">
-          <CodeMirror
+          <textarea
             value={value}
-            onChange={onChange}
-            extensions={extensions}
-            theme={isDarkMode ? oneDark : undefined}
+            onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
             readOnly={readOnly}
-            basicSetup={{
-              lineNumbers: true,
-              foldGutter: true,
-              dropCursor: false,
-              allowMultipleSelections: false,
-              indentOnInput: true,
-              bracketMatching: true,
-              closeBrackets: true,
-              autocompletion: true,
-              highlightSelectionMatches: false,
-            }}
+            className="w-full h-96 p-4 font-mono text-sm resize-none border-0 focus:outline-none bg-background text-foreground"
+            style={{ minHeight: '300px' }}
           />
         </div>
       </CardContent>

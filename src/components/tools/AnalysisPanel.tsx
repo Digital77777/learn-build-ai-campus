@@ -18,8 +18,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { CodeAnalysisResult } from '@/lib/aiCodeService';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+// Removed syntax highlighter dependency for simplified build
 import { toast } from 'sonner';
 
 interface AnalysisPanelProps {
@@ -175,17 +174,9 @@ ${analysis.refactoredCode ? `REFACTORED CODE:\n${analysis.refactoredCode}` : ''}
                       <CheckCircle className="h-4 w-4 text-green-600" />
                       Improved Code
                     </h4>
-                    <SyntaxHighlighter
-                      language="javascript"
-                      style={tomorrow}
-                      customStyle={{
-                        margin: 0,
-                        borderRadius: '6px',
-                        fontSize: '13px'
-                      }}
-                    >
-                      {analysis.refactoredCode}
-                    </SyntaxHighlighter>
+                    <pre className="bg-gray-900 text-white p-4 rounded-lg text-sm overflow-x-auto">
+                      <code>{analysis.refactoredCode}</code>
+                    </pre>
                   </div>
                 ) : (
                   <div className="space-y-3">

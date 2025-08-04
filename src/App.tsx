@@ -18,6 +18,7 @@ import FreelanceServicesPage from "./pages/FreelanceServicesPage";
 import PostJobsPage from "./pages/PostJobsPage";
 import AIDevelopmentPage from "./pages/AIDevelopmentPage";
 import CreateListingPage from "./pages/CreateListingPage";
+import EditListingPage from "./pages/EditListingPage";
 import MyListingsPage from "./pages/MyListingsPage";
 import AICodeAssistant from "./pages/tools/AICodeAssistant";
 import NeuralImageGenerator from "./pages/tools/NeuralImageGenerator";
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/marketplace/post-jobs" element={<PostJobsPage />} />
             <Route path="/marketplace/ai-development" element={<AIDevelopmentPage />} />
             <Route path="/marketplace/create" element={<CreateListingPage />} />
+            <Route path="/marketplace/edit/:id" element={<EditListingPage />} />
             <Route path="/marketplace/my-listings" element={<MyListingsPage />} />
             <Route path="/tools/ai-code-assistant" element={<AICodeAssistant />} />
             <Route path="/tools/neural-image-generator" element={<NeuralImageGenerator />} />

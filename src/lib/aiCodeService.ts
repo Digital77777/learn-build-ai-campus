@@ -1,7 +1,4 @@
-import { HfInference } from '@huggingface/inference';
-
-// Using Hugging Face's free inference API
-const hf = new HfInference(import.meta.env.VITE_HUGGINGFACE_API_KEY || 'hf_demo');
+// Simplified AI service without external dependencies
 
 export interface CodeAnalysisResult {
   suggestions: string;
@@ -19,26 +16,8 @@ export interface CodeCompletionResult {
 
 class AICodeService {
   private async makeRequest(prompt: string, maxTokens: number = 500): Promise<string> {
-    try {
-      // Using CodeLlama model for code-specific tasks
-      const response = await hf.textGeneration({
-        model: 'codellama/CodeLlama-7b-Instruct-hf',
-        inputs: prompt,
-        parameters: {
-          max_new_tokens: maxTokens,
-          temperature: 0.1,
-          top_p: 0.95,
-          do_sample: true,
-          return_full_text: false
-        }
-      });
-
-      return response.generated_text || '';
-    } catch (error) {
-      console.error('AI API Error:', error);
-      // Fallback to mock responses for demo
-      return this.getMockResponse(prompt);
-    }
+    // Using mock responses for demo
+    return this.getMockResponse(prompt);
   }
 
   private getMockResponse(prompt: string): string {

@@ -154,7 +154,7 @@ function example() {
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="analysis" className="text-xs">
-                  <Brain className="h-3 w-3 mr-1" />
+                  <div className="h-3 w-3 mr-1" />
                   Analysis
                 </TabsTrigger>
                 <TabsTrigger value="explanation" className="text-xs">

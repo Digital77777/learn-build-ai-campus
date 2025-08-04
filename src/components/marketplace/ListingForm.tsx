@@ -1,9 +1,14 @@
-// Placeholder file to resolve build errors
-// This component uses outdated interfaces that don't match the current database schema
-// TODO: Update this component to use the simplified MarketplaceListing interface
-
-import React from 'react';
-import { MarketplaceListing } from '@/hooks/useMarketplace';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { MarketplaceListing, useMarketplace } from '@/hooks/useMarketplace';
+import { Upload, X, Image as ImageIcon, Video } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ListingFormProps {
   initialData?: Partial<MarketplaceListing>;
@@ -12,34 +17,336 @@ interface ListingFormProps {
   isLoading?: boolean;
 }
 
-export const ListingForm: React.FC<ListingFormProps> = ({ onSubmit, onCancel }) => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({
-      title: 'Sample Title',
-      description: 'Sample Description',
-      listing_type: 'product'
-    });
+export const ListingForm: React.FC<ListingFormProps> = ({ 
+  initialData, 
+  onSubmit, 
+  onCancel, 
+  isLoading = false 
+}) => {
+  const { categories } = useMarketplace();
+  const [formData, setFormData] = useState({
+    title: initialData?.title || '',
+    description: initialData?.description || '',
+    listing_type: initialData?.listing_type || 'product' as const,
+    category_id: initialData?.category_id || '',
+    price: initialData?.price || 0,
+    currency: initialData?.currency || 'USD',
+    images: initialData?.images || [],
+    tags: initialData?.tags || [],
+    requirements: initialData?.requirements || '',
+    delivery_time: initialData?.delivery_time || 1,
+  });
+
+  const [newTag, setNewTag] = useState('');
+  const [imagePreview, setImagePreview] = useState<string[]>(initialData?.images || []);
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || '',
+        description: initialData.description || '',
+        listing_type: initialData.listing_type || 'product',
+        category_id: initialData.category_id || '',
+        price: initialData.price || 0,
+        currency: initialData.currency || 'USD',
+        images: initialData.images || [],
+        tags: initialData.tags || [],
+        requirements: initialData.requirements || '',
+        delivery_time: initialData.delivery_time || 1,
+      });
+      setImagePreview(initialData.images || []);
+    }
+  }, [initialData]);
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const addTag = () => {
+    if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
+      const updatedTags = [...formData.tags, newTag.trim()];
+      handleInputChange('tags', updatedTags);
+      setNewTag('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    const updatedTags = formData.tags.filter(tag => tag !== tagToRemove);
+    handleInputChange('tags', updatedTags);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addTag();
+    }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          setImagePreview(prev => [...prev, result]);
+          handleInputChange('images', [...formData.images, result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const updatedImages = formData.images.filter((_, i) => i !== index);
+    const updatedPreviews = imagePreview.filter((_, i) => i !== index);
+    setImagePreview(updatedPreviews);
+    handleInputChange('images', updatedImages);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.title.trim() || !formData.description.trim()) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    if (formData.price <= 0) {
+      toast.error('Please enter a valid price');
+      return;
+    }
+
+    onSubmit(formData);
+  };
+
+  const isValid = formData.title.trim() && formData.description.trim() && formData.price > 0;
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium">Title</label>
-        <input type="text" className="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium">Description</label>
-        <textarea className="w-full p-2 border rounded" />
-      </div>
-      <div className="flex gap-2">
-        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
-          Submit
-        </button>
-        <button type="button" onClick={onCancel} className="px-4 py-2 bg-gray-500 text-white rounded">
-          Cancel
-        </button>
-      </div>
-    </form>
+    <Card className="max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle>
+          {initialData ? 'Edit Listing' : 'Create New Listing'}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Basic Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="title">Title *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
+                  placeholder="Enter listing title"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="listing_type">Type *</Label>
+                <Select 
+                  value={formData.listing_type} 
+                  onValueChange={(value) => handleInputChange('listing_type', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="product">Product</SelectItem>
+                    <SelectItem value="service">Service</SelectItem>
+                    <SelectItem value="job">Job</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="category">Category</Label>
+                <Select 
+                  value={formData.category_id} 
+                  onValueChange={(value) => handleInputChange('category_id', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <Label htmlFor="price">Price *</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={formData.price}
+                    onChange={(e) => handleInputChange('price', parseFloat(e.target.value) || 0)}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="currency">Currency</Label>
+                  <Select 
+                    value={formData.currency} 
+                    onValueChange={(value) => handleInputChange('currency', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="USD">USD</SelectItem>
+                      <SelectItem value="EUR">EUR</SelectItem>
+                      <SelectItem value="GBP">GBP</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="description">Description *</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  placeholder="Describe your offering"
+                  className="min-h-[120px]"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="delivery_time">Delivery Time (days)</Label>
+                <Input
+                  id="delivery_time"
+                  type="number"
+                  min="1"
+                  value={formData.delivery_time}
+                  onChange={(e) => handleInputChange('delivery_time', parseInt(e.target.value) || 1)}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div>
+            <Label>Tags</Label>
+            <div className="flex gap-2 mb-2">
+              <Input
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Add a tag"
+              />
+              <Button type="button" onClick={addTag} disabled={!newTag.trim()}>
+                Add
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {formData.tags.map((tag, index) => (
+                <Badge key={index} variant="secondary" className="cursor-pointer">
+                  {tag}
+                  <X 
+                    className="h-3 w-3 ml-1" 
+                    onClick={() => removeTag(tag)}
+                  />
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Requirements */}
+          <div>
+            <Label htmlFor="requirements">Requirements (Optional)</Label>
+            <Textarea
+              id="requirements"
+              value={formData.requirements}
+              onChange={(e) => handleInputChange('requirements', e.target.value)}
+              placeholder="List any specific requirements for this listing"
+            />
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <Label>Images</Label>
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <div className="text-center">
+                  <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="mt-2">
+                    <label className="cursor-pointer">
+                      <span className="text-sm text-gray-600">
+                        Click to upload images or drag and drop
+                      </span>
+                      <input
+                        type="file"
+                        className="hidden"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {imagePreview.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {imagePreview.map((image, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={image}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-1 right-1 h-6 w-6 p-0"
+                        onClick={() => removeImage(index)}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Submit Buttons */}
+          <div className="flex gap-4 pt-6">
+            <Button 
+              type="submit" 
+              disabled={!isValid || isLoading}
+              className="flex-1"
+            >
+              {isLoading ? 'Saving...' : initialData ? 'Update Listing' : 'Create Listing'}
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onCancel}
+              disabled={isLoading}
+              className="flex-1"
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
