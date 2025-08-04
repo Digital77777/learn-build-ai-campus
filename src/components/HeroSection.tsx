@@ -75,7 +75,7 @@ const HeroSection = () => {
                     <Users className="h-4 w-4 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold">5,000+</div>
+                    <div className="font-semibold">300+</div>
                     <div className="text-sm text-muted-foreground">Active Students</div>
                   </div>
                 </div>
