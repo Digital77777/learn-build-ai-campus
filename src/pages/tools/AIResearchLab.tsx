@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -359,4 +360,10 @@ const AIResearchLab = () => {
   );
 };
 
-export default AIResearchLab;
+export default function AIResearchLabWithBoundary(props) {
+  return (
+    <ErrorBoundary>
+      <AIResearchLab {...props} />
+    </ErrorBoundary>
+  );
+}
