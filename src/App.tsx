@@ -2,8 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { AuthProvider } from "@/hooks/useAuth";
+import Navigation from "./components/Navigation";
+import MobileFooter from "./components/MobileFooter";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -29,6 +32,30 @@ import AutoMLPlatform from "./pages/tools/AutoMLPlatform";
 
 const queryClient = new QueryClient();
 
+// Component to handle scroll to top and prevent volume button navigation
+function ScrollToTop() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // Prevent volume buttons from triggering navigation
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'VolumeUp' || e.key === 'VolumeDown' || e.key === 'VolumeMute') {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown, { capture: true });
+    return () => document.removeEventListener('keydown', handleKeyDown, { capture: true });
+  }, []);
+
+  return null;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -36,7 +63,10 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
+          <div className="min-h-screen bg-background pb-16 md:pb-0">
+            <ScrollToTop />
+            <Navigation />
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/learning-paths" element={<LearningPaths />} />
             <Route path="/ai-tools" element={<AIToolsPage />} />
@@ -61,6 +91,8 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <MobileFooter />
+        </div>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
