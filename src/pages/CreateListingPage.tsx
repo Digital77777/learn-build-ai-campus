@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navigation from '@/components/Navigation';
+
 import { ListingForm } from '@/components/marketplace/ListingForm';
 import { useMarketplace } from '@/hooks/useMarketplace';
 import { useAuth } from '@/hooks/useAuth';
@@ -42,7 +42,6 @@ const CreateListingPage = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
         <div className="container mx-auto px-6 pt-24 pb-12">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Sign In Required</h1>
@@ -63,7 +62,7 @@ const CreateListingPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       <div className="container mx-auto px-6 pt-24 pb-12">
         <ListingForm
           onSubmit={handleSubmit}

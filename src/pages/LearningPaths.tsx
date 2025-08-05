@@ -1,4 +1,4 @@
-import Navigation from "@/components/Navigation";
+
 import { BookOpen, Clock, Star, Users, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,7 +61,7 @@ const LearningPaths = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 pt-20 pb-16">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navigation from '@/components/Navigation';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -88,7 +88,7 @@ const MyListingsPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       <div className="container mx-auto px-6 pt-24 pb-12">
         <div className="flex items-center justify-between mb-8">
           <div>

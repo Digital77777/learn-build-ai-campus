@@ -1,4 +1,4 @@
-import Navigation from "@/components/Navigation";
+
 import { Store, Briefcase, Users, Code, DollarSign, ArrowRight, Star, MapPin, Clock, TrendingUp, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -86,7 +86,7 @@ const MarketplacePage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 pt-20 pb-16">

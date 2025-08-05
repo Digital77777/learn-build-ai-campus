@@ -1,4 +1,4 @@
-import Navigation from "@/components/Navigation";
+
 import { Store, Briefcase, Users, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +38,7 @@ const StartSellingPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       
       <div className="container mx-auto px-6 pt-24 pb-12">
         <div className="text-center max-w-3xl mx-auto mb-12">

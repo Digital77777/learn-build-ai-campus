@@ -1,5 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
-import Navigation from "@/components/Navigation";
+
 import { ArrowLeft, Clock, Users, Star, BookOpen, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -184,7 +184,7 @@ const CourseDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       
       <div className="pt-20">
         <div className="container mx-auto px-6 py-8">

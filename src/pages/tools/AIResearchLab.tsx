@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Navigation from '@/components/Navigation';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -129,7 +129,7 @@ const AIResearchLab = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       
       <div className="container mx-auto px-6 pt-24 pb-12">
         {/* Header */}

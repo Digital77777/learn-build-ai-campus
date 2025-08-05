@@ -1,5 +1,5 @@
 
-import Navigation from "@/components/Navigation";
+
 import { Brain, Zap, Code, Image, MessageSquare, BarChart3, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -133,7 +133,7 @@ const AIToolsPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 pt-20 pb-16">

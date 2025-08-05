@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Navigation from '@/components/Navigation';
+
 import { ListingForm } from '@/components/marketplace/ListingForm';
 import { useMarketplace, MarketplaceListing } from '@/hooks/useMarketplace';
 import { useAuth } from '@/hooks/useAuth';
@@ -70,7 +70,6 @@ const EditListingPage = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
         <div className="container mx-auto px-6 pt-24 pb-12">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Sign In Required</h1>
@@ -92,7 +91,6 @@ const EditListingPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
         <div className="container mx-auto px-6 pt-24 pb-12">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
@@ -106,7 +104,6 @@ const EditListingPage = () => {
   if (!listing) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
         <div className="container mx-auto px-6 pt-24 pb-12">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Listing Not Found</h1>
@@ -127,7 +124,7 @@ const EditListingPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       <div className="container mx-auto px-6 pt-24 pb-12">
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Edit Listing</h1>

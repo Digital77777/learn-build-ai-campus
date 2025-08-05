@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import Navigation from '@/components/Navigation';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -93,7 +93,7 @@ const AICodeAssistant = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      
       
       <div className="container mx-auto px-6 pt-24 pb-12">
         {/* Header */}
