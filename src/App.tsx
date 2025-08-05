@@ -33,7 +33,7 @@ import AutoMLPlatform from "./pages/tools/AutoMLPlatform";
 const queryClient = new QueryClient();
 
 // Component to handle scroll to top and prevent volume button navigation
-function ScrollToTop() {
+const ScrollToTop = () => {
   const location = useLocation();
   
   useEffect(() => {
@@ -54,7 +54,7 @@ function ScrollToTop() {
   }, []);
 
   return null;
-}
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
