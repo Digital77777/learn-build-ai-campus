@@ -7,8 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { MarketplaceListing, useMarketplace } from '@/hooks/useMarketplace';
-import { Upload, X, Image as ImageIcon, Video } from 'lucide-react';
+import { X } from 'lucide-react';
 import { toast } from 'sonner';
+import { MediaUploader } from '@/components/media/MediaUploader';
 
 interface ListingFormProps {
   initialData?: Partial<MarketplaceListing>;
@@ -315,102 +316,18 @@ export const ListingForm: React.FC<ListingFormProps> = ({
             />
           </div>
 
-          {/* Videos Upload */}
+          {/* Media Upload */}
           <div>
-            <Label>Demo Videos</Label>
-            <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-                <div className="text-center">
-                  <Video className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="mt-2">
-                    <label className="cursor-pointer">
-                      <span className="text-sm text-gray-600">
-                        Click to upload videos or drag and drop
-                      </span>
-                      <input
-                        type="file"
-                        className="hidden"
-                        multiple
-                        accept="video/*"
-                        onChange={handleVideoUpload}
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {videoPreview.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {videoPreview.map((video, index) => (
-                    <div key={index} className="relative">
-                      <video
-                        src={video}
-                        controls
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        className="absolute top-1 right-1 h-6 w-6 p-0"
-                        onClick={() => removeVideo(index)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Image Upload */}
-          <div>
-            <Label>Images</Label>
-            <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-                <div className="text-center">
-                  <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="mt-2">
-                    <label className="cursor-pointer">
-                      <span className="text-sm text-gray-600">
-                        Click to upload images or drag and drop
-                      </span>
-                      <input
-                        type="file"
-                        className="hidden"
-                        multiple
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {imagePreview.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {imagePreview.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={image}
-                        alt={`Preview ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg"
-                      />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        className="absolute top-1 right-1 h-6 w-6 p-0"
-                        onClick={() => removeImage(index)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <Label>Media (Images & Videos)</Label>
+            <MediaUploader
+              images={formData.images}
+              videos={formData.videos}
+              onImagesChange={(images) => handleInputChange('images', images)}
+              onVideosChange={(videos) => handleInputChange('videos', videos)}
+              maxImages={10}
+              maxVideos={5}
+              maxFileSize={50}
+            />
           </div>
 
           {/* Submit Buttons */}

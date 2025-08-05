@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Heart } from 'lucide-react';
 import { MarketplaceListing } from '@/hooks/useMarketplace';
+import { MediaPreview } from '@/components/media/MediaPreview';
 
 interface SimpleListingCardProps {
   listing: MarketplaceListing;
@@ -57,15 +58,14 @@ export const SimpleListingCard: React.FC<SimpleListingCardProps> = ({
           )}
         </div>
         
-        {listing.images && listing.images.length > 0 && (
-          <div className="aspect-video bg-muted rounded-md mb-3 overflow-hidden">
-            <img
-              src={listing.images[0]}
-              alt={listing.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-            />
-          </div>
-        )}
+        <MediaPreview
+          images={listing.images || []}
+          videos={listing.videos || []}
+          title={listing.title}
+          category="tech"
+          className="mb-3"
+          maxVisible={1}
+        />
         
         <CardTitle className="text-lg line-clamp-2">{listing.title}</CardTitle>
       </CardHeader>

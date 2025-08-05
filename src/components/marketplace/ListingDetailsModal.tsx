@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Heart, ExternalLink, Play, Image as ImageIcon } from 'lucide-react';
 import { MarketplaceListing } from '@/hooks/useMarketplace';
+import { MediaPreview } from '@/components/media/MediaPreview';
 
 interface ListingDetailsModalProps {
   listing: MarketplaceListing | null;
@@ -58,46 +59,20 @@ export const ListingDetailsModal: React.FC<ListingDetailsModalProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Images/Videos */}
-            {listing.images && listing.images.length > 0 && (
+            {/* Media Preview */}
+            {((listing.images && listing.images.length > 0) || (listing.videos && listing.videos.length > 0)) && (
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <ImageIcon className="h-5 w-5" />
-                  Preview
+                  Media Preview
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {listing.images.map((image, index) => (
-                    <div key={index} className="aspect-video bg-muted rounded-lg overflow-hidden">
-                      <img
-                        src={image}
-                        alt={`${listing.title} preview ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Videos */}
-            {listing.videos && listing.videos.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Play className="h-5 w-5" />
-                  Demo Videos
-                </h3>
-                <div className="grid grid-cols-1 gap-4">
-                  {listing.videos.map((video, index) => (
-                    <div key={index} className="aspect-video bg-muted rounded-lg overflow-hidden">
-                      <video
-                        src={video}
-                        controls
-                        className="w-full h-full object-cover"
-                        preload="metadata"
-                      />
-                    </div>
-                  ))}
-                </div>
+                <MediaPreview
+                  images={listing.images || []}
+                  videos={listing.videos || []}
+                  title={listing.title}
+                  category="tech"
+                  showCount={true}
+                />
               </div>
             )}
 
