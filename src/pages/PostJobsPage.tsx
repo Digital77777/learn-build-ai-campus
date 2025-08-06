@@ -181,7 +181,7 @@ const PostJobsPage = () => {
               Connect with pre-screened AI experts, data scientists, and machine learning engineers. Build your dream AI team faster than ever.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90" onClick={() => window.location.href = '/marketplace/create-job'}>
                 <Briefcase className="h-5 w-5 mr-2" />
                 Post a Job
               </Button>
@@ -231,7 +231,7 @@ const PostJobsPage = () => {
                       ))}
                     </div>
                   </div>
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full" variant="outline" onClick={() => window.location.href = `/marketplace/create-job?role=${encodeURIComponent(type.title)}`}>
                     Post {type.title} Job
                   </Button>
                 </CardContent>

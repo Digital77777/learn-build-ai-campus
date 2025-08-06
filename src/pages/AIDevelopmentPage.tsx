@@ -175,7 +175,7 @@ const AIDevelopmentPage = () => {
               Transform your business with enterprise-grade AI development. From custom models to full-scale AI integration, we build solutions that drive real results.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90" onClick={() => window.location.href = '/marketplace/start-project'}>
                 <Code className="h-5 w-5 mr-2" />
                 Start Your Project
               </Button>
@@ -389,7 +389,7 @@ const AIDevelopmentPage = () => {
                 <Code className="h-5 w-5 mr-2" />
                 Start Your AI Project
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={() => window.location.href = '/marketplace/schedule-consultation'}>
                 Schedule Consultation
               </Button>
             </div>

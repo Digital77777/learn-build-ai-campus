@@ -29,6 +29,10 @@ import SmartAnalytics from "./pages/tools/SmartAnalytics";
 import ConversationalAI from "./pages/tools/ConversationalAI";
 import AIResearchLab from "./pages/tools/AIResearchLab";
 import AutoMLPlatform from "./pages/tools/AutoMLPlatform";
+import CreateJobPostingPage from "./pages/CreateJobPostingPage";
+import CreateFreelancerProfilePage from "./pages/CreateFreelancerProfilePage";
+import StartProjectPage from "./pages/StartProjectPage";
+import ScheduleConsultationPage from "./pages/ScheduleConsultationPage";
 
 const queryClient = new QueryClient();
 
@@ -87,6 +91,10 @@ const App = () => (
             <Route path="/tools/automl-platform" element={<AutoMLPlatform />} />
             <Route path="/start-selling" element={<StartSellingPage />} />
             <Route path="/course/:courseId" element={<CourseDetail />} />
+            <Route path="/marketplace/create-job" element={<CreateJobPostingPage />} />
+            <Route path="/marketplace/create-freelancer-profile" element={<CreateFreelancerProfilePage />} />
+            <Route path="/marketplace/start-project" element={<StartProjectPage />} />
+            <Route path="/marketplace/schedule-consultation" element={<ScheduleConsultationPage />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

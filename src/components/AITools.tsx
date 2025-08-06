@@ -109,7 +109,7 @@ const AITools = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {aiTools.slice(0, 6).map((tool) => (
             <Card key={tool.id} className="hover:shadow-ai transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
               <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${tool.gradient}`} />

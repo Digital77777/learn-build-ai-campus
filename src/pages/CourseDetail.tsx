@@ -21,28 +21,28 @@ const courseData = {
       {
         title: "Introduction to AI",
         description: "Understanding what AI is and its applications",
-        videoId: "JMUxmLyrhSk", // Introduction to Artificial Intelligence
+        videoId: "ad79nYk2keg", // What is Artificial Intelligence? In 5 minutes
         duration: "45 min",
         completed: false
       },
       {
         title: "Machine Learning Basics",
         description: "Core concepts of machine learning algorithms",
-        videoId: "ukzFI9rgwfU", // Machine Learning Explained
+        videoId: "Gv9_4yMHFhI", // Machine Learning Explained
         duration: "38 min",
         completed: false
       },
       {
         title: "Neural Networks",
         description: "How neural networks work and their applications",
-        videoId: "aircAruvnKk", // Neural Networks Explained
+        videoId: "bfmFfD2RIcg", // Neural Networks Explained
         duration: "52 min",
         completed: false
       },
       {
         title: "Python for AI",
         description: "Programming fundamentals for AI development",
-        videoId: "kqtD5dpn9C8", // Python for AI
+        videoId: "WGJJIrtnfpk", // Python for AI and Machine Learning
         duration: "41 min",
         completed: false
       }
@@ -61,28 +61,28 @@ const courseData = {
       {
         title: "Text Processing",
         description: "Preprocessing and analyzing text data",
-        videoId: "8S3qHHUKqYk", // NLP Text Processing
+        videoId: "fOvTtapxa9c", // Natural Language Processing
         duration: "35 min",
         completed: false
       },
       {
         title: "Language Models",
         description: "Understanding and building language models",
-        videoId: "zjkBMFhNj_g", // Language Models Explained
+        videoId: "zizonToFXDs", // Large Language Models explained
         duration: "42 min",
         completed: false
       },
       {
         title: "Chatbot Development",
         description: "Creating intelligent conversational AI",
-        videoId: "1lwddP0KUEg", // Chatbot Development
+        videoId: "EPnRSVreMzI", // How to Build a Chatbot
         duration: "48 min",
         completed: false
       },
       {
         title: "Sentiment Analysis",
         description: "Analyzing emotions and opinions in text",
-        videoId: "AJXLS3XjnDM", // Sentiment Analysis
+        videoId: "QpzMWQvxXWk", // Sentiment Analysis Explained
         duration: "33 min",
         completed: false
       }
@@ -101,14 +101,14 @@ const courseData = {
       {
         title: "Image Processing",
         description: "Fundamentals of digital image processing",
-        videoId: "C_zFhWdM4ic", // Image Processing Basics
+        videoId: "XkVdwrmN_h0", // Computer Vision Explained
         duration: "40 min",
         completed: false
       },
       {
         title: "Object Detection",
         description: "Detecting and classifying objects in images",
-        videoId: "9s_FpMpdYW8", // Object Detection
+        videoId: "tFNJGim3FXw", // Object Detection Explained
         duration: "45 min",
         completed: false
       },

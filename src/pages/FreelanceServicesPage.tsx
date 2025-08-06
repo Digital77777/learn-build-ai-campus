@@ -290,7 +290,7 @@ const FreelanceServicesPage = () => {
             <p className="text-muted-foreground mb-8">
               Join thousands of AI experts building successful freelance careers on our platform.
             </p>
-            <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+            <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90" onClick={() => window.location.href = '/marketplace/create-freelancer-profile'}>
               <Briefcase className="h-5 w-5 mr-2" />
               Create Freelancer Profile
             </Button>
