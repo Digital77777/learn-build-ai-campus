@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Search, Filter, Heart, Star } from 'lucide-react';
 import { useMarketplace, MarketplaceListing } from '@/hooks/useMarketplace';
 import { SimpleListingCard } from '@/components/marketplace/SimpleListingCard';
+import { JobListingCard } from '@/components/marketplace/JobListingCard';
 import { ListingDetailsModal } from '@/components/marketplace/ListingDetailsModal';
 import { useAuth } from '@/hooks/useAuth';
 

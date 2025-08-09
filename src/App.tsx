@@ -30,6 +30,7 @@ import ConversationalAI from "./pages/tools/ConversationalAI";
 import AIResearchLab from "./pages/tools/AIResearchLab";
 import AutoMLPlatform from "./pages/tools/AutoMLPlatform";
 import CreateJobPostingPage from "./pages/CreateJobPostingPage";
+import CreateJobPostingPage from "./pages/CreateJobPostingPage";
 import CreateFreelancerProfilePage from "./pages/CreateFreelancerProfilePage";
 import StartProjectPage from "./pages/StartProjectPage";
 import ScheduleConsultationPage from "./pages/ScheduleConsultationPage";

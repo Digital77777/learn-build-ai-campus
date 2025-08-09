@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Heart } from 'lucide-react';
 import { MarketplaceListing } from '@/hooks/useMarketplace';
 import { MediaPreview } from '@/components/media/MediaPreview';
+import { JobListingCard } from './JobListingCard';
 
 interface SimpleListingCardProps {
   listing: MarketplaceListing;
@@ -25,6 +26,17 @@ export const SimpleListingCard: React.FC<SimpleListingCardProps> = ({
       currency: currency,
     }).format(price);
   };
+
+  // Use specialized job card for job listings
+  if (listing.listing_type === 'job') {
+    return (
+      <JobListingCard
+        listing={listing}
+        onApply={(listingId) => console.log('Apply to job:', listingId)}
+        onViewDetails={onViewDetails}
+      />
+    );
+  }
 
   const getTypeColor = (type: string) => {
     switch (type) {

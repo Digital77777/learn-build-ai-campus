@@ -185,7 +185,7 @@ const PostJobsPage = () => {
                 <Briefcase className="h-5 w-5 mr-2" />
                 Post a Job
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={() => navigate('/marketplace/browse')}>
                 Browse Talent
               </Button>
             </div>
@@ -232,7 +232,9 @@ const PostJobsPage = () => {
                     </div>
                   </div>
                   <Button className="w-full" variant="outline" onClick={() => window.location.href = `/marketplace/create-job?role=${encodeURIComponent(type.title)}`}>
-                    Post {type.title} Job
+                    <Button className="w-full" variant="outline" onClick={() => navigate('/marketplace/create-job', { state: { role: type.title } })}>
+                      Post {type.title} Job
+                    </Button>
                   </Button>
                 </CardContent>
               </Card>
@@ -302,7 +304,8 @@ const PostJobsPage = () => {
                     ))}
                   </ul>
                   <Button className={`w-full ${plan.recommended ? 'bg-primary' : ''}`} variant={plan.recommended ? "default" : "outline"}>
-                    {plan.name === "Enterprise" ? "Contact Sales" : "Get Started"}
+                    {plan.name === "Enterprise" ? "Contact Sales" : 
+                     <span onClick={() => navigate('/marketplace/create-job')}>Get Started</span>}
                   </Button>
                 </CardContent>
               </Card>
@@ -375,6 +378,7 @@ const PostJobsPage = () => {
               Join hundreds of companies building exceptional AI teams with our platform.
             </p>
             <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+            <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90" onClick={() => navigate('/marketplace/create-job')}>
               <Briefcase className="h-5 w-5 mr-2" />
               Post Your First Job
             </Button>

@@ -136,6 +136,8 @@ export const useMarketplace = () => {
         requirements: listingData.requirements,
         delivery_time: listingData.delivery_time,
         is_featured: false,
+        // Store additional metadata for jobs and services
+        metadata: listingData.metadata || {}
       };
 
       const { data, error } = await supabase
