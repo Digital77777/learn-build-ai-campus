@@ -36,15 +36,7 @@ export type Database = {
           role?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "admin_roles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       admin_users: {
         Row: {
@@ -65,15 +57,7 @@ export type Database = {
           role?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "admin_users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       error_log: {
         Row: {
@@ -153,13 +137,6 @@ export type Database = {
             referencedRelation: "marketplace_listings"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "marketplace_favorites_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
         ]
       }
       marketplace_listings: {
@@ -231,13 +208,6 @@ export type Database = {
             referencedRelation: "marketplace_categories"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "marketplace_listings_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
         ]
       }
       notifications: {
@@ -268,15 +238,7 @@ export type Database = {
           type?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -303,15 +265,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       seller_profiles: {
         Row: {
@@ -362,15 +316,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "seller_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       seller_verification_tasks: {
         Row: {
@@ -414,13 +360,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "seller_verification_tasks_reviewed_by_fkey"
-            columns: ["reviewed_by"]
-            isOneToOne: false
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
-          {
             foreignKeyName: "seller_verification_tasks_seller_profile_id_fkey"
             columns: ["seller_profile_id"]
             isOneToOne: false
@@ -454,19 +393,11 @@ export type Database = {
           owner_id?: string | null
           price?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "tools_owner_id_fkey"
-            columns: ["owner_id"]
-            isOneToOne: false
-            referencedRelation: "is_admin"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
-      is_admin: {
+      is_admin_secure: {
         Row: {
           email: string | null
           is_admin: boolean | null
@@ -504,6 +435,15 @@ export type Database = {
       create_seller_verification_task: {
         Args: { p_required_documents?: Json; p_seller_profile_id: number }
         Returns: number
+      }
+      get_admin_info: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          email: string
+          is_admin: boolean
+          role: string
+          user_id: string
+        }[]
       }
       get_sellers_for_review: {
         Args: { p_page?: number; p_page_size?: number; p_status?: string }
