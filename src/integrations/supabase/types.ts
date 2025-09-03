@@ -397,7 +397,15 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      is_admin: {
+        Row: {
+          email: string | null
+          is_admin: boolean | null
+          role: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       add_admin_user: {
