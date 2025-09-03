@@ -16,7 +16,8 @@ export const JobListingCard: React.FC<JobListingCardProps> = ({
   onApply,
   onViewDetails
 }) => {
-  const metadata = listing.metadata as any || {};
+  // For now, we'll use empty metadata since it's not in the current schema
+  const metadata: any = {};
   
   const formatSalary = (min: number, max: number) => {
     if (!min && !max) return 'Salary not specified';

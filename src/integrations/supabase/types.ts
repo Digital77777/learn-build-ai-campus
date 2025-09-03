@@ -7,10 +7,10 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "12.2.12 (cd3cf9e)"
   }
   public: {
     Tables: {
@@ -479,7 +479,7 @@ export type Database = {
     Functions: {
       add_admin_user: {
         Args:
-          | { p_user_id: string; p_role: string }
+          | { p_role: string; p_user_id: string }
           | { user_email: string; user_role: string }
         Returns: undefined
       }
@@ -492,34 +492,34 @@ export type Database = {
       }
       create_notification: {
         Args:
-          | { p_user_id: number; p_message: string }
           | {
-              p_user_id: string
-              p_type: string
               p_message: string
               p_metadata?: Json
+              p_type: string
+              p_user_id: string
             }
+          | { p_message: string; p_user_id: number }
         Returns: number
       }
       create_seller_verification_task: {
-        Args: { p_seller_profile_id: number; p_required_documents?: Json }
+        Args: { p_required_documents?: Json; p_seller_profile_id: number }
         Returns: number
       }
       get_sellers_for_review: {
-        Args: { p_status?: string; p_page?: number; p_page_size?: number }
+        Args: { p_page?: number; p_page_size?: number; p_status?: string }
         Returns: {
-          seller_profile_id: number
-          user_id: string
           business_name: string
           business_type: string
-          status: string
           created_at: string
-          verification_task_id: number
+          seller_profile_id: number
+          status: string
           uploaded_documents: Json
+          user_id: string
+          verification_task_id: number
         }[]
       }
       log_error: {
-        Args: { p_error_message: string; p_error_context?: Json }
+        Args: { p_error_context?: Json; p_error_message: string }
         Returns: undefined
       }
       raise_application_error: {
@@ -529,12 +529,12 @@ export type Database = {
       review_seller_profile: {
         Args:
           | {
-              p_verification_task_id: number
-              p_status: string
               p_reviewer_notes?: string
+              p_status: string
+              p_verification_task_id: number
             }
-          | { seller_id: number; review_text: string }
-        Returns: undefined
+          | { review_text: string; seller_id: number }
+        Returns: boolean
       }
       safe_user_creation: {
         Args: { p_email: string; p_full_name: string }
@@ -545,21 +545,21 @@ export type Database = {
         Returns: string
       }
       update_required_document_types: {
-        Args: { p_seller_profile_id: number; p_document_types: Json }
+        Args: { p_document_types: Json; p_seller_profile_id: number }
         Returns: undefined
       }
       upload_seller_documents: {
-        Args: { p_seller_profile_id: number; p_documents: Json }
+        Args: { p_documents: Json; p_seller_profile_id: number }
         Returns: Json
       }
       upsert_seller_profile: {
         Args: {
+          p_address?: Json
           p_business_name: string
           p_business_type?: string
-          p_description?: string
           p_contact_email?: string
           p_contact_phone?: string
-          p_address?: Json
+          p_description?: string
           p_tax_id?: string
         }
         Returns: number
