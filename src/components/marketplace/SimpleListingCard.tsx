@@ -72,7 +72,7 @@ export const SimpleListingCard: React.FC<SimpleListingCardProps> = ({
         
         <MediaPreview
           images={listing.images || []}
-          videos={listing.videos || []}
+          videos={[]} // Do not display demo videos on the marketplace grid
           title={listing.title}
           category="tech"
           className="mb-3"
