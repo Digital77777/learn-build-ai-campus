@@ -397,15 +397,7 @@ export type Database = {
       }
     }
     Views: {
-      is_admin_secure: {
-        Row: {
-          email: string | null
-          is_admin: boolean | null
-          role: string | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       add_admin_user: {
@@ -457,6 +449,10 @@ export type Database = {
           user_id: string
           verification_task_id: number
         }[]
+      }
+      is_current_user_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       log_error: {
         Args: { p_error_context?: Json; p_error_message: string }
