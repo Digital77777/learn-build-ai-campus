@@ -1,4 +1,4 @@
-import { Home, BookOpen, Brain, Store, User } from "lucide-react";
+import { Home, BookOpen, Brain, Store, Users } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
@@ -29,9 +29,9 @@ const MobileFooter = () => {
       path: "/marketplace"
     },
     {
-      icon: User,
-      label: user ? "Account" : "Sign In",
-      path: user ? "/marketplace/my-listings" : "/auth"
+      icon: Users,
+      label: "Community",
+      path: "/community"
     }
   ];
 
