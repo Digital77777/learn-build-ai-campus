@@ -397,15 +397,7 @@ export type Database = {
       }
     }
     Views: {
-      admin_view: {
-        Row: {
-          email: string | null
-          is_admin: boolean | null
-          role: string | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       add_admin_user: {
@@ -413,6 +405,15 @@ export type Database = {
           | { p_role: string; p_user_id: string }
           | { user_email: string; user_role: string }
         Returns: undefined
+      }
+      check_current_user_admin_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          email: string
+          is_admin: boolean
+          role: string
+          user_id: string
+        }[]
       }
       check_user_seller_status: {
         Args: Record<PropertyKey, never>
@@ -459,10 +460,6 @@ export type Database = {
       }
       raise_application_error: {
         Args: { p_error_code: number; p_error_message: string }
-        Returns: undefined
-      }
-      refresh_admin_view: {
-        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       review_seller_profile: {
