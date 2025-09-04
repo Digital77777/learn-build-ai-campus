@@ -10,6 +10,52 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const CommunityPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Handler functions for button interactions
+  const handleStartTopic = () => {
+    console.log("Starting new topic...");
+    // Add your logic here (e.g., open modal, navigate to form)
+  };
+
+  const handleBrowseEvents = () => {
+    console.log("Browsing events...");
+    // Add your logic here (e.g., scroll to events section, filter events)
+  };
+
+  const handleFilters = () => {
+    console.log("Opening filters...");
+    // Add your logic here (e.g., open filter modal)
+  };
+
+  const handleHostEvent = () => {
+    console.log("Hosting new event...");
+    // Add your logic here (e.g., open event creation form)
+  };
+
+  const handleJoinEvent = (eventId: number) => {
+    console.log(`Joining event ${eventId}...`);
+    // Add your logic here (e.g., register for event)
+  };
+
+  const handleShareInsight = () => {
+    console.log("Sharing new insight...");
+    // Add your logic here (e.g., open insight creation form)
+  };
+
+  const handleStartDiscussion = () => {
+    console.log("Starting discussion...");
+    // Add your logic here
+  };
+
+  const handleCreateEvent = () => {
+    console.log("Creating event...");
+    // Add your logic here
+  };
+
+  const handleFindMembers = () => {
+    console.log("Finding members...");
+    // Add your logic here (e.g., navigate to members page)
+  };
+
   // Sample data - in a real app this would come from your database
   const topics = [
     {
@@ -103,11 +149,11 @@ const CommunityPage = () => {
               Connect with AI enthusiasts, share insights, participate in live events, and grow together in the world of artificial intelligence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-gradient-ai text-white">
+              <Button size="lg" className="bg-gradient-ai text-white" onClick={handleStartTopic}>
                 <Plus className="mr-2 h-5 w-5" />
                 Start a Topic
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" onClick={handleBrowseEvents}>
                 <Calendar className="mr-2 h-5 w-5" />
                 Browse Events
               </Button>
@@ -132,7 +178,7 @@ const CommunityPage = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline">
+              <Button variant="outline" onClick={handleFilters}>
                 <Filter className="mr-2 h-4 w-4" />
                 Filters
               </Button>
@@ -150,7 +196,7 @@ const CommunityPage = () => {
               <TabsContent value="topics" className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-semibold">Recent Discussions</h2>
-                  <Button>
+                  <Button onClick={handleStartTopic}>
                     <Plus className="mr-2 h-4 w-4" />
                     New Topic
                   </Button>
@@ -207,7 +253,7 @@ const CommunityPage = () => {
               <TabsContent value="events" className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-semibold">Upcoming Events</h2>
-                  <Button>
+                  <Button onClick={handleHostEvent}>
                     <Calendar className="mr-2 h-4 w-4" />
                     Host Event
                   </Button>
@@ -231,7 +277,7 @@ const CommunityPage = () => {
                               <span>{event.attendees} attendees</span>
                             </div>
                           </div>
-                          <Button>Join Event</Button>
+                          <Button onClick={() => handleJoinEvent(event.id)}>Join Event</Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -243,7 +289,7 @@ const CommunityPage = () => {
               <TabsContent value="insights" className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-semibold">Community Insights</h2>
-                  <Button>
+                  <Button onClick={handleShareInsight}>
                     <Plus className="mr-2 h-4 w-4" />
                     Share Insight
                   </Button>
@@ -307,15 +353,15 @@ const CommunityPage = () => {
                 <CardTitle className="text-lg">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start" onClick={handleStartDiscussion}>
                   <Plus className="mr-2 h-4 w-4" />
                   Start Discussion
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start" onClick={handleCreateEvent}>
                   <Calendar className="mr-2 h-4 w-4" />
                   Create Event
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start" onClick={handleFindMembers}>
                   <Users className="mr-2 h-4 w-4" />
                   Find Members
                 </Button>
