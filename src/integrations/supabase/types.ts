@@ -397,7 +397,7 @@ export type Database = {
       }
     }
     Views: {
-      is_admin: {
+      admin_view: {
         Row: {
           email: string | null
           is_admin: boolean | null
@@ -436,15 +436,6 @@ export type Database = {
         Args: { p_required_documents?: Json; p_seller_profile_id: number }
         Returns: number
       }
-      get_admin_info: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          email: string
-          is_admin: boolean
-          role: string
-          user_id: string
-        }[]
-      }
       get_sellers_for_review: {
         Args: { p_page?: number; p_page_size?: number; p_status?: string }
         Returns: {
@@ -468,6 +459,10 @@ export type Database = {
       }
       raise_application_error: {
         Args: { p_error_code: number; p_error_message: string }
+        Returns: undefined
+      }
+      refresh_admin_view: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       review_seller_profile: {
