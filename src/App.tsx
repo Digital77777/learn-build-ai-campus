@@ -34,6 +34,7 @@ import CreateFreelancerProfilePage from "./pages/CreateFreelancerProfilePage";
 import StartProjectPage from "./pages/StartProjectPage";
 import ScheduleConsultationPage from "./pages/ScheduleConsultationPage";
 import CommunityPage from "./pages/CommunityPage";
+import ReferralPage from "./pages/ReferralPage";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,7 @@ const App = () => (
             <Route path="/marketplace/start-project" element={<StartProjectPage />} />
             <Route path="/marketplace/schedule-consultation" element={<ScheduleConsultationPage />} />
             <Route path="/community" element={<CommunityPage />} />
+            <Route path="/referrals" element={<ReferralPage />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
