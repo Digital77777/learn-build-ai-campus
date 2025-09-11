@@ -54,7 +54,7 @@ export const WhatsAppReferralButton = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-20 md:bottom-6 right-6 z-50">
       {isExpanded && (
         <Card className="mb-4 w-80 shadow-lg border-green-200 animate-scale-in">
           <CardContent className="p-4">
