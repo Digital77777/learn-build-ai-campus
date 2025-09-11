@@ -267,6 +267,75 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_contests: {
+        Row: {
+          contest_entry_date: string | null
+          created_at: string
+          id: string
+          is_eligible: boolean
+          prize_amount: number | null
+          prize_currency: string | null
+          referral_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contest_entry_date?: string | null
+          created_at?: string
+          id?: string
+          is_eligible?: boolean
+          prize_amount?: number | null
+          prize_currency?: string | null
+          referral_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contest_entry_date?: string | null
+          created_at?: string
+          id?: string
+          is_eligible?: boolean
+          prize_amount?: number | null
+          prize_currency?: string | null
+          referral_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          referral_code: string
+          referred_email: string
+          referred_user_id: string | null
+          referrer_id: string
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          referral_code: string
+          referred_email: string
+          referred_user_id?: string | null
+          referrer_id: string
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          referral_code?: string
+          referred_email?: string
+          referred_user_id?: string | null
+          referrer_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       seller_profiles: {
         Row: {
           address: Json | null
@@ -436,6 +505,10 @@ export type Database = {
       create_seller_verification_task: {
         Args: { p_required_documents?: Json; p_seller_profile_id: number }
         Returns: number
+      }
+      generate_referral_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       get_sellers_for_review: {
         Args: { p_page?: number; p_page_size?: number; p_status?: string }
