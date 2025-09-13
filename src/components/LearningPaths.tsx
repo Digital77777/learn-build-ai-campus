@@ -6,47 +6,47 @@ import { useNavigate } from "react-router-dom";
 
 const learningPaths = [
   {
-    id: "ai-fundamentals",
-    title: "AI Fundamentals",
-    description: "Master the basics of artificial intelligence, machine learning, and neural networks",
-    duration: "4-6 weeks",
-    students: "2,341",
+    id: "foundation-path",
+    title: "AI Basics for Everyone",
+    description: "Foundation path covering AI fundamentals, mathematics, Python programming, and industry applications",
+    duration: "8-12 weeks",
+    students: "3,241",
     level: "Beginner",
-    earnings: "$500-1,000",
-    modules: ["Introduction to AI", "Machine Learning Basics", "Neural Networks", "Python for AI"],
+    earnings: "$500-1,500",
+    modules: ["Introduction to AI", "Mathematics for AI", "Python Programming", "AI in Industries"],
     gradient: "bg-gradient-learning"
   },
   {
-    id: "nlp",
-    title: "Natural Language Processing",
-    description: "Build chatbots, language models, and text analysis applications",
-    duration: "6-8 weeks", 
-    students: "1,847",
-    level: "Intermediate",
+    id: "practical-skills",
+    title: "From Zero to Builder",
+    description: "Practical AI skills including prompt engineering, AI tools, no-code platforms, and data handling",
+    duration: "10-14 weeks", 
+    students: "2,847",
+    level: "Beginner",
     earnings: "$1,000-2,500",
-    modules: ["Text Processing", "Language Models", "Chatbot Development", "Sentiment Analysis"],
+    modules: ["Prompt Engineering", "Using AI Tools", "No-Code AI Building", "Data Handling"],
     gradient: "bg-gradient-ai"
   },
   {
-    id: "computer-vision",
-    title: "Computer Vision",
-    description: "Create image recognition systems, object detection, and visual AI applications",
-    duration: "8-10 weeks",
-    students: "1,234",
+    id: "technical-developer",
+    title: "Future AI Engineer",
+    description: "Technical development path covering machine learning, deep learning, NLP, and computer vision",
+    duration: "16-20 weeks",
+    students: "1,834",
     level: "Intermediate",
-    earnings: "$1,500-3,000",
-    modules: ["Image Processing", "Object Detection", "Face Recognition", "AI Art Generation"],
+    earnings: "$2,500-5,000",
+    modules: ["Machine Learning", "Deep Learning", "NLP", "Computer Vision", "Model Deployment"],
     gradient: "bg-gradient-earn"
   },
   {
-    id: "ai-business",
-    title: "AI for Business",
-    description: "Learn to implement AI solutions for real-world business problems",
-    duration: "6-8 weeks",
-    students: "987",
-    level: "Advanced",
-    earnings: "$2,000-5,000",
-    modules: ["Business AI Strategy", "ROI Analysis", "Implementation", "Client Consulting"],
+    id: "business-careers",
+    title: "AI for Work & Startups",
+    description: "Business-focused path covering productivity, marketing, product management, and entrepreneurship",
+    duration: "12-16 weeks",
+    students: "1,487",
+    level: "Intermediate",
+    earnings: "$2,000-4,000",
+    modules: ["AI for Business", "AI Marketing", "Product Management", "Freelancing", "Building Startups"],
     gradient: "bg-gradient-learning"
   }
 ];
@@ -58,10 +58,10 @@ const LearningPaths = () => {
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-4xl font-bold">Structured Learning Paths</h2>
+          <h2 className="text-4xl font-bold">Tier 1 Learning Paths</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Follow our expertly designed curricula to build AI expertise step-by-step, 
-            with real projects and earning opportunities at every stage.
+            Beginner to Builder foundations - structured paths designed to take you from 
+            complete beginner to confident AI builder with hands-on projects.
           </p>
         </div>
 

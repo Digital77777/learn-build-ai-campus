@@ -2,88 +2,62 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Code, FileText, Image, MessageSquare, Sparkles, BarChart3, Zap } from "lucide-react";
+import { Blocks, Sliders, BarChart3, GraduationCap, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AITool } from "@/types/aiTools";
 
 const aiTools: AITool[] = [
   {
     id: 1,
-    name: "AI Code Assistant",
-    title: "AI Code Assistant",
-    description: "Intelligent code completion and debugging powered by advanced language models",
-    icon: Code,
+    name: "AI SnapBuilder",
+    title: "AI SnapBuilder",
+    description: "Drag-and-drop AI blocks with visual training interface. Upload 5-10 examples and get instant mini models.",
+    icon: Blocks,
     category: "Development",
-    features: ["Code completion", "Bug detection", "Refactoring"],
+    features: ["Drag-and-drop AI blocks", "Visual training interface", "Live preview window"],
     usage: "Free unlimited",
     pricing: "Free",
     gradient: "from-blue-500 to-cyan-500",
-    route: "/tools/ai-code-assistant"
+    route: "/tools/ai-snapbuilder"
   },
   {
     id: 2,
-    name: "Neural Image Generator",
-    title: "Neural Image Generator",
-    description: "Create stunning visuals and artwork using state-of-the-art image generation AI",
-    icon: Image,
+    name: "PromptPlayground",
+    title: "PromptPlayground",
+    description: "Sliders and dropdowns for creativity, tone, style instead of raw prompt writing. Side-by-side results comparison.",
+    icon: Sliders,
     category: "Creative",
-    features: ["Text-to-image", "Style transfer", "Image editing"],
-    usage: "50 images/day",
-    pricing: "Premium",
+    features: ["Creativity sliders", "Tone controls", "Built-in prompt library"],
+    usage: "Free unlimited",
+    pricing: "Free",
     gradient: "from-purple-500 to-pink-500",
-    route: "/tools/neural-image-generator"
+    route: "/tools/prompt-playground"
   },
   {
     id: 3,
-    name: "Smart Analytics",
-    title: "Smart Analytics",
-    description: "Automated data analysis and insights generation for your business metrics",
+    name: "Data2App",
+    title: "Data2App",
+    description: "Upload spreadsheet and instantly get charts, dashboards, and search bars. Export as a simple web app.",
     icon: BarChart3,
     category: "Analytics",
-    features: ["Predictive analytics", "Report generation", "Data visualization"],
-    usage: "Pro plan",
-    pricing: "Pro",
+    features: ["Instant dashboards", "No-code filters", "Web app export"],
+    usage: "Free unlimited",
+    pricing: "Free",
     gradient: "from-emerald-500 to-teal-500",
-    route: "/tools/smart-analytics"
+    route: "/tools/data2app"
   },
   {
     id: 4,
-    name: "Conversational AI",
-    title: "Conversational AI",
-    description: "Build intelligent chatbots and virtual assistants for customer support",
-    icon: MessageSquare,
-    category: "Communication",
-    features: ["Natural language", "Multi-language", "Integration APIs"],
-    usage: "Enterprise plan",
-    pricing: "Enterprise",
-    gradient: "from-orange-500 to-red-500",
-    route: "/tools/conversational-ai"
-  },
-  {
-    id: 5,
-    name: "AI Research Lab",
-    title: "AI Research Lab",
-    description: "Experiment with cutting-edge AI models and research tools",
-    icon: Brain,
+    name: "AI TutorLab",
+    title: "AI TutorLab",
+    description: "Students type questions, AI explains concepts in plain language. Interactive sandbox for learning.",
+    icon: GraduationCap,
     category: "Research",
-    features: ["Model training", "Experiment tracking", "Collaboration"],
-    usage: "Academic plan",
-    pricing: "Academic",
-    gradient: "from-indigo-500 to-purple-500",
-    route: "/tools/ai-research-lab"
-  },
-  {
-    id: 6,
-    name: "AutoML Platform",
-    title: "AutoML Platform",
-    description: "Automated machine learning pipeline for rapid model development",
-    icon: Zap,
-    category: "Machine Learning",
-    features: ["Auto feature engineering", "Model selection", "Deployment"],
-    usage: "Pro plan",
-    pricing: "Pro",
-    gradient: "from-yellow-500 to-orange-500",
-    route: "/tools/automl-platform"
+    features: ["Plain language explanations", "Practice problems", "Interactive sandbox"],
+    usage: "Free unlimited",
+    pricing: "Free",
+    gradient: "from-orange-500 to-red-500",
+    route: "/tools/ai-tutorlab"
   }
 ];
 
@@ -100,17 +74,17 @@ const AITools = () => {
         <div className="text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full">
             <Sparkles className="h-4 w-4 text-accent-foreground" />
-            <span className="text-sm font-medium text-accent-foreground">6 Powerful AI Tools</span>
+            <span className="text-sm font-medium text-accent-foreground">4 Beginner-Friendly Tools</span>
           </div>
-          <h2 className="text-4xl font-bold">Embedded AI Tools</h2>
+          <h2 className="text-4xl font-bold">Tier 1 AI Tools</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Access cutting-edge AI tools directly in your learning environment. 
-            No separate subscriptions, no limits - just powerful AI at your fingertips.
+            Fun, simple tools that lower the barrier to entry. Build your first AI projects 
+            with drag-and-drop interfaces and visual training tools.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {aiTools.slice(0, 6).map((tool) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+          {aiTools.map((tool) => (
             <Card key={tool.id} className="hover:shadow-ai transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
               <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${tool.gradient}`} />
               
