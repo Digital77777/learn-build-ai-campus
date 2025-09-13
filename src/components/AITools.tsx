@@ -63,6 +63,7 @@ const aiTools: AITool[] = [
 
 const AITools = () => {
   const navigate = useNavigate();
+  console.log("AITools component rendered with Tier 1 tools");
 
   const handleToolAccess = () => {
     navigate('/ai-tools');
