@@ -1,6 +1,6 @@
 
 
-import { Brain, Zap, Code, Image, MessageSquare, BarChart3, Sparkles, ArrowRight } from "lucide-react";
+import { Brain, Zap, Code, Image, MessageSquare, BarChart3, Sparkles, ArrowRight, Blocks, Sliders, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,81 +13,55 @@ const AIToolsPage = () => {
   const tools: AITool[] = [
     {
       id: 1,
-      name: "AI Code Assistant",
-      title: "AI Code Assistant",
-      description: "Intelligent code completion and debugging powered by advanced language models",
-      icon: Code,
+      name: "AI SnapBuilder",
+      title: "AI SnapBuilder",
+      description: "Drag-and-drop AI blocks with visual training interface. Upload 5-10 examples and get instant mini models.",
+      icon: Blocks,
       category: "Development",
-      features: ["Code completion", "Bug detection", "Refactoring"],
+      features: ["Drag-and-drop AI blocks", "Visual training interface", "Live preview window"],
       pricing: "Free",
       usage: "Free unlimited",
       gradient: "from-blue-500 to-cyan-500",
-      route: "/tools/ai-code-assistant"
+      route: "/tools/ai-snapbuilder"
     },
     {
       id: 2,
-      name: "Neural Image Generator",
-      title: "Neural Image Generator",
-      description: "Create stunning visuals and artwork using state-of-the-art image generation AI",
-      icon: Image,
+      name: "PromptPlayground",
+      title: "PromptPlayground",
+      description: "Sliders and dropdowns for creativity, tone, style instead of raw prompt writing. Side-by-side results comparison.",
+      icon: Sliders,
       category: "Creative",
-      features: ["Text-to-image", "Style transfer", "Image editing"],
-      pricing: "Premium",
-      usage: "50 images/day",
+      features: ["Creativity sliders", "Tone controls", "Built-in prompt library"],
+      pricing: "Free",
+      usage: "Free unlimited",
       gradient: "from-purple-500 to-pink-500",
-      route: "/tools/neural-image-generator"
+      route: "/tools/prompt-playground"
     },
     {
       id: 3,
-      name: "Smart Analytics",
-      title: "Smart Analytics",
-      description: "Automated data analysis and insights generation for your business metrics",
+      name: "Data2App",
+      title: "Data2App",
+      description: "Upload spreadsheet and instantly get charts, dashboards, and search bars. Export as a simple web app.",
       icon: BarChart3,
       category: "Analytics",
-      features: ["Predictive analytics", "Report generation", "Data visualization"],
-      pricing: "Pro",
-      usage: "Pro plan",
+      features: ["Instant dashboards", "No-code filters", "Web app export"],
+      pricing: "Free",
+      usage: "Free unlimited",
       gradient: "from-emerald-500 to-teal-500",
-      route: "/tools/smart-analytics"
+      route: "/tools/data2app"
     },
     {
       id: 4,
-      name: "Conversational AI",
-      title: "Conversational AI",
-      description: "Build intelligent chatbots and virtual assistants for customer support",
-      icon: MessageSquare,
-      category: "Communication",
-      features: ["Natural language", "Multi-language", "Integration APIs"],
-      pricing: "Enterprise",
-      usage: "Enterprise plan",
-      gradient: "from-orange-500 to-red-500",
-      route: "/tools/conversational-ai"
-    },
-    {
-      id: 5,
-      name: "AI Research Lab",
-      title: "AI Research Lab",
-      description: "Experiment with cutting-edge AI models and research tools",
-      icon: Brain,
+      name: "AI TutorLab",
+      title: "AI TutorLab",
+      description: "Students type questions, AI explains concepts in plain language. Interactive sandbox for learning.",
+      icon: GraduationCap,
       category: "Research",
-      features: ["Model training", "Experiment tracking", "Collaboration"],
-      pricing: "Academic",
-      usage: "Academic plan",
-      gradient: "from-indigo-500 to-purple-500",
-      route: "/tools/ai-research-lab"
-    },
-    {
-      id: 6,
-      name: "AutoML Platform",
-      title: "AutoML Platform",
-      description: "Automated machine learning pipeline for rapid model development",
-      icon: Zap,
-      category: "Machine Learning",
-      features: ["Auto feature engineering", "Model selection", "Deployment"],
-      pricing: "Pro",
-      usage: "Pro plan",
-      gradient: "from-yellow-500 to-orange-500",
-      route: "/tools/automl-platform"
+      features: ["Plain language explanations", "Practice problems", "Interactive sandbox"],
+      pricing: "Free",
+      usage: "Free unlimited",
+      gradient: "from-orange-500 to-red-500",
+      route: "/tools/ai-tutorlab"
     }
   ];
 
@@ -145,11 +119,11 @@ const AIToolsPage = () => {
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-ai bg-clip-text text-transparent">
-                AI Tools Hub
+                Tier 1 AI Tools
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Discover and master the most powerful AI tools to accelerate your work and creativity
+              Beginner-friendly AI tools that lower the barrier to entry. Build your first AI projects with simple, intuitive interfaces.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button size="lg" className="bg-gradient-ai text-white hover:opacity-90" onClick={handleTryTools}>

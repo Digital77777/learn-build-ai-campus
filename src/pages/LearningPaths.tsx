@@ -10,52 +10,52 @@ const LearningPaths = () => {
   
   const paths = [
     {
-      id: "ai-fundamentals",
-      title: "AI Fundamentals",
-      description: "Master the basics of artificial intelligence and machine learning",
-      duration: "6 weeks",
+      id: "foundation-path",
+      title: "AI Basics for Everyone",
+      description: "Foundation path covering AI fundamentals, mathematics, Python programming, and industry applications",
+      duration: "8-12 weeks",
       level: "Beginner",
-      students: 2500,
+      students: 3241,
+      rating: 4.9,
+      image: "🎓",
+      lessons: 20,
+      skills: ["AI Fundamentals", "Mathematics", "Python", "Industry Applications"]
+    },
+    {
+      id: "practical-skills",
+      title: "From Zero to Builder",
+      description: "Practical AI skills including prompt engineering, AI tools, no-code platforms, and data handling",
+      duration: "10-14 weeks",
+      level: "Beginner",
+      students: 2847,
       rating: 4.8,
-      image: "🤖",
+      image: "🛠️",
       lessons: 24,
-      skills: ["Python", "Neural Networks", "Data Science"]
+      skills: ["Prompt Engineering", "AI Tools", "No-Code Building", "Data Handling"]
     },
     {
-      id: "nlp",
-      title: "Natural Language Processing",
-      description: "Build chatbots, language models, and text analysis applications",
-      duration: "6-8 weeks",
+      id: "technical-developer",
+      title: "Future AI Engineer",
+      description: "Technical development path covering machine learning, deep learning, NLP, and computer vision",
+      duration: "16-20 weeks",
       level: "Intermediate",
-      students: 1847,
-      rating: 4.8,
-      image: "💬",
-      lessons: 32,
-      skills: ["NLP", "Transformers", "BERT"]
-    },
-    {
-      id: "computer-vision",
-      title: "Computer Vision",
-      description: "Create image recognition systems, object detection, and visual AI applications",
-      duration: "8-10 weeks",
-      level: "Intermediate",
-      students: 1234,
+      students: 1834,
       rating: 4.7,
-      image: "👁️",
-      lessons: 28,
-      skills: ["OpenCV", "Object Detection", "Image Processing"]
+      image: "⚡",
+      lessons: 30,
+      skills: ["Machine Learning", "Deep Learning", "NLP", "Computer Vision"]
     },
     {
-      id: "ai-business",
-      title: "AI for Business",
-      description: "Learn to implement AI solutions for real-world business problems",
-      duration: "6-8 weeks",
-      level: "Advanced",
-      students: 987,
+      id: "business-careers",
+      title: "AI for Work & Startups",
+      description: "Business-focused path covering productivity, marketing, product management, and entrepreneurship",
+      duration: "12-16 weeks",
+      level: "Intermediate",
+      students: 1487,
       rating: 4.8,
-      image: "💼",
-      lessons: 24,
-      skills: ["Strategy", "ROI", "Implementation"]
+      image: "🚀",
+      lessons: 25,
+      skills: ["Business AI", "Marketing", "Product Management", "Entrepreneurship"]
     }
   ];
 
@@ -69,11 +69,11 @@ const LearningPaths = () => {
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-ai bg-clip-text text-transparent">
-                Learning Paths
+                Tier 1 Learning Paths
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Structured learning journeys designed to take you from beginner to expert in AI and machine learning
+              Beginner to Builder foundations - structured journeys from complete beginner to confident AI builder
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
