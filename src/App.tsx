@@ -29,6 +29,10 @@ import SmartAnalytics from "./pages/tools/SmartAnalytics";
 import ConversationalAI from "./pages/tools/ConversationalAI";
 import AIResearchLab from "./pages/tools/AIResearchLab";
 import AutoMLPlatform from "./pages/tools/AutoMLPlatform";
+import AISnapBuilder from "./pages/tools/AISnapBuilder";
+import PromptPlayground from "./pages/tools/PromptPlayground";
+import Data2App from "./pages/tools/Data2App";
+import AITutorLab from "./pages/tools/AITutorLab";
 import CreateJobPostingPage from "./pages/CreateJobPostingPage";
 import CreateFreelancerProfilePage from "./pages/CreateFreelancerProfilePage";
 import StartProjectPage from "./pages/StartProjectPage";
@@ -91,6 +95,10 @@ const App = () => (
             <Route path="/tools/conversational-ai" element={<ConversationalAI />} />
             <Route path="/tools/ai-research-lab" element={<AIResearchLab />} />
             <Route path="/tools/automl-platform" element={<AutoMLPlatform />} />
+            <Route path="/tools/ai-snapbuilder" element={<AISnapBuilder />} />
+            <Route path="/tools/prompt-playground" element={<PromptPlayground />} />
+            <Route path="/tools/data2app" element={<Data2App />} />
+            <Route path="/tools/ai-tutorlab" element={<AITutorLab />} />
             <Route path="/start-selling" element={<StartSellingPage />} />
             <Route path="/course/:courseId" element={<CourseDetail />} />
             <Route path="/marketplace/create-job" element={<CreateJobPostingPage />} />
