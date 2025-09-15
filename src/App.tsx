@@ -33,6 +33,10 @@ import AISnapBuilder from "./pages/tools/AISnapBuilder";
 import PromptPlayground from "./pages/tools/PromptPlayground";
 import Data2App from "./pages/tools/Data2App";
 import AITutorLab from "./pages/tools/AITutorLab";
+import FoundationPath from "./pages/course/FoundationPath";
+import PracticalSkills from "./pages/course/PracticalSkills";
+import TechnicalDeveloper from "./pages/course/TechnicalDeveloper";
+import BusinessCareers from "./pages/course/BusinessCareers";
 import CreateJobPostingPage from "./pages/CreateJobPostingPage";
 import CreateFreelancerProfilePage from "./pages/CreateFreelancerProfilePage";
 import StartProjectPage from "./pages/StartProjectPage";
@@ -99,6 +103,10 @@ const App = () => (
             <Route path="/tools/prompt-playground" element={<PromptPlayground />} />
             <Route path="/tools/data2app" element={<Data2App />} />
             <Route path="/tools/ai-tutorlab" element={<AITutorLab />} />
+            <Route path="/course/foundation-path" element={<FoundationPath />} />
+            <Route path="/course/practical-skills" element={<PracticalSkills />} />
+            <Route path="/course/technical-developer" element={<TechnicalDeveloper />} />
+            <Route path="/course/business-careers" element={<BusinessCareers />} />
             <Route path="/start-selling" element={<StartSellingPage />} />
             <Route path="/course/:courseId" element={<CourseDetail />} />
             <Route path="/marketplace/create-job" element={<CreateJobPostingPage />} />
