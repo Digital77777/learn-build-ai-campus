@@ -16,7 +16,8 @@ import {
   LineChart,
   Table as TableIcon,
   Globe,
-  Eye
+  Eye,
+  CheckCircle
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Cell, LineChart as RechartsLineChart, Line } from 'recharts';
@@ -106,14 +107,12 @@ const Data2App = () => {
             <Badge variant="secondary" className="ml-auto">Free</Badge>
           </div>
           
-          <div className="flex gap-4 items-center">
-            <Button variant="outline" onClick={handlePreview}>
-              <Eye className="h-4 w-4 mr-2" />
-              Preview Dashboard
+          <div className="flex gap-3 items-center">
+            <Button variant="outline" onClick={handlePreview} size="sm">
+              <Eye className="h-4 w-4" />
             </Button>
-            <Button onClick={handleExportApp} disabled={!uploadedFile}>
-              <Globe className="h-4 w-4 mr-2" />
-              Export Web App
+            <Button onClick={handleExportApp} disabled={!uploadedFile} size="sm">
+              <Globe className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -130,11 +129,14 @@ const Data2App = () => {
             <CardContent className="space-y-4">
               {/* File Upload */}
               <div>
-                <Label htmlFor="file-upload">Upload Spreadsheet</Label>
-                <div className="mt-2 border-2 border-dashed border-border rounded-lg p-6 text-center">
-                  <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Upload CSV, Excel, or Google Sheets
+                <Label htmlFor="file-upload" className="flex items-center gap-2">
+                  <Upload className="h-4 w-4" />
+                  Data Source
+                </Label>
+                <div className="mt-2 border-2 border-dashed border-border rounded-lg p-4 text-center">
+                  <Upload className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-xs text-muted-foreground mb-2">
+                    CSV, Excel, Google Sheets
                   </p>
                   <Input
                     id="file-upload"
@@ -145,35 +147,60 @@ const Data2App = () => {
                   />
                   <Label htmlFor="file-upload">
                     <Button variant="outline" size="sm" asChild>
-                      <span>Choose File</span>
+                      <span>
+                        <Upload className="h-3 w-3 mr-1" />
+                        Browse
+                      </span>
                     </Button>
                   </Label>
                 </div>
                 {uploadedFile && (
-                  <div className="mt-2 text-sm text-muted-foreground">
-                    ✓ {uploadedFile}
+                  <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
+                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    {uploadedFile}
                   </div>
                 )}
               </div>
 
               {/* Chart Type */}
               <div>
-                <Label>Chart Type</Label>
+                <Label className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Chart Type
+                </Label>
                 <Select value={selectedChart} onValueChange={setSelectedChart}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bar">Bar Chart</SelectItem>
-                    <SelectItem value="pie">Pie Chart</SelectItem>
-                    <SelectItem value="line">Line Chart</SelectItem>
+                    <SelectItem value="bar">
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4" />
+                        Bar Chart
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="pie">
+                      <div className="flex items-center gap-2">
+                        <PieChart className="h-4 w-4" />
+                        Pie Chart
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="line">
+                      <div className="flex items-center gap-2">
+                        <LineChart className="h-4 w-4" />
+                        Line Chart
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {/* Group By */}
               <div>
-                <Label>Group By</Label>
+                <Label className="flex items-center gap-2">
+                  <Filter className="h-4 w-4" />
+                  Group By
+                </Label>
                 <Select value={selectedColumn} onValueChange={setSelectedColumn}>
                   <SelectTrigger>
                     <SelectValue />
@@ -186,13 +213,16 @@ const Data2App = () => {
                 </Select>
               </div>
 
-              {/* Search Bar */}
+              {/* Search */}
               <div>
-                <Label>Filter Data</Label>
+                <Label className="flex items-center gap-2">
+                  <Search className="h-4 w-4" />
+                  Search
+                </Label>
                 <div className="relative mt-2">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search data..."
+                    placeholder="Filter data..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"

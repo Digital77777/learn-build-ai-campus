@@ -106,20 +106,18 @@ const AISnapBuilder = () => {
             <Badge variant="secondary" className="ml-auto">Free</Badge>
           </div>
           
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-3 items-center">
             <Input
               placeholder="Project name..."
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               className="max-w-xs"
             />
-            <Button variant="outline" onClick={handlePreview} disabled={!selectedBlock}>
-              <Eye className="h-4 w-4 mr-2" />
-              Preview
+            <Button variant="outline" onClick={handlePreview} disabled={!selectedBlock} size="sm">
+              <Eye className="h-4 w-4" />
             </Button>
-            <Button onClick={handleExport} disabled={progress < 100}>
-              <Download className="h-4 w-4 mr-2" />
-              Export Model
+            <Button onClick={handleExport} disabled={progress < 100} size="sm">
+              <Download className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -171,11 +169,14 @@ const AISnapBuilder = () => {
                 
                 <TabsContent value="upload" className="space-y-4">
                   <div>
-                    <Label htmlFor="file-upload">Training Examples</Label>
-                    <div className="mt-2 border-2 border-dashed border-border rounded-lg p-8 text-center">
-                      <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground mb-4">
-                        Upload 5-10 examples to train your AI model
+                    <Label htmlFor="file-upload" className="flex items-center gap-2">
+                      <Upload className="h-4 w-4" />
+                      Training Data
+                    </Label>
+                    <div className="mt-2 border-2 border-dashed border-border rounded-lg p-6 text-center">
+                      <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+                      <p className="text-sm text-muted-foreground mb-3">
+                        5-10 examples minimum
                       </p>
                       <Input
                         id="file-upload"
@@ -186,8 +187,11 @@ const AISnapBuilder = () => {
                         className="hidden"
                       />
                       <Label htmlFor="file-upload">
-                        <Button variant="outline" asChild>
-                          <span>Choose Files</span>
+                        <Button variant="outline" size="sm" asChild>
+                          <span>
+                            <Upload className="h-4 w-4 mr-2" />
+                            Choose Files
+                          </span>
                         </Button>
                       </Label>
                     </div>
@@ -233,7 +237,7 @@ const AISnapBuilder = () => {
                       className="w-full"
                     >
                       <Play className="h-4 w-4 mr-2" />
-                      {isTraining ? "Training..." : "Start Training"}
+                      {isTraining ? "Training..." : "Train"}
                     </Button>
 
                     <div className="text-sm text-muted-foreground space-y-1">

@@ -196,13 +196,12 @@ const PromptPlayground = () => {
                 </Select>
               </div>
 
-              {/* Action Buttons */}
-              <div className="space-y-2">
-                <Button onClick={handleShuffle} variant="outline" className="w-full">
-                  <Shuffle className="h-4 w-4 mr-2" />
-                  Randomize Settings
+              {/* Actions */}
+              <div className="flex gap-2">
+                <Button onClick={handleShuffle} variant="outline" size="sm" className="flex-1">
+                  <Shuffle className="h-4 w-4" />
                 </Button>
-                <Button onClick={handleGenerate} disabled={isGenerating} className="w-full">
+                <Button onClick={handleGenerate} disabled={isGenerating} className="flex-1">
                   <Play className="h-4 w-4 mr-2" />
                   {isGenerating ? "Generating..." : "Generate"}
                 </Button>
@@ -227,7 +226,10 @@ const PromptPlayground = () => {
                 
                 <TabsContent value="prompt" className="space-y-4">
                   <div>
-                    <Label htmlFor="prompt">Enter your prompt</Label>
+                    <Label htmlFor="prompt" className="flex items-center gap-2">
+                      <Zap className="h-4 w-4" />
+                      Your Prompt
+                    </Label>
                     <Textarea
                       id="prompt"
                       placeholder="Describe what you want to generate..."

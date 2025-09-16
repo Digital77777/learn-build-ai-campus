@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -226,9 +227,12 @@ Want to dive deeper into any part of this explanation?`
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Subject Selection */}
+              {/* Subject */}
               <div>
-                <label className="text-sm font-medium mb-2 block">Subject</label>
+                <Label className="flex items-center gap-2">
+                  <Book className="h-4 w-4" />
+                  Subject
+                </Label>
                 <Select value={subject} onValueChange={setSubject}>
                   <SelectTrigger>
                     <SelectValue />
@@ -249,43 +253,58 @@ Want to dive deeper into any part of this explanation?`
               {/* Quick Actions */}
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Quick Start</h4>
-                <div className="space-y-1">
+                <div className="grid grid-cols-3 gap-1">
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-start"
+                    className="p-2"
                     onClick={() => setQuestion("How does photosynthesis work?")}
                   >
-                    <Lightbulb className="h-4 w-4 mr-2" />
-                    Explain a concept
+                    <Lightbulb className="h-4 w-4" />
                   </Button>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-start"
+                    className="p-2"
                     onClick={() => setQuestion("Can you give me a practice problem?")}
                   >
-                    <Target className="h-4 w-4 mr-2" />
-                    Practice problems
+                    <Target className="h-4 w-4" />
                   </Button>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full justify-start"
+                    className="p-2"
                     onClick={() => setQuestion("Help me understand why this is important")}
                   >
-                    <HelpCircle className="h-4 w-4 mr-2" />
-                    Ask why it matters
+                    <HelpCircle className="h-4 w-4" />
                   </Button>
+                </div>
+                <div className="text-xs text-muted-foreground space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="h-3 w-3" />
+                    <span>Explain concepts</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Target className="h-3 w-3" />
+                    <span>Practice problems</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <HelpCircle className="h-3 w-3" />
+                    <span>Why it matters</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Practice Problems */}
+              {/* Practice */}
               <div className="space-y-2">
-                <h4 className="text-sm font-medium">Try Practice Problems</h4>
+                <h4 className="text-sm font-medium flex items-center gap-2">
+                  <Target className="h-4 w-4" />
+                  Practice
+                </h4>
                 <div className="space-y-1">
                   {practiceProblems
                     .filter(p => subject === 'general' || p.subject === subject)
+                    .slice(0, 2)
                     .map((problem, index) => (
                       <Button
                         key={index}
@@ -364,13 +383,13 @@ Want to dive deeper into any part of this explanation?`
                   {/* Input */}
                   <div className="flex gap-2">
                     <Input
-                      placeholder="Ask me anything... (Press Enter to send)"
+                      placeholder="Ask me anything... (Enter to send)"
                       value={question}
                       onChange={(e) => setQuestion(e.target.value)}
                       onKeyPress={handleKeyPress}
                       className="flex-1"
                     />
-                    <Button onClick={handleAsk} disabled={isTyping}>
+                    <Button onClick={handleAsk} disabled={isTyping} size="sm">
                       <MessageSquare className="h-4 w-4" />
                     </Button>
                   </div>
