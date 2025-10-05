@@ -1,4 +1,4 @@
-import { BookOpen, Brain, Store, Home, User, LogOut, Menu, Users, Gift } from "lucide-react";
+import { BookOpen, Brain, Store, Home, User, LogOut, Menu, Users, Gift, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
@@ -138,6 +138,14 @@ const Navigation = () => {
                     </p>
                   </div>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/subscription">
+                      <div className="flex items-center">
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        Subscription
+                      </div>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/marketplace/my-listings">My Listings</Link>
                   </DropdownMenuItem>
