@@ -437,6 +437,48 @@ export type Database = {
           },
         ]
       }
+      subscription_tiers: {
+        Row: {
+          created_at: string
+          currency: string
+          display_name: string
+          features: Json
+          id: string
+          is_active: boolean
+          max_listings: number | null
+          max_tools_access: number | null
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          display_name: string
+          features?: Json
+          id?: string
+          is_active?: boolean
+          max_listings?: number | null
+          max_tools_access?: number | null
+          name: string
+          price?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          display_name?: string
+          features?: Json
+          id?: string
+          is_active?: boolean
+          max_listings?: number | null
+          max_tools_access?: number | null
+          name?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tools: {
         Row: {
           created_at: string | null
@@ -463,6 +505,47 @@ export type Database = {
           price?: number
         }
         Relationships: []
+      }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          started_at: string
+          status: string
+          tier_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          started_at?: string
+          status?: string
+          tier_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          started_at?: string
+          status?: string
+          tier_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_tiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -522,6 +605,14 @@ export type Database = {
           user_id: string
           verification_task_id: number
         }[]
+      }
+      get_user_tier: {
+        Args: { user_id_param: string }
+        Returns: string
+      }
+      is_admin_email: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       is_current_user_admin: {
         Args: Record<PropertyKey, never>
