@@ -14,6 +14,7 @@ import LearningPaths from "./pages/LearningPaths";
 import AIToolsPage from "./pages/AIToolsPage";
 import MarketplacePage from "./pages/MarketplacePage";
 import StartSellingPage from "./pages/StartSellingPage";
+import SubscriptionPage from "./pages/SubscriptionPage";
 import CourseDetail from "./pages/CourseDetail";
 import BrowseMarketplacePage from "./pages/BrowseMarketplacePage";
 import SellProductsPage from "./pages/SellProductsPage";
@@ -115,6 +116,7 @@ const App = () => (
             <Route path="/marketplace/schedule-consultation" element={<ScheduleConsultationPage />} />
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/referrals" element={<ReferralPage />} />
+            <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
