@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { TierProvider } from "@/contexts/TierContext";
 import Navigation from "./components/Navigation";
 import MobileFooter from "./components/MobileFooter";
 import Index from "./pages/Index";
@@ -15,6 +16,7 @@ import AIToolsPage from "./pages/AIToolsPage";
 import MarketplacePage from "./pages/MarketplacePage";
 import StartSellingPage from "./pages/StartSellingPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
+import DashboardPage from "./pages/DashboardPage";
 import CourseDetail from "./pages/CourseDetail";
 import BrowseMarketplacePage from "./pages/BrowseMarketplacePage";
 import SellProductsPage from "./pages/SellProductsPage";
@@ -74,15 +76,17 @@ const ScrollToTop = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+      <TierProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <div className="min-h-screen bg-background pb-16 md:pb-0">
             <ScrollToTop />
             <Navigation />
             <Routes>
-            <Route path="/" element={<Index />} />
+              <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/learning-paths" element={<LearningPaths />} />
             <Route path="/ai-tools" element={<AIToolsPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
@@ -124,7 +128,8 @@ const App = () => (
           <MobileFooter />
         </div>
         </BrowserRouter>
-      </TooltipProvider>
+        </TooltipProvider>
+      </TierProvider>
     </AuthProvider>
   </QueryClientProvider>
 );
