@@ -1,123 +1,151 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { BookOpen, Brain, Store, Gift, TrendingUp, Sparkles, Zap, Crown, HeadphonesIcon } from 'lucide-react';
+import { Brain, Store, Gift, TrendingUp, Sparkles, Zap, Crown, HeadphonesIcon, Trophy, Target, Infinity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { TierHero } from './shared/TierHero';
+import { FeatureCard } from './shared/FeatureCard';
+import { BenefitsList } from './shared/BenefitsList';
+import { QuickStats } from './shared/QuickStats';
 
 export const CareerDashboard = () => {
   const navigate = useNavigate();
 
+  const benefits = [
+    "Unlimited access to all AI tools and features",
+    "Unlimited marketplace product listings",
+    "Maximum referral commission rates (20%)",
+    "Advanced analytics and business intelligence",
+    "24/7 priority support with dedicated account manager",
+    "Early access to beta features and new releases",
+    "VIP community membership and exclusive events",
+    "Professional creator certification program",
+    "Custom branding and white-label options",
+    "API access for custom integrations",
+    "Monthly strategy consultation sessions",
+    "Featured placement in marketplace"
+  ];
+
+  const stats = [
+    { value: "∞", label: "AI Tools", icon: <Brain className="h-6 w-6 text-primary" /> },
+    { value: "∞", label: "Listings", icon: <Store className="h-6 w-6 text-primary" /> },
+    { value: "20%", label: "Commission", icon: <Trophy className="h-6 w-6 text-primary" /> }
+  ];
+
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <div className="flex items-center justify-center gap-2">
-          <Crown className="h-8 w-8 text-yellow-500" />
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-500 via-primary to-purple-500 bg-clip-text text-transparent">
-            Career Tier Dashboard
-          </h2>
-          <Crown className="h-8 w-8 text-yellow-500" />
-        </div>
-        <p className="text-muted-foreground">Full platform access with premium features</p>
+    <div className="space-y-8">
+      <TierHero 
+        title="Maximize Your AI Career"
+        subtitle="The ultimate platform for AI professionals to earn, scale, and dominate"
+        icon={
+          <div className="flex items-center gap-2">
+            <Crown className="h-16 w-16 text-primary" />
+            <Trophy className="h-16 w-16 text-accent-foreground" />
+          </div>
+        }
+        gradient="earn"
+      />
+
+      <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 p-6 rounded-lg text-center">
+        <Target className="h-12 w-12 mx-auto mb-3 text-primary" />
+        <h3 className="text-xl font-bold mb-2">Professional Growth Guaranteed</h3>
+        <p className="text-muted-foreground">Everything you need to build a thriving AI career</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent" onClick={() => navigate('/learning-paths')}>
-          <CardHeader>
-            <BookOpen className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>All Learning Paths</CardTitle>
-            <CardDescription>Complete course library</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Start Learning</Button>
-          </CardContent>
-        </Card>
+      <QuickStats stats={stats} />
 
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent" onClick={() => navigate('/ai-tools')}>
-          <CardHeader>
-            <Brain className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Unlimited AI Tools</CardTitle>
-            <CardDescription>All tools unlocked</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Access Tools</Button>
-          </CardContent>
-        </Card>
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-center">Elite Career Features</h2>
+        <BenefitsList benefits={benefits} columns={3} />
+      </div>
 
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent" onClick={() => navigate('/marketplace')}>
-          <CardHeader>
-            <Store className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Unlimited Listings</CardTitle>
-            <CardDescription>No listing limits</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Manage Store</Button>
-          </CardContent>
-        </Card>
+      <div>
+        <h2 className="text-2xl font-bold text-center mb-8">Your Professional Command Center</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <FeatureCard
+            icon={<Infinity className="h-10 w-10 text-primary" />}
+            title="Unlimited AI Tools"
+            description="Full access to every tool, forever"
+            buttonText="Access All Tools"
+            onClick={() => navigate('/ai-tools')}
+            variant="premium"
+          />
 
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent" onClick={() => navigate('/referral')}>
-          <CardHeader>
-            <Gift className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Premium Referrals</CardTitle>
-            <CardDescription>Higher rewards</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Earn More</Button>
-          </CardContent>
-        </Card>
+          <FeatureCard
+            icon={<Store className="h-10 w-10 text-primary" />}
+            title="Unlimited Listings"
+            description="Scale your marketplace presence without limits"
+            buttonText="Manage Store"
+            onClick={() => navigate('/marketplace')}
+            variant="premium"
+          />
 
-        <Card className="hover:shadow-lg transition-shadow border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent">
-          <CardHeader>
-            <TrendingUp className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Advanced Analytics</CardTitle>
-            <CardDescription>Deep insights & reports</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">View Analytics</Button>
-          </CardContent>
-        </Card>
+          <FeatureCard
+            icon={<Trophy className="h-10 w-10 text-primary" />}
+            title="Premium Referrals"
+            description="Earn 20% commission on every referral"
+            buttonText="Maximize Earnings"
+            onClick={() => navigate('/referral')}
+            variant="premium"
+          />
 
-        <Card className="hover:shadow-lg transition-shadow border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent">
-          <CardHeader>
-            <Sparkles className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Pro Creator Suite</CardTitle>
-            <CardDescription>Full content toolkit</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full">Launch Suite</Button>
-          </CardContent>
-        </Card>
+          <FeatureCard
+            icon={<TrendingUp className="h-10 w-10 text-primary" />}
+            title="Advanced Analytics"
+            description="Deep insights, forecasting, and business intelligence"
+            buttonText="View Dashboard"
+            onClick={() => navigate('/dashboard')}
+            variant="highlighted"
+          />
 
-        <Card className="hover:shadow-lg transition-shadow border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent">
-          <CardHeader>
-            <Zap className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Priority Access</CardTitle>
-            <CardDescription>First to new features</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" variant="outline">Early Access</Button>
-          </CardContent>
-        </Card>
+          <FeatureCard
+            icon={<HeadphonesIcon className="h-10 w-10 text-primary" />}
+            title="Priority Support"
+            description="24/7 dedicated support with personal account manager"
+            buttonText="Contact Support"
+            onClick={() => navigate('/dashboard')}
+            variant="highlighted"
+          />
 
-        <Card className="hover:shadow-lg transition-shadow border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent">
-          <CardHeader>
-            <HeadphonesIcon className="h-8 w-8 text-primary mb-2" />
-            <CardTitle>Premium Support</CardTitle>
-            <CardDescription>24/7 priority support</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" variant="outline">Contact Support</Button>
-          </CardContent>
-        </Card>
+          <FeatureCard
+            icon={<Zap className="h-10 w-10 text-primary" />}
+            title="Early Access"
+            description="Be first to try new features and beta releases"
+            buttonText="Explore Beta"
+            onClick={() => navigate('/ai-tools')}
+            variant="highlighted"
+          />
 
-        <Card className="hover:shadow-lg transition-shadow border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-transparent">
-          <CardHeader>
-            <Crown className="h-8 w-8 text-yellow-500 mb-2" />
-            <CardTitle>Exclusive Access</CardTitle>
-            <CardDescription>VIP community & events</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" variant="outline">Join VIP</Button>
-          </CardContent>
-        </Card>
+          <FeatureCard
+            icon={<Crown className="h-10 w-10 text-primary" />}
+            title="VIP Community"
+            description="Exclusive access to elite AI professionals network"
+            buttonText="Join VIP"
+            onClick={() => navigate('/community')}
+            variant="default"
+          />
+
+          <FeatureCard
+            icon={<Sparkles className="h-10 w-10 text-primary" />}
+            title="Pro Creator Suite"
+            description="White-label options and custom branding"
+            buttonText="Customize"
+            onClick={() => navigate('/ai-tools')}
+            variant="default"
+          />
+
+          <FeatureCard
+            icon={<Target className="h-10 w-10 text-primary" />}
+            title="Strategy Sessions"
+            description="Monthly consultations to optimize your career"
+            buttonText="Schedule"
+            onClick={() => navigate('/dashboard')}
+            variant="default"
+          />
+        </div>
+      </div>
+
+      <div className="bg-gradient-earn p-8 rounded-lg text-center text-primary-foreground">
+        <Crown className="h-12 w-12 mx-auto mb-4" />
+        <h3 className="text-2xl font-bold mb-2">You're at the Top</h3>
+        <p className="mb-4 opacity-90">Join the elite community of AI professionals earning serious income</p>
       </div>
     </div>
   );
