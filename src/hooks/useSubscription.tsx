@@ -159,6 +159,8 @@ export const useSubscription = () => {
           tier_id: tierId,
           status: 'active',
           started_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id'
         });
 
       if (error) throw error;
