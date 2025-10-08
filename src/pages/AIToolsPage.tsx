@@ -1,14 +1,17 @@
 
 
-import { Brain, Zap, Code, Image, MessageSquare, BarChart3, Sparkles, ArrowRight, Blocks, Sliders, GraduationCap } from "lucide-react";
+import { Brain, Zap, Sparkles, ArrowRight, Blocks, Sliders, BarChart3, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { AITool, AIToolCategory, FeatureHighlight } from "@/types/aiTools";
+import { AITool } from "@/types/aiTools";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ToolCard } from "@/components/ai-tools/ToolCard";
+import { FeatureHighlight } from "@/components/ai-tools/FeatureHighlight";
+import { CategoryFilter } from "@/components/ai-tools/CategoryFilter";
 
 const AIToolsPage = () => {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const tools: AITool[] = [
     {
@@ -67,23 +70,15 @@ const AIToolsPage = () => {
 
   const categories: string[] = ["All", "Development", "Creative", "Analytics", "Communication", "Research", "Machine Learning"];
 
-  const featureHighlights: FeatureHighlight[] = [
-    {
-      title: "Lightning Fast",
-      description: "Optimized for speed and efficiency to boost your productivity",
-      icon: Zap
-    },
-    {
-      title: "Intelligent",
-      description: "Powered by the latest AI models and machine learning algorithms",
-      icon: Brain
-    },
-    {
-      title: "Easy to Use",
-      description: "Intuitive interfaces designed for both beginners and experts",
-      icon: Sparkles
-    }
+  const featureHighlights = [
+    { title: "Lightning Fast", description: "Optimized for speed and efficiency to boost your productivity", icon: Zap },
+    { title: "Intelligent", description: "Powered by the latest AI models and machine learning algorithms", icon: Brain },
+    { title: "Easy to Use", description: "Intuitive interfaces designed for both beginners and experts", icon: Sparkles }
   ];
+
+  const filteredTools = selectedCategory === "All" 
+    ? tools 
+    : tools.filter(tool => tool.category === selectedCategory);
 
   const handleTryTools = () => {
     console.log("Try tools free clicked");
@@ -139,74 +134,23 @@ const AIToolsPage = () => {
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="py-8 border-b border-border/50">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-wrap justify-center gap-3">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={category === "All" ? "default" : "outline"}
-                size="sm"
-                className="rounded-full"
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </section>
+      <CategoryFilter 
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+      />
 
       {/* Tools Grid */}
       <section className="py-16">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tools.map((tool) => (
-              <Card key={tool.id} className="group hover:shadow-ai transition-all duration-300 border-border/50 overflow-hidden">
-                <CardHeader className="pb-4">
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${tool.gradient} flex items-center justify-center text-white mb-4`}>
-                    <tool.icon className="h-8 w-8" />
-                  </div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {tool.category}
-                    </Badge>
-                    <Badge variant={tool.pricing === "Free" ? "default" : "outline"} className="text-xs">
-                      {tool.pricing}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                    {tool.name}
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    {tool.description}
-                  </CardDescription>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-medium">Key Features:</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      {tool.features.map((feature, index) => (
-                        <li key={index} className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="flex gap-2 pt-2">
-                    <Button className="flex-1 group/btn" onClick={() => handleTryTool(tool)}>
-                      Try Now
-                      <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleLearnMore(tool.id)}>
-                      Learn More
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+            {filteredTools.map((tool) => (
+              <ToolCard
+                key={tool.id}
+                {...tool}
+                onTryTool={() => handleTryTool(tool)}
+                onLearnMore={() => handleLearnMore(tool.id)}
+              />
             ))}
           </div>
         </div>
@@ -224,15 +168,7 @@ const AIToolsPage = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featureHighlights.map((feature, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                  <feature.icon className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">
-                  {feature.description}
-                </p>
-              </div>
+              <FeatureHighlight key={index} {...feature} />
             ))}
           </div>
         </div>
