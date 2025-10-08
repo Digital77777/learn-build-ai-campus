@@ -1,5 +1,6 @@
 import { BookOpen, Brain, Users, Sparkles, GraduationCap, PlayCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { TierHero } from './shared/TierHero';
 import { FeatureCard } from './shared/FeatureCard';
 import { BenefitsList } from './shared/BenefitsList';
@@ -75,6 +76,14 @@ export const StarterDashboard = () => {
         <PlayCircle className="h-12 w-12 mx-auto mb-4" />
         <h3 className="text-2xl font-bold mb-2">Ready to Level Up?</h3>
         <p className="mb-4 opacity-90">Upgrade to Creator or Career tier for more tools and earning opportunities</p>
+        <Button 
+          variant="secondary" 
+          size="lg"
+          onClick={() => navigate('/subscription')}
+          className="mt-4"
+        >
+          View Upgrade Options
+        </Button>
       </div>
     </div>
   );

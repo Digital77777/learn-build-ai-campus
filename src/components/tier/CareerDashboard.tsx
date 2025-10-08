@@ -1,5 +1,6 @@
 import { Brain, Store, Gift, TrendingUp, Sparkles, Zap, Crown, HeadphonesIcon, Trophy, Target, Infinity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { TierHero } from './shared/TierHero';
 import { FeatureCard } from './shared/FeatureCard';
 import { BenefitsList } from './shared/BenefitsList';
@@ -146,6 +147,14 @@ export const CareerDashboard = () => {
         <Crown className="h-12 w-12 mx-auto mb-4" />
         <h3 className="text-2xl font-bold mb-2">You're at the Top</h3>
         <p className="mb-4 opacity-90">Join the elite community of AI professionals earning serious income</p>
+        <Button 
+          variant="secondary" 
+          size="lg"
+          onClick={() => navigate('/referrals')}
+          className="mt-4"
+        >
+          Share & Earn More
+        </Button>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Brain, Store, Gift, TrendingUp, Sparkles, Hammer, Rocket, DollarSign } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { TierHero } from './shared/TierHero';
 import { FeatureCard } from './shared/FeatureCard';
 import { BenefitsList } from './shared/BenefitsList';
@@ -104,6 +105,14 @@ export const CreatorDashboard = () => {
         <Sparkles className="h-12 w-12 mx-auto mb-4" />
         <h3 className="text-2xl font-bold mb-2">You're Creating Magic</h3>
         <p className="mb-4 opacity-90">Join thousands of creators building and earning with AI</p>
+        <Button 
+          variant="secondary" 
+          size="lg"
+          onClick={() => navigate('/subscription')}
+          className="mt-4"
+        >
+          Unlock Career Tier
+        </Button>
       </div>
     </div>
   );
