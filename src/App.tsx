@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { TierProvider } from "@/contexts/TierContext";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Navigation from "./components/Navigation";
 import MobileFooter from "./components/MobileFooter";
 import Index from "./pages/Index";
@@ -74,13 +75,14 @@ const ScrollToTop = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TierProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TierProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
           <div className="min-h-screen bg-background pb-16 md:pb-0">
             <ScrollToTop />
             <Navigation />
@@ -132,6 +134,7 @@ const App = () => (
       </TierProvider>
     </AuthProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
