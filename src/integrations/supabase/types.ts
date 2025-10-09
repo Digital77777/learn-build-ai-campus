@@ -336,6 +336,42 @@ export type Database = {
         }
         Relationships: []
       }
+      security_audit_log: {
+        Row: {
+          action: string
+          created_at: string
+          id: number
+          ip_address: unknown | null
+          metadata: Json | null
+          record_id: string | null
+          table_name: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: number
+          ip_address?: unknown | null
+          metadata?: Json | null
+          record_id?: string | null
+          table_name: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: number
+          ip_address?: unknown | null
+          metadata?: Json | null
+          record_id?: string | null
+          table_name?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       seller_profiles: {
         Row: {
           address: Json | null
@@ -348,8 +384,10 @@ export type Database = {
           description: string | null
           id: number
           payout_method: Json | null
+          payout_method_encrypted: string | null
           status: string | null
           tax_id: string | null
+          tax_id_encrypted: string | null
           updated_at: string | null
           user_id: string
         }
@@ -364,8 +402,10 @@ export type Database = {
           description?: string | null
           id?: never
           payout_method?: Json | null
+          payout_method_encrypted?: string | null
           status?: string | null
           tax_id?: string | null
+          tax_id_encrypted?: string | null
           updated_at?: string | null
           user_id: string
         }
@@ -380,8 +420,10 @@ export type Database = {
           description?: string | null
           id?: never
           payout_method?: Json | null
+          payout_method_encrypted?: string | null
           status?: string | null
           tax_id?: string | null
+          tax_id_encrypted?: string | null
           updated_at?: string | null
           user_id?: string
         }
@@ -506,6 +548,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_subscriptions: {
         Row: {
           created_at: string
@@ -554,9 +620,9 @@ export type Database = {
     Functions: {
       add_admin_user: {
         Args:
-          | { p_role: string; p_user_id: string }
+          | { p_role?: string; p_user_id: string }
           | { user_email: string; user_role: string }
-        Returns: undefined
+        Returns: string
       }
       check_current_user_admin_status: {
         Args: Record<PropertyKey, never>
@@ -593,6 +659,12 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_current_user_roles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          role: string
+        }[]
+      }
       get_sellers_for_review: {
         Args: { p_page?: number; p_page_size?: number; p_status?: string }
         Returns: {
@@ -610,6 +682,13 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: string
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       is_admin_email: {
         Args: Record<PropertyKey, never>
         Returns: boolean
@@ -620,6 +699,15 @@ export type Database = {
       }
       log_error: {
         Args: { p_error_context?: Json; p_error_message: string }
+        Returns: undefined
+      }
+      log_sensitive_access: {
+        Args: {
+          p_action: string
+          p_metadata?: Json
+          p_record_id: string
+          p_table_name: string
+        }
         Returns: undefined
       }
       raise_application_error: {
@@ -666,7 +754,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -793,6 +881,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
