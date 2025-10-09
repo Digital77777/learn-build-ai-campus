@@ -22,9 +22,40 @@ export const TierProvider = ({ children }: { children: ReactNode }) => {
     if (!tierName) return false;
     
     const tierFeatures: Record<string, string[]> = {
-      starter: ['basic_tools', 'learning_paths', 'community'],
-      creator: ['basic_tools', 'learning_paths', 'community', 'advanced_tools', 'marketplace', 'referrals'],
-      career: ['basic_tools', 'learning_paths', 'community', 'advanced_tools', 'marketplace', 'referrals', 'premium_support', 'analytics', 'priority_access']
+      starter: [
+        'basic_tools', 
+        'basic_learning_paths', 
+        'community', 
+        'limited_marketplace_view'
+      ],
+      creator: [
+        'basic_tools', 
+        'advanced_tools', 
+        'all_learning_paths', 
+        'community', 
+        'marketplace_buy', 
+        'marketplace_sell', 
+        'referrals',
+        'creator_badge',
+        'priority_support'
+      ],
+      career: [
+        'basic_tools', 
+        'advanced_tools', 
+        'unlimited_tools',
+        'all_learning_paths', 
+        'career_certification',
+        'community', 
+        'marketplace_buy', 
+        'marketplace_sell', 
+        'unlimited_listings',
+        'referrals', 
+        'premium_support', 
+        'personal_ai_tutor',
+        'job_placement',
+        'analytics', 
+        'priority_access'
+      ]
     };
 
     return tierFeatures[tierName]?.includes(feature) || false;

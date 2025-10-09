@@ -1,5 +1,4 @@
 
-
 import { Brain, Zap, Sparkles, ArrowRight, Blocks, Sliders, BarChart3, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AITool } from "@/types/aiTools";
@@ -8,10 +7,13 @@ import { useState } from "react";
 import { ToolCard } from "@/components/ai-tools/ToolCard";
 import { FeatureHighlight } from "@/components/ai-tools/FeatureHighlight";
 import { CategoryFilter } from "@/components/ai-tools/CategoryFilter";
+import { ToolAccessBanner } from "@/components/tier/ToolAccessBanner";
+import { useTier } from "@/contexts/TierContext";
 
 const AIToolsPage = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { maxToolsAccess, tierName } = useTier();
 
   const tools: AITool[] = [
     {
@@ -80,6 +82,9 @@ const AIToolsPage = () => {
     ? tools 
     : tools.filter(tool => tool.category === selectedCategory);
 
+  // Limit tools based on tier (Starter: 2, Creator: 10, Career: unlimited)
+  const accessibleTools = tierName === 'career' ? filteredTools : filteredTools.slice(0, maxToolsAccess);
+
   const handleTryTools = () => {
     console.log("Try tools free clicked");
   };
@@ -134,6 +139,8 @@ const AIToolsPage = () => {
         </div>
       </section>
 
+      <ToolAccessBanner />
+
       <CategoryFilter 
         categories={categories}
         selectedCategory={selectedCategory}
@@ -144,7 +151,7 @@ const AIToolsPage = () => {
       <section className="py-16">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredTools.map((tool) => (
+            {accessibleTools.map((tool) => (
               <ToolCard
                 key={tool.id}
                 {...tool}

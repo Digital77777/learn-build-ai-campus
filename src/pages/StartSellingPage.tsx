@@ -3,6 +3,7 @@ import { Store, Briefcase, Users, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { TierGate } from "@/components/tier/TierGate";
 
 const StartSellingPage = () => {
   const sellingOptions = [
@@ -37,10 +38,11 @@ const StartSellingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      
-      
-      <div className="container mx-auto px-6 pt-24 pb-12">
+    <TierGate feature="marketplace_sell">
+      <div className="min-h-screen bg-background">
+        
+        
+        <div className="container mx-auto px-6 pt-24 pb-12">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h1 className="text-5xl font-bold mb-6">
             <span className="bg-gradient-earn bg-clip-text text-transparent">
@@ -94,8 +96,9 @@ const StartSellingPage = () => {
             Contact Support
           </Button>
         </div>
+        </div>
       </div>
-    </div>
+    </TierGate>
   );
 };
 

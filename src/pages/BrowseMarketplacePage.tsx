@@ -10,6 +10,7 @@ import { SimpleListingCard } from '@/components/marketplace/SimpleListingCard';
 import { JobListingCard } from '@/components/marketplace/JobListingCard';
 import { ListingDetailsModal } from '@/components/marketplace/ListingDetailsModal';
 import { useAuth } from '@/hooks/useAuth';
+import { TierGate } from '@/components/tier/TierGate';
 
 export default function BrowseMarketplacePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,10 +64,11 @@ export default function BrowseMarketplacePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      
-      
-      <div className="container mx-auto px-4 py-8">
+    <TierGate feature="marketplace_buy">
+      <div className="min-h-screen bg-background">
+        
+        
+        <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">
@@ -157,7 +159,8 @@ export default function BrowseMarketplacePage() {
           onFavorite={user ? handleFavorite : undefined}
           isFavorited={selectedListing ? userFavorites.some(fav => fav.listing_id === selectedListing.id) : false}
         />
+        </div>
       </div>
-    </div>
+    </TierGate>
   );
 }

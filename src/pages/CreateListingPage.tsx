@@ -5,6 +5,8 @@ import { ListingForm } from '@/components/marketplace/ListingForm';
 import { useMarketplace } from '@/hooks/useMarketplace';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { TierGate } from '@/components/tier/TierGate';
+import { ListingLimitBanner } from '@/components/tier/ListingLimitBanner';
 
 const CreateListingPage = () => {
   const navigate = useNavigate();
@@ -61,16 +63,19 @@ const CreateListingPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      
-      <div className="container mx-auto px-6 pt-24 pb-12">
-        <ListingForm
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-          isLoading={isLoading}
-        />
+    <TierGate feature="marketplace_sell">
+      <div className="min-h-screen bg-background">
+        
+        <div className="container mx-auto px-6 pt-24 pb-12">
+          <ListingLimitBanner />
+          <ListingForm
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
-    </div>
+    </TierGate>
   );
 };
 
