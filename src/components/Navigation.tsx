@@ -1,4 +1,4 @@
-import { BookOpen, Brain, Store, Home, User, LogOut, Menu, Users, Gift, CreditCard, LayoutDashboard } from "lucide-react";
+import { BookOpen, Brain, Store, Home, User, LogOut, Menu, Users, Gift, CreditCard, LayoutDashboard, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Navigation = () => {
   const {
@@ -14,6 +15,7 @@ const Navigation = () => {
     loading
   } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
   const navigationItems = [{
     icon: Home,
     label: "Home",
@@ -125,9 +127,9 @@ const Navigation = () => {
             </Sheet>
             {loading ? <div className="w-20 h-8 animate-pulse bg-muted rounded" /> : user ? <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2" aria-label="Account menu">
                     <User className="h-4 w-4" />
-                    Account
+                    {!isMobile && "Account"}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -168,13 +170,15 @@ const Navigation = () => {
                 </DropdownMenuContent>
               </DropdownMenu> : <>
                 <Link to="/auth">
-                  <Button variant="outline" size="sm">
-                    Sign In
+                  <Button variant="outline" size="sm" aria-label="Sign in">
+                    <User className="h-4 w-4" />
+                    {!isMobile && <span className="ml-2">Sign In</span>}
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button variant="ai" size="sm" className="mx-0 px-0 py-[2px] my-[10px]">
-                    Get Started Free
+                  <Button variant="ai" size="sm" className="mx-0 px-0 py-[2px] my-[10px]" aria-label="Get started free">
+                    <ArrowRight className="h-4 w-4" />
+                    {!isMobile && <span className="ml-2">Get Started Free</span>}
                   </Button>
                 </Link>
               </>}
