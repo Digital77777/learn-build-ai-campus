@@ -92,7 +92,7 @@ export const CareerDashboard = () => {
             title="Advanced Analytics"
             description="Deep insights, forecasting, and business intelligence"
             buttonText="View Dashboard"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/analytics')}
             variant="highlighted"
           />
 
@@ -101,7 +101,7 @@ export const CareerDashboard = () => {
             title="Priority Support"
             description="24/7 dedicated support with personal account manager"
             buttonText="Contact Support"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/support')}
             variant="highlighted"
           />
 
@@ -128,7 +128,7 @@ export const CareerDashboard = () => {
             title="Pro Creator Suite"
             description="White-label options and custom branding"
             buttonText="Customize"
-            onClick={() => navigate('/ai-tools')}
+            onClick={() => navigate('/creator-suite')}
             variant="default"
           />
 
@@ -137,7 +137,7 @@ export const CareerDashboard = () => {
             title="Strategy Sessions"
             description="Monthly consultations to optimize your career"
             buttonText="Schedule"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/strategy-sessions')}
             variant="default"
           />
         </div>

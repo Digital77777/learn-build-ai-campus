@@ -37,6 +37,10 @@ import AISnapBuilder from "./pages/tools/AISnapBuilder";
 import PromptPlayground from "./pages/tools/PromptPlayground";
 import Data2App from "./pages/tools/Data2App";
 import AITutorLab from "./pages/tools/AITutorLab";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import SupportPage from "./pages/SupportPage";
+import StrategySessionsPage from "./pages/StrategySessionsPage";
+import CreatorSuitePage from "./pages/CreatorSuitePage";
 import FoundationPath from "./pages/course/FoundationPath";
 import PracticalSkills from "./pages/course/PracticalSkills";
 import TechnicalDeveloper from "./pages/course/TechnicalDeveloper";
@@ -123,6 +127,10 @@ const App = () => (
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/referrals" element={<ReferralPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/strategy-sessions" element={<StrategySessionsPage />} />
+            <Route path="/creator-suite" element={<CreatorSuitePage />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
