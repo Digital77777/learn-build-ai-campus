@@ -7,18 +7,21 @@ interface TierContextType {
   maxListings: number;
   canAccessFeature: (feature: string) => boolean;
   loading: boolean;
+  isAdminEmail: boolean;
 }
 
 const TierContext = createContext<TierContextType | undefined>(undefined);
 
 export const TierProvider = ({ children }: { children: ReactNode }) => {
-  const { subscription, loading } = useSubscription();
+  const { subscription, loading, isAdminEmail } = useSubscription();
 
   const tierName = subscription?.tier?.name || null;
-  const maxToolsAccess = subscription?.tier?.max_tools_access || 0;
-  const maxListings = subscription?.tier?.max_listings || 0;
+  const maxToolsAccess = isAdminEmail ? 999999 : (subscription?.tier?.max_tools_access || 0);
+  const maxListings = isAdminEmail ? 999999 : (subscription?.tier?.max_listings || 0);
 
   const canAccessFeature = (feature: string): boolean => {
+    // Admins have access to all features
+    if (isAdminEmail) return true;
     if (!tierName) return false;
     
     const tierFeatures: Record<string, string[]> = {
@@ -62,7 +65,7 @@ export const TierProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <TierContext.Provider value={{ tierName, maxToolsAccess, maxListings, canAccessFeature, loading }}>
+    <TierContext.Provider value={{ tierName, maxToolsAccess, maxListings, canAccessFeature, loading, isAdminEmail }}>
       {children}
     </TierContext.Provider>
   );
