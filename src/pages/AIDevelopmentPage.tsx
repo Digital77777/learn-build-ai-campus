@@ -1,401 +1,189 @@
-
-import { Code, Cpu, Database, Zap, Shield, Rocket } from "lucide-react";
+import { useState } from "react";
+import { Send, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
+
+type Message = { role: "user" | "assistant"; content: string };
 
 const AIDevelopmentPage = () => {
-  const developmentServices = [
-    {
-      title: "Custom AI Models",
-      description: "Tailored machine learning models for your specific business needs",
-      features: ["Model Training", "Fine-tuning", "Optimization", "Deployment"],
-      pricing: "$5,000 - $50,000",
-      timeline: "4-12 weeks",
-      complexity: "Advanced"
-    },
-    {
-      title: "AI Integration",
-      description: "Seamlessly integrate AI capabilities into existing systems",
-      features: ["API Development", "System Integration", "Data Pipeline", "Testing"],
-      pricing: "$3,000 - $25,000",
-      timeline: "2-8 weeks",
-      complexity: "Intermediate"
-    },
-    {
-      title: "MLOps & Infrastructure",
-      description: "Production-ready AI infrastructure and deployment pipelines",
-      features: ["Model Deployment", "Monitoring", "Scaling", "CI/CD"],
-      pricing: "$8,000 - $75,000",
-      timeline: "6-16 weeks",
-      complexity: "Expert"
-    },
-    {
-      title: "Computer Vision Solutions",
-      description: "Advanced image and video processing AI applications",
-      features: ["Object Detection", "Image Classification", "OCR", "Video Analysis"],
-      pricing: "$4,000 - $40,000",
-      timeline: "3-10 weeks",
-      complexity: "Advanced"
-    },
-    {
-      title: "NLP & Chatbots",
-      description: "Natural language processing and conversational AI systems",
-      features: ["Text Analysis", "Chatbot Development", "Language Models", "API Integration"],
-      pricing: "$2,500 - $30,000",
-      timeline: "2-8 weeks",
-      complexity: "Intermediate"
-    },
-    {
-      title: "AI Consulting",
-      description: "Strategic guidance for AI transformation and implementation",
-      features: ["Strategy Development", "Technology Assessment", "ROI Analysis", "Implementation Plan"],
-      pricing: "$1,500 - $15,000",
-      timeline: "1-4 weeks",
-      complexity: "Beginner"
-    }
-  ];
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const technologies = [
-    { name: "TensorFlow", category: "Framework" },
-    { name: "PyTorch", category: "Framework" },
-    { name: "Python", category: "Language" },
-    { name: "R", category: "Language" },
-    { name: "AWS", category: "Cloud" },
-    { name: "Google Cloud", category: "Cloud" },
-    { name: "Azure", category: "Cloud" },
-    { name: "Docker", category: "DevOps" },
-    { name: "Kubernetes", category: "DevOps" },
-    { name: "MLflow", category: "MLOps" },
-    { name: "Hugging Face", category: "Models" },
-    { name: "OpenAI API", category: "API" }
-  ];
+  const streamChat = async (userMessage: string) => {
+    const newMessages = [...messages, { role: "user" as const, content: userMessage }];
+    setMessages(newMessages);
+    setIsLoading(true);
 
-  const benefits = [
-    {
-      icon: <Rocket className="h-6 w-6" />,
-      title: "Enterprise Ready",
-      description: "Production-grade solutions designed for scale and reliability"
-    },
-    {
-      icon: <Shield className="h-6 w-6" />,
-      title: "Secure & Compliant",
-      description: "Built with security best practices and compliance requirements"
-    },
-    {
-      icon: <Zap className="h-6 w-6" />,
-      title: "Fast Delivery",
-      description: "Rapid development cycles with proven methodologies"
-    },
-    {
-      icon: <Database className="h-6 w-6" />,
-      title: "Data Excellence",
-      description: "Expert data engineering and model optimization"
-    }
-  ];
+    let assistantContent = "";
 
-  const process = [
-    {
-      step: "1",
-      title: "Discovery & Planning",
-      description: "Understand your business needs and define project scope",
-      duration: "1-2 weeks"
-    },
-    {
-      step: "2",
-      title: "Data Analysis & Design",
-      description: "Analyze your data and design the optimal AI solution",
-      duration: "1-3 weeks"
-    },
-    {
-      step: "3",
-      title: "Development & Training",
-      description: "Build, train, and optimize your custom AI models",
-      duration: "2-8 weeks"
-    },
-    {
-      step: "4",
-      title: "Testing & Deployment",
-      description: "Rigorous testing and seamless production deployment",
-      duration: "1-2 weeks"
-    },
-    {
-      step: "5",
-      title: "Support & Optimization",
-      description: "Ongoing monitoring, support, and continuous improvement",
-      duration: "Ongoing"
-    }
-  ];
+    try {
+      const response = await fetch(
+        `https://uegujjkjkoohucpbdjwj.supabase.co/functions/v1/chat-ai`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlZ3Vqamtqa29vaHVjcGJkandqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MzkxNzIsImV4cCI6MjA2ODAxNTE3Mn0.tIR1Pldwu-Ncp0W43vIwsjf3RvrDF3PNKOJ4r0x5Nf8`,
+          },
+          body: JSON.stringify({ messages: newMessages }),
+        }
+      );
 
-  const caseStudies = [
-    {
-      title: "E-commerce Recommendation Engine",
-      client: "Fashion Retailer",
-      challenge: "Increase conversion rates and personalize shopping experience",
-      solution: "Custom recommendation algorithm using collaborative filtering",
-      results: ["35% increase in conversion", "42% boost in average order value", "60% improvement in user engagement"],
-      tech: ["TensorFlow", "Python", "AWS"]
-    },
-    {
-      title: "Automated Quality Control",
-      client: "Manufacturing Company",
-      challenge: "Detect product defects in real-time production line",
-      solution: "Computer vision system for automated quality inspection",
-      results: ["99.2% defect detection accuracy", "50% reduction in manual inspection", "30% cost savings"],
-      tech: ["PyTorch", "OpenCV", "Docker"]
-    },
-    {
-      title: "Customer Service Automation",
-      client: "Financial Services",
-      challenge: "Handle customer inquiries 24/7 with human-like responses",
-      solution: "Advanced NLP chatbot with sentiment analysis",
-      results: ["80% query resolution rate", "60% reduction in response time", "40% cost reduction"],
-      tech: ["Hugging Face", "Python", "Azure"]
+      if (!response.ok) {
+        if (response.status === 429) {
+          toast.error("Rate limit exceeded. Please try again later.");
+          setIsLoading(false);
+          return;
+        }
+        if (response.status === 402) {
+          toast.error("AI credits exhausted. Please contact support.");
+          setIsLoading(false);
+          return;
+        }
+        throw new Error("Failed to start stream");
+      }
+
+      if (!response.body) throw new Error("No response body");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let streamDone = false;
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") {
+            streamDone = true;
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              assistantContent += content;
+              setMessages((prev) => {
+                const last = prev[prev.length - 1];
+                if (last?.role === "assistant") {
+                  return prev.map((m, i) =>
+                    i === prev.length - 1 ? { ...m, content: assistantContent } : m
+                  );
+                }
+                return [...prev, { role: "assistant", content: assistantContent }];
+              });
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Chat error:", error);
+      toast.error("Failed to get AI response");
+      setIsLoading(false);
     }
-  ];
+  };
+
+  const handleSend = () => {
+    if (!input.trim() || isLoading) return;
+    const userInput = input;
+    setInput("");
+    streamChat(userInput);
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      
-      
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 pt-20 pb-16">
-        <div className="container mx-auto px-6">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-success/10 rounded-full">
-              <Code className="h-4 w-4 text-success" />
-              <span className="text-sm font-medium text-success">AI Development</span>
+      <div className="container mx-auto px-6 py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Sparkles className="h-8 w-8 text-primary" />
+              <h1 className="text-4xl font-bold">AI Development Assistant</h1>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-earn bg-clip-text text-transparent">
-                Custom AI Solutions
-              </span>
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Transform your business with enterprise-grade AI development. From custom models to full-scale AI integration, we build solutions that drive real results.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90" onClick={() => window.location.href = '/marketplace/start-project'}>
-                <Code className="h-5 w-5 mr-2" />
-                Start Your Project
-              </Button>
-              <Button size="lg" variant="outline">
-                View Case Studies
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Development Services */}
-      <section className="py-16">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">AI Development Services</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive AI development solutions for businesses of all sizes
+            <p className="text-muted-foreground text-lg">
+              Powered by Gemini AI - Get instant help with AI tools, learning paths, and marketplace features
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {developmentServices.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <CardTitle className="text-lg">{service.title}</CardTitle>
-                    <Badge variant={service.complexity === "Expert" ? "default" : service.complexity === "Advanced" ? "secondary" : "outline"}>
-                      {service.complexity}
-                    </Badge>
-                  </div>
-                  <CardDescription>{service.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-muted-foreground">Pricing</span>
-                      <div className="font-semibold text-success">{service.pricing}</div>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Timeline</span>
-                      <div className="font-semibold">{service.timeline}</div>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="text-sm text-muted-foreground mb-2 block">Key Features:</span>
-                    <div className="grid grid-cols-2 gap-1">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="text-sm flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-success rounded-full" />
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <Button className="w-full">
-                    Get Quote
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Technologies */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Technologies We Use</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Cutting-edge tools and frameworks for robust AI development
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {technologies.map((tech, index) => (
-              <Card key={index} className="text-center hover:shadow-md transition-all duration-300">
-                <CardContent className="p-4">
-                  <div className="w-12 h-12 mx-auto mb-2 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Cpu className="h-6 w-6 text-primary" />
-                  </div>
-                  <h4 className="font-medium text-sm">{tech.name}</h4>
-                  <p className="text-xs text-muted-foreground">{tech.category}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section className="py-16">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Choose Our AI Development</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Enterprise-grade solutions built with industry best practices
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {benefits.map((benefit, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                    {benefit.icon}
-                  </div>
-                  <h3 className="font-semibold mb-2">{benefit.title}</h3>
-                  <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Development Process */}
-      <section className="py-16 bg-gradient-to-r from-primary/5 to-accent/5">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Our Development Process</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Proven methodology for successful AI project delivery
-            </p>
-          </div>
-
-          <div className="space-y-8">
-            {process.map((step, index) => (
-              <div key={index} className="flex items-start gap-6 max-w-4xl mx-auto">
-                <div className="w-16 h-16 flex-shrink-0 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl">
-                  {step.step}
+          <Card className="p-6">
+            <ScrollArea className="h-[500px] pr-4 mb-4">
+              {messages.length === 0 ? (
+                <div className="text-center text-muted-foreground py-12">
+                  <p>Ask me anything about AI tools, learning, or the marketplace!</p>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-4 mb-2">
-                    <h3 className="text-xl font-semibold">{step.title}</h3>
-                    <Badge variant="outline">{step.duration}</Badge>
-                  </div>
-                  <p className="text-muted-foreground">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Case Studies */}
-      <section className="py-16">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Success Stories</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Real results from our AI development projects
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {caseStudies.map((study, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-lg">{study.title}</CardTitle>
-                  <CardDescription className="font-medium text-primary">{study.client}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-medium mb-2">Challenge:</h4>
-                    <p className="text-sm text-muted-foreground">{study.challenge}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-medium mb-2">Solution:</h4>
-                    <p className="text-sm text-muted-foreground">{study.solution}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-medium mb-2">Results:</h4>
-                    <ul className="space-y-1">
-                      {study.results.map((result, idx) => (
-                        <li key={idx} className="text-sm text-muted-foreground flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-success rounded-full" />
-                          {result}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-medium mb-2">Technologies:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {study.tech.map((tech, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs">
-                          {tech}
-                        </Badge>
-                      ))}
+              ) : (
+                <div className="space-y-4">
+                  {messages.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      <div
+                        className={`max-w-[80%] rounded-lg p-4 ${
+                          msg.role === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
+                        }`}
+                      >
+                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
 
-      {/* CTA Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Business?</h2>
-            <p className="text-muted-foreground mb-8">
-              Let's discuss how custom AI solutions can drive growth and efficiency for your organization.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
-                <Code className="h-5 w-5 mr-2" />
-                Start Your AI Project
-              </Button>
-              <Button size="lg" variant="outline" onClick={() => window.location.href = '/marketplace/schedule-consultation'}>
-                Schedule Consultation
+            <div className="flex gap-2">
+              <Textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                placeholder="Ask me anything..."
+                className="resize-none"
+                rows={3}
+                disabled={isLoading}
+              />
+              <Button
+                onClick={handleSend}
+                disabled={!input.trim() || isLoading}
+                size="icon"
+                className="h-auto"
+              >
+                {isLoading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Send className="h-5 w-5" />
+                )}
               </Button>
             </div>
-          </div>
+          </Card>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

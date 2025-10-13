@@ -23,7 +23,6 @@ import BrowseMarketplacePage from "./pages/BrowseMarketplacePage";
 import SellProductsPage from "./pages/SellProductsPage";
 import FreelanceServicesPage from "./pages/FreelanceServicesPage";
 import PostJobsPage from "./pages/PostJobsPage";
-import AIDevelopmentPage from "./pages/AIDevelopmentPage";
 import CreateListingPage from "./pages/CreateListingPage";
 import EditListingPage from "./pages/EditListingPage";
 import MyListingsPage from "./pages/MyListingsPage";
@@ -41,6 +40,7 @@ import AnalyticsPage from "./pages/AnalyticsPage";
 import SupportPage from "./pages/SupportPage";
 import StrategySessionsPage from "./pages/StrategySessionsPage";
 import CreatorSuitePage from "./pages/CreatorSuitePage";
+import AIDevelopmentPage from "./pages/AIDevelopmentPage";
 import FoundationPath from "./pages/course/FoundationPath";
 import PracticalSkills from "./pages/course/PracticalSkills";
 import TechnicalDeveloper from "./pages/course/TechnicalDeveloper";
@@ -131,6 +131,7 @@ const App = () => (
             <Route path="/support" element={<SupportPage />} />
             <Route path="/strategy-sessions" element={<StrategySessionsPage />} />
             <Route path="/creator-suite" element={<CreatorSuitePage />} />
+            <Route path="/ai-development" element={<AIDevelopmentPage />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
