@@ -192,13 +192,13 @@ const FoundationPath = () => {
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <Button className="h-10 px-6 md:h-11 md:px-8" onClick={handleStartCourse}>
-                  <Play className="h-5 w-5 mr-2" />
+              <div className="flex gap-3">
+                <Button className="h-9 px-4 text-sm md:h-11 md:px-8 md:text-base" onClick={handleStartCourse}>
+                  <Play className="h-4 w-4 mr-1.5 md:h-5 md:w-5 md:mr-2" />
                   Start Learning Free
                 </Button>
-                <Button className="h-10 px-6 md:h-11 md:px-8" variant="outline" onClick={handleEnrollNow}>
-                  <GraduationCap className="h-5 w-5 mr-2" />
+                <Button className="h-9 px-4 text-sm md:h-11 md:px-8 md:text-base" variant="outline" onClick={handleEnrollNow}>
+                  <GraduationCap className="h-4 w-4 mr-1.5 md:h-5 md:w-5 md:mr-2" />
                   Enroll Now
                 </Button>
               </div>
