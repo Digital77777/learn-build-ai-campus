@@ -456,9 +456,80 @@ export const useCommunity = () => {
     });
   };
 
+  // Fetch single topic with all replies
+  const useTopicDetail = (topicId: string) => {
+    return useQuery({
+      queryKey: ['topic-detail', topicId],
+      queryFn: async () => {
+        const { data, error } = await supabase
+          .from('community_topics')
+          .select(`
+            *,
+            profiles!community_topics_user_id_fkey (full_name, email),
+            topic_replies (
+              *,
+              profiles!topic_replies_user_id_fkey (full_name, email)
+            )
+          `)
+          .eq('id', topicId)
+          .maybeSingle();
+
+        if (error) throw error;
+        return data;
+      },
+      enabled: !!topicId,
+    });
+  };
+
+  // Create a reply to a topic
+  const createReply = useMutation({
+    mutationFn: async ({ topicId, content }: { topicId: string; content: string }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const { data, error } = await supabase
+        .from('topic_replies')
+        .insert({
+          topic_id: topicId,
+          user_id: user.id,
+          content,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['topic-detail'] });
+      queryClient.invalidateQueries({ queryKey: ['topics'] });
+      queryClient.invalidateQueries({ queryKey: ['my-activity'] });
+    },
+  });
+
+  // Delete a reply
+  const deleteReply = useMutation({
+    mutationFn: async (replyId: string) => {
+      const { error } = await supabase
+        .from('topic_replies')
+        .delete()
+        .eq('id', replyId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['topic-detail'] });
+      queryClient.invalidateQueries({ queryKey: ['topics'] });
+      queryClient.invalidateQueries({ queryKey: ['my-activity'] });
+    },
+  });
+
   return {
     useTopics,
     createTopic,
+    useTopicDetail,
+    createReply,
+    deleteReply,
     useEvents,
     createEvent,
     registerForEvent,

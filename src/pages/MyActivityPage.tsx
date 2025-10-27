@@ -83,7 +83,11 @@ const MyActivityPage = () => {
             <TabsContent value="topics" className="space-y-6 mt-6">
               {activity?.topics && activity.topics.length > 0 ? (
                 activity.topics.map((topic: any) => (
-                  <Card key={topic.id} className="hover:shadow-md transition-shadow">
+                  <Card 
+                    key={topic.id} 
+                    className="hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => navigate(`/community/topic/${topic.id}`)}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">

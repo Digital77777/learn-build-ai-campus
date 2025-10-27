@@ -177,7 +177,11 @@ const CommunityPage = () => {
               <div className="space-y-4">
                 {topics && topics.length > 0 ? (
                   topics.map((topic) => (
-                    <Card key={topic.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                    <Card 
+                      key={topic.id} 
+                      className="hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={() => navigate(`/community/topic/${topic.id}`)}
+                    >
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
