@@ -193,13 +193,13 @@ const FoundationPath = () => {
               </div>
 
               <div className="flex gap-4">
-                <Button size="sm" className="md:h-11 md:px-8" onClick={handleStartCourse}>
-                  <Play className="h-5 w-5 md:mr-2" />
-                  <span className="hidden md:inline">Start Learning Free</span>
+                <Button className="h-10 px-6 md:h-11 md:px-8" onClick={handleStartCourse}>
+                  <Play className="h-5 w-5 mr-2" />
+                  Start Learning Free
                 </Button>
-                <Button size="sm" className="md:h-11 md:px-8" variant="outline" onClick={handleEnrollNow}>
-                  <GraduationCap className="h-5 w-5 md:mr-2" />
-                  <span className="hidden md:inline">Enroll Now</span>
+                <Button className="h-10 px-6 md:h-11 md:px-8" variant="outline" onClick={handleEnrollNow}>
+                  <GraduationCap className="h-5 w-5 mr-2" />
+                  Enroll Now
                 </Button>
               </div>
             </div>
@@ -255,10 +255,22 @@ const FoundationPath = () => {
         <div className="container mx-auto px-6">
           <Tabs defaultValue="curriculum" className="w-full">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-              <TabsTrigger value="outcomes">Learning Outcomes</TabsTrigger>
-              <TabsTrigger value="instructor">Instructor</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              <TabsTrigger value="curriculum">
+                <BookOpen className="h-4 w-4 md:hidden" />
+                <span className="hidden md:inline">Curriculum</span>
+              </TabsTrigger>
+              <TabsTrigger value="outcomes">
+                <Target className="h-4 w-4 md:hidden" />
+                <span className="hidden md:inline">Learning Outcomes</span>
+              </TabsTrigger>
+              <TabsTrigger value="instructor">
+                <GraduationCap className="h-4 w-4 md:hidden" />
+                <span className="hidden md:inline">Instructor</span>
+              </TabsTrigger>
+              <TabsTrigger value="reviews">
+                <Star className="h-4 w-4 md:hidden" />
+                <span className="hidden md:inline">Reviews</span>
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="curriculum" className="space-y-6">
