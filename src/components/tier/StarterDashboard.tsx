@@ -1,4 +1,4 @@
-import { BookOpen, Brain, Users, Sparkles, GraduationCap, PlayCircle } from 'lucide-react';
+import { BookOpen, Brain, Users, Sparkles, GraduationCap, PlayCircle, HeadphonesIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { TierHero } from './shared/TierHero';
@@ -70,6 +70,19 @@ export const StarterDashboard = () => {
             variant="default"
           />
         </div>
+      </div>
+
+      <div className="bg-card border border-border p-8 rounded-lg text-center">
+        <HeadphonesIcon className="h-12 w-12 mx-auto mb-4 text-primary" />
+        <h3 className="text-2xl font-bold mb-2">Need Help?</h3>
+        <p className="text-muted-foreground mb-4">Get email support within 48 hours from our team</p>
+        <Button 
+          variant="outline" 
+          size="lg"
+          onClick={() => navigate('/support')}
+        >
+          Get Support
+        </Button>
       </div>
 
       <div className="bg-gradient-learning p-8 rounded-lg text-center text-primary-foreground">
