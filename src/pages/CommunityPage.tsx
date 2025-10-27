@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,52 +9,44 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const CommunityPage = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
   // Handler functions for button interactions
   const handleStartTopic = () => {
-    console.log("Starting new topic...");
-    // Add your logic here (e.g., open modal, navigate to form)
+    navigate("/community/start-topic");
   };
 
   const handleBrowseEvents = () => {
-    console.log("Browsing events...");
-    // Add your logic here (e.g., scroll to events section, filter events)
+    navigate("/community/browse-events");
   };
 
   const handleFilters = () => {
     console.log("Opening filters...");
-    // Add your logic here (e.g., open filter modal)
   };
 
   const handleHostEvent = () => {
-    console.log("Hosting new event...");
-    // Add your logic here (e.g., open event creation form)
+    navigate("/community/host-event");
   };
 
   const handleJoinEvent = (eventId: number) => {
-    console.log(`Joining event ${eventId}...`);
-    // Add your logic here (e.g., register for event)
+    navigate("/community/browse-events");
   };
 
   const handleShareInsight = () => {
-    console.log("Sharing new insight...");
-    // Add your logic here (e.g., open insight creation form)
+    navigate("/community/share-insight");
   };
 
   const handleStartDiscussion = () => {
-    console.log("Starting discussion...");
-    // Add your logic here
+    navigate("/community/start-topic");
   };
 
   const handleCreateEvent = () => {
-    console.log("Creating event...");
-    // Add your logic here
+    navigate("/community/host-event");
   };
 
   const handleFindMembers = () => {
-    console.log("Finding members...");
-    // Add your logic here (e.g., navigate to members page)
+    navigate("/community/find-members");
   };
 
   // Sample data - in a real app this would come from your database

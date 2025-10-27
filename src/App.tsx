@@ -55,6 +55,11 @@ const CreateFreelancerProfilePage = lazy(() => import("./pages/CreateFreelancerP
 const StartProjectPage = lazy(() => import("./pages/StartProjectPage"));
 const ScheduleConsultationPage = lazy(() => import("./pages/ScheduleConsultationPage"));
 const CommunityPage = lazy(() => import("./pages/CommunityPage"));
+const StartTopicPage = lazy(() => import("./pages/community/StartTopicPage"));
+const BrowseEventsPage = lazy(() => import("./pages/community/BrowseEventsPage"));
+const HostEventPage = lazy(() => import("./pages/community/HostEventPage"));
+const ShareInsightPage = lazy(() => import("./pages/community/ShareInsightPage"));
+const FindMembersPage = lazy(() => import("./pages/community/FindMembersPage"));
 const ReferralPage = lazy(() => import("./pages/ReferralPage"));
 
 const queryClient = new QueryClient();
@@ -131,6 +136,11 @@ const App = () => (
                 <Route path="/marketplace/start-project" element={<StartProjectPage />} />
                 <Route path="/marketplace/schedule-consultation" element={<ScheduleConsultationPage />} />
                 <Route path="/community" element={<CommunityPage />} />
+                <Route path="/community/start-topic" element={<StartTopicPage />} />
+                <Route path="/community/browse-events" element={<BrowseEventsPage />} />
+                <Route path="/community/host-event" element={<HostEventPage />} />
+                <Route path="/community/share-insight" element={<ShareInsightPage />} />
+                <Route path="/community/find-members" element={<FindMembersPage />} />
                 <Route path="/referrals" element={<ReferralPage />} />
                 <Route path="/subscription" element={<SubscriptionPage />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />
