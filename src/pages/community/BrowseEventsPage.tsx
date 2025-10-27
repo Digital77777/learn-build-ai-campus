@@ -160,18 +160,8 @@ const BrowseEventsPage = () => {
                     </div>
                   </CardContent>
                 </Card>
-              ))
-            ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-semibold mb-2">No events found</h3>
-                  <p className="text-muted-foreground">Try adjusting your search.</p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        )}
+              ))}
+            </div>
           </TabsContent>
 
           <TabsContent value="live" className="space-y-6 mt-6">
