@@ -59,6 +59,156 @@ export type Database = {
         }
         Relationships: []
       }
+      community_events: {
+        Row: {
+          attendees_count: number | null
+          cover_image: string | null
+          created_at: string
+          description: string
+          duration_minutes: number | null
+          event_date: string
+          event_time: string
+          event_type: string
+          id: string
+          is_online: boolean | null
+          location: string | null
+          max_attendees: number | null
+          meeting_link: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attendees_count?: number | null
+          cover_image?: string | null
+          created_at?: string
+          description: string
+          duration_minutes?: number | null
+          event_date: string
+          event_time: string
+          event_type: string
+          id?: string
+          is_online?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          meeting_link?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attendees_count?: number | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string
+          duration_minutes?: number | null
+          event_date?: string
+          event_time?: string
+          event_type?: string
+          id?: string
+          is_online?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          meeting_link?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      community_insights: {
+        Row: {
+          category: string
+          content: string
+          cover_image: string | null
+          created_at: string
+          id: string
+          is_published: boolean | null
+          likes_count: number | null
+          read_time: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number | null
+        }
+        Insert: {
+          category: string
+          content: string
+          cover_image?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean | null
+          likes_count?: number | null
+          read_time?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          cover_image?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean | null
+          likes_count?: number | null
+          read_time?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
+      community_topics: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_locked: boolean | null
+          is_pinned: boolean | null
+          last_activity_at: string | null
+          replies_count: number | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+          views: number | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_locked?: boolean | null
+          is_pinned?: boolean | null
+          last_activity_at?: string | null
+          replies_count?: number | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+          views?: number | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_locked?: boolean | null
+          is_pinned?: boolean | null
+          last_activity_at?: string | null
+          replies_count?: number | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views?: number | null
+        }
+        Relationships: []
+      }
       error_log: {
         Row: {
           error_context: Json | null
@@ -79,6 +229,67 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      event_attendees: {
+        Row: {
+          event_id: string
+          id: string
+          joined_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          event_id: string
+          id?: string
+          joined_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          event_id?: string
+          id?: string
+          joined_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_attendees_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "community_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insight_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          insight_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          insight_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          insight_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insight_likes_insight_id_fkey"
+            columns: ["insight_id"]
+            isOneToOne: false
+            referencedRelation: "community_insights"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       marketplace_categories: {
         Row: {
@@ -341,7 +552,7 @@ export type Database = {
           action: string
           created_at: string
           id: number
-          ip_address: unknown | null
+          ip_address: unknown
           metadata: Json | null
           record_id: string | null
           table_name: string
@@ -352,7 +563,7 @@ export type Database = {
           action: string
           created_at?: string
           id?: number
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           record_id?: string | null
           table_name: string
@@ -363,7 +574,7 @@ export type Database = {
           action?: string
           created_at?: string
           id?: number
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           record_id?: string | null
           table_name?: string
@@ -548,6 +759,41 @@ export type Database = {
         }
         Relationships: []
       }
+      topic_replies: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          topic_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          topic_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          topic_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "topic_replies_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "community_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -618,14 +864,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      add_admin_user: {
-        Args:
-          | { p_role?: string; p_user_id: string }
-          | { user_email: string; user_role: string }
-        Returns: string
-      }
+      add_admin_user:
+        | { Args: { p_role?: string; p_user_id: string }; Returns: string }
+        | { Args: { user_email: string; user_role: string }; Returns: string }
       check_current_user_admin_status: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           email: string
           is_admin: boolean
@@ -634,33 +877,30 @@ export type Database = {
         }[]
       }
       check_user_seller_status: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           has_seller_profile: boolean
           profile_status: string
         }[]
       }
-      create_notification: {
-        Args:
-          | {
+      create_notification:
+        | {
+            Args: {
               p_message: string
               p_metadata?: Json
               p_type: string
               p_user_id: string
             }
-          | { p_message: string; p_user_id: number }
-        Returns: number
-      }
+            Returns: number
+          }
+        | { Args: { p_message: string; p_user_id: number }; Returns: number }
       create_seller_verification_task: {
         Args: { p_required_documents?: Json; p_seller_profile_id: number }
         Returns: number
       }
-      generate_referral_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      generate_referral_code: { Args: never; Returns: string }
       get_current_user_roles: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           role: string
         }[]
@@ -678,10 +918,7 @@ export type Database = {
           verification_task_id: number
         }[]
       }
-      get_user_tier: {
-        Args: { user_id_param: string }
-        Returns: string
-      }
+      get_user_tier: { Args: { user_id_param: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -689,14 +926,8 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_admin_email: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_current_user_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      is_admin_email: { Args: never; Returns: boolean }
+      is_current_user_admin: { Args: never; Returns: boolean }
       log_error: {
         Args: { p_error_context?: Json; p_error_message: string }
         Returns: undefined
@@ -714,24 +945,21 @@ export type Database = {
         Args: { p_error_code: number; p_error_message: string }
         Returns: undefined
       }
-      review_seller_profile: {
-        Args:
-          | {
+      review_seller_profile:
+        | {
+            Args: {
               p_reviewer_notes?: string
               p_status: string
               p_verification_task_id: number
             }
-          | { review_text: string; seller_id: number }
-        Returns: boolean
-      }
+            Returns: undefined
+          }
+        | { Args: { review_text: string; seller_id: number }; Returns: boolean }
       safe_user_creation: {
         Args: { p_email: string; p_full_name: string }
         Returns: string
       }
-      secure_function_template: {
-        Args: { param1: string }
-        Returns: string
-      }
+      secure_function_template: { Args: { param1: string }; Returns: string }
       update_required_document_types: {
         Args: { p_document_types: Json; p_seller_profile_id: number }
         Returns: undefined
