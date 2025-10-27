@@ -7,15 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { useCommunity } from "@/hooks/useCommunity";
+import { useAuth } from "@/hooks/useAuth";
 
 const StartTopicPage = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { user } = useAuth();
+  const { createTopic } = useCommunity();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddTag = () => {
     if (tagInput.trim() && tags.length < 5) {
@@ -28,25 +31,29 @@ const StartTopicPage = () => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!title.trim() || !content.trim()) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in both title and content.",
-        variant: "destructive",
-      });
+    if (!user) {
+      navigate("/auth");
       return;
     }
 
-    // Here you would save to your database
-    toast({
-      title: "Topic Created!",
-      description: "Your discussion topic has been posted successfully.",
-    });
-    
-    navigate("/community");
+    if (!title.trim() || !content.trim()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await createTopic.mutateAsync({
+        title: title.trim(),
+        content: content.trim(),
+        tags,
+      });
+      navigate("/community");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -131,14 +138,15 @@ const StartTopicPage = () => {
               </div>
 
               <div className="flex gap-4">
-                <Button type="submit" className="bg-gradient-ai text-white">
+                <Button type="submit" className="bg-gradient-ai text-white" disabled={isSubmitting}>
                   <FileText className="mr-2 h-4 w-4" />
-                  Post Topic
+                  {isSubmitting ? "Posting..." : "Post Topic"}
                 </Button>
                 <Button 
                   type="button" 
                   variant="outline" 
                   onClick={() => navigate("/community")}
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </Button>

@@ -7,11 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
+import { useCommunity } from "@/hooks/useCommunity";
+import { useAuth } from "@/hooks/useAuth";
 
 const HostEventPage = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { user } = useAuth();
+  const { createEvent } = useCommunity();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -27,25 +30,36 @@ const HostEventPage = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.description || !formData.type || !formData.date || !formData.time) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
+    if (!user) {
+      navigate("/auth");
       return;
     }
 
-    // Here you would save to your database
-    toast({
-      title: "Event Created!",
-      description: "Your event has been scheduled successfully.",
-    });
-    
-    navigate("/community/browse-events");
+    if (!formData.title || !formData.description || !formData.type || !formData.date || !formData.time) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await createEvent.mutateAsync({
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        event_type: formData.type,
+        event_date: formData.date,
+        event_time: formData.time,
+        duration_minutes: formData.duration ? parseInt(formData.duration) : 60,
+        max_attendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : undefined,
+        is_online: formData.location === "virtual" || formData.location === "hybrid",
+        meeting_link: undefined,
+        location: formData.location === "in-person" ? "TBD" : undefined,
+      });
+      navigate("/community");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -182,14 +196,15 @@ const HostEventPage = () => {
               </div>
 
               <div className="flex gap-4">
-                <Button type="submit" className="bg-gradient-ai text-white">
+                <Button type="submit" className="bg-gradient-ai text-white" disabled={isSubmitting}>
                   <Calendar className="mr-2 h-4 w-4" />
-                  Create Event
+                  {isSubmitting ? "Creating..." : "Create Event"}
                 </Button>
                 <Button 
                   type="button" 
                   variant="outline" 
                   onClick={() => navigate("/community")}
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </Button>

@@ -1,16 +1,34 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter } from "lucide-react";
+import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useCommunity } from "@/hooks/useCommunity";
+import { formatDistanceToNow } from "date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/useAuth";
 
 const CommunityPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const { user } = useAuth();
+  const {
+    useTopics,
+    useEvents,
+    useInsights,
+    useStats,
+    registerForEvent,
+    toggleInsightLike,
+  } = useCommunity();
+
+  const { data: topics, isLoading: topicsLoading } = useTopics(searchQuery);
+  const { data: events, isLoading: eventsLoading } = useEvents(searchQuery);
+  const { data: insights, isLoading: insightsLoading } = useInsights(searchQuery);
+  const { data: stats } = useStats();
 
   // Handler functions for button interactions
   const handleStartTopic = () => {
@@ -49,85 +67,33 @@ const CommunityPage = () => {
     navigate("/community/find-members");
   };
 
-  // Sample data - in a real app this would come from your database
-  const topics = [
-    {
-      id: 1,
-      title: "Best AI Tools for Content Creation in 2024",
-      author: "Sarah Chen",
-      avatar: "SC",
-      replies: 24,
-      lastActivity: "2 hours ago",
-      tags: ["AI Tools", "Content Creation"],
-      trending: true
-    },
-    {
-      id: 2,
-      title: "How to optimize machine learning models for production",
-      author: "David Martinez",
-      avatar: "DM",
-      replies: 18,
-      lastActivity: "5 hours ago",
-      tags: ["Machine Learning", "Production"]
-    },
-    {
-      id: 3,
-      title: "Building a successful AI startup: Lessons learned",
-      author: "Emily Johnson",
-      avatar: "EJ",
-      replies: 42,
-      lastActivity: "1 day ago",
-      tags: ["Startup", "AI Business"]
+  const handleJoinEventClick = async (eventId: string, isRegistered: boolean) => {
+    if (!user) {
+      navigate("/auth");
+      return;
     }
-  ];
+    if (!isRegistered) {
+      await registerForEvent.mutateAsync(eventId);
+    }
+  };
 
-  const events = [
-    {
-      id: 1,
-      title: "AI Ethics Workshop",
-      date: "March 15, 2024",
-      time: "2:00 PM EST",
-      attendees: 156,
-      type: "Workshop"
-    },
-    {
-      id: 2,
-      title: "Machine Learning Q&A Session",
-      date: "March 18, 2024", 
-      time: "1:00 PM EST",
-      attendees: 89,
-      type: "Q&A"
-    },
-    {
-      id: 3,
-      title: "AI Tools Demo Day",
-      date: "March 22, 2024",
-      time: "3:00 PM EST",
-      attendees: 234,
-      type: "Demo"
+  const handleLikeInsight = async (insightId: string, isLiked: boolean) => {
+    if (!user) {
+      navigate("/auth");
+      return;
     }
-  ];
+    await toggleInsightLike.mutateAsync({ insightId, isLiked });
+  };
 
-  const insights = [
-    {
-      id: 1,
-      title: "The Future of AI in Education",
-      author: "Alex Thompson",
-      avatar: "AT",
-      excerpt: "Exploring how artificial intelligence is revolutionizing the way we learn and teach...",
-      readTime: "5 min read",
-      likes: 128
-    },
-    {
-      id: 2,
-      title: "No-Code AI: Democratizing Machine Learning",
-      author: "Maria Rodriguez",
-      avatar: "MR",
-      excerpt: "How no-code platforms are making AI accessible to everyone, regardless of technical background...",
-      readTime: "8 min read",
-      likes: 95
+  const getInitials = (name: string | undefined, email: string | undefined) => {
+    if (name) {
+      return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
     }
-  ];
+    if (email) {
+      return email.slice(0, 2).toUpperCase();
+    }
+    return "U";
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -187,34 +153,50 @@ const CommunityPage = () => {
 
               {/* Topics Tab */}
               <TabsContent value="topics" className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-semibold">Recent Discussions</h2>
-                  <Button onClick={handleStartTopic}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    New Topic
-                  </Button>
-                </div>
-                
-                <div className="space-y-4">
-                  {topics.map((topic) => (
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold">Recent Discussions</h2>
+              <Button onClick={handleStartTopic}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Topic
+              </Button>
+            </div>
+            
+            {topicsLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i}>
+                    <CardContent className="p-6">
+                      <Skeleton className="h-6 w-3/4 mb-4" />
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-2/3" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {topics && topics.length > 0 ? (
+                  topics.map((topic) => (
                     <Card key={topic.id} className="hover:shadow-md transition-shadow cursor-pointer">
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              {topic.trending && (
+                              {topic.is_pinned && (
                                 <Badge variant="secondary" className="text-xs">
                                   <TrendingUp className="w-3 h-3 mr-1" />
-                                  Trending
+                                  Pinned
                                 </Badge>
                               )}
-                              <div className="flex gap-1">
-                                {topic.tags.map((tag) => (
-                                  <Badge key={tag} variant="outline" className="text-xs">
-                                    {tag}
-                                  </Badge>
-                                ))}
-                              </div>
+                              {topic.tags && topic.tags.length > 0 && (
+                                <div className="flex gap-1">
+                                  {topic.tags.map((tag) => (
+                                    <Badge key={tag} variant="outline" className="text-xs">
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                             <h3 className="text-lg font-semibold mb-2 hover:text-primary transition-colors">
                               {topic.title}
@@ -222,97 +204,190 @@ const CommunityPage = () => {
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
                               <div className="flex items-center gap-2">
                                 <Avatar className="w-6 h-6">
-                                  <AvatarFallback className="text-xs">{topic.avatar}</AvatarFallback>
+                                  <AvatarFallback className="text-xs">
+                                    {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
+                                  </AvatarFallback>
                                 </Avatar>
-                                <span>{topic.author}</span>
+                                <span>{topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}</span>
                               </div>
                               <span>•</span>
                               <div className="flex items-center gap-1">
                                 <MessageCircle className="w-4 h-4" />
-                                <span>{topic.replies} replies</span>
+                                <span>{topic.replies_count} replies</span>
                               </div>
                               <span>•</span>
-                              <span>{topic.lastActivity}</span>
+                              <span>{formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}</span>
                             </div>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
+                  ))
+                ) : (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-lg font-semibold mb-2">No discussions yet</h3>
+                      <p className="text-muted-foreground mb-4">Be the first to start a conversation!</p>
+                      <Button onClick={handleStartTopic}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Start a Topic
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
               </TabsContent>
 
               {/* Events Tab */}
               <TabsContent value="events" className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-semibold">Upcoming Events</h2>
-                  <Button onClick={handleHostEvent}>
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Host Event
-                  </Button>
-                </div>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Upcoming Events</h2>
+                <Button onClick={handleHostEvent}>
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Host Event
+                </Button>
+              </div>
 
+              {eventsLoading ? (
                 <div className="grid gap-4">
-                  {events.map((event) => (
-                    <Card key={event.id} className="hover:shadow-md transition-shadow">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i}>
                       <CardContent className="p-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge variant="secondary">{event.type}</Badge>
-                            </div>
-                            <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                              <span>{event.date}</span>
-                              <span>•</span>
-                              <span>{event.time}</span>
-                              <span>•</span>
-                              <span>{event.attendees} attendees</span>
-                            </div>
-                          </div>
-                          <Button onClick={() => handleJoinEvent(event.id)}>Join Event</Button>
-                        </div>
+                        <Skeleton className="h-6 w-3/4 mb-4" />
+                        <Skeleton className="h-4 w-full mb-2" />
+                        <Skeleton className="h-4 w-2/3" />
                       </CardContent>
                     </Card>
                   ))}
                 </div>
+              ) : (
+                <div className="grid gap-4">
+                  {events && events.length > 0 ? (
+                    events.map((event) => (
+                      <Card key={event.id} className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Badge variant="secondary">{event.event_type}</Badge>
+                                {event.is_online && <Badge variant="outline">Online</Badge>}
+                              </div>
+                              <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                                <span>{new Date(event.event_date).toLocaleDateString()}</span>
+                                <span>•</span>
+                                <span>{event.event_time}</span>
+                                <span>•</span>
+                                <span>{event.attendees_count} attendees</span>
+                              </div>
+                            </div>
+                            <Button
+                              onClick={() => handleJoinEventClick(event.id, event.is_registered || false)}
+                              disabled={event.is_registered}
+                            >
+                              {event.is_registered ? "Registered" : "Join Event"}
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <Card>
+                      <CardContent className="p-12 text-center">
+                        <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                        <h3 className="text-lg font-semibold mb-2">No upcoming events</h3>
+                        <p className="text-muted-foreground mb-4">Host an event to bring the community together!</p>
+                        <Button onClick={handleHostEvent}>
+                          <Calendar className="mr-2 h-4 w-4" />
+                          Host an Event
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
               </TabsContent>
 
               {/* Insights Tab */}
               <TabsContent value="insights" className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-semibold">Community Insights</h2>
-                  <Button onClick={handleShareInsight}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Share Insight
-                  </Button>
-                </div>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Community Insights</h2>
+                <Button onClick={handleShareInsight}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Share Insight
+                </Button>
+              </div>
 
+              {insightsLoading ? (
                 <div className="space-y-6">
-                  {insights.map((insight) => (
-                    <Card key={insight.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                  {[1, 2].map((i) => (
+                    <Card key={i}>
                       <CardContent className="p-6">
-                        <h3 className="text-xl font-semibold mb-2 hover:text-primary transition-colors">
-                          {insight.title}
-                        </h3>
-                        <p className="text-muted-foreground mb-4 line-clamp-2">
-                          {insight.excerpt}
-                        </p>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground">
-                          <div className="flex items-center gap-2">
-                            <Avatar className="w-6 h-6">
-                              <AvatarFallback className="text-xs">{insight.avatar}</AvatarFallback>
-                            </Avatar>
-                            <span>{insight.author}</span>
-                            <span>•</span>
-                            <span>{insight.readTime}</span>
-                          </div>
-                          <span>{insight.likes} likes</span>
-                        </div>
+                        <Skeleton className="h-6 w-3/4 mb-4" />
+                        <Skeleton className="h-4 w-full mb-2" />
+                        <Skeleton className="h-4 w-full mb-2" />
+                        <Skeleton className="h-4 w-2/3" />
                       </CardContent>
                     </Card>
                   ))}
                 </div>
+              ) : (
+                <div className="space-y-6">
+                  {insights && insights.length > 0 ? (
+                    insights.map((insight) => (
+                      <Card key={insight.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                        <CardContent className="p-6">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="outline">{insight.category}</Badge>
+                          </div>
+                          <h3 className="text-xl font-semibold mb-2 hover:text-primary transition-colors">
+                            {insight.title}
+                          </h3>
+                          <p className="text-muted-foreground mb-4 line-clamp-2">
+                            {insight.content.substring(0, 150)}...
+                          </p>
+                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="w-6 h-6">
+                                <AvatarFallback className="text-xs">
+                                  {getInitials(insight.profiles?.full_name, insight.profiles?.email)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span>{insight.profiles?.full_name || insight.profiles?.email || "Anonymous"}</span>
+                              <span>•</span>
+                              <span>{insight.read_time || "5 min read"}</span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleLikeInsight(insight.id, insight.is_liked || false)}
+                            >
+                              <Heart
+                                className={`h-4 w-4 mr-1 ${insight.is_liked ? "fill-current text-red-500" : ""}`}
+                              />
+                              {insight.likes_count}
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <Card>
+                      <CardContent className="p-12 text-center">
+                        <TrendingUp className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                        <h3 className="text-lg font-semibold mb-2">No insights yet</h3>
+                        <p className="text-muted-foreground mb-4">Share your knowledge with the community!</p>
+                        <Button onClick={handleShareInsight}>
+                          <Plus className="mr-2 h-4 w-4" />
+                          Share an Insight
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
               </TabsContent>
             </Tabs>
           </div>
@@ -327,15 +402,15 @@ const CommunityPage = () => {
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Active Members</span>
-                  <span className="font-semibold">12,847</span>
+                  <span className="font-semibold">{stats?.activeMembers || 0}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Topics Today</span>
-                  <span className="font-semibold">156</span>
+                  <span className="text-muted-foreground">Topics</span>
+                  <span className="font-semibold">{stats?.topicsToday || 0}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Events This Week</span>
-                  <span className="font-semibold">8</span>
+                  <span className="text-muted-foreground">Events</span>
+                  <span className="font-semibold">{stats?.eventsThisWeek || 0}</span>
                 </div>
               </CardContent>
             </Card>
