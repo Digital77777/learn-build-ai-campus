@@ -55,6 +55,7 @@ const CreateFreelancerProfilePage = lazy(() => import("./pages/CreateFreelancerP
 const StartProjectPage = lazy(() => import("./pages/StartProjectPage"));
 const ScheduleConsultationPage = lazy(() => import("./pages/ScheduleConsultationPage"));
 const CommunityPage = lazy(() => import("./pages/CommunityPage"));
+const MyActivityPage = lazy(() => import("./pages/MyActivityPage"));
 const StartTopicPage = lazy(() => import("./pages/community/StartTopicPage"));
 const BrowseEventsPage = lazy(() => import("./pages/community/BrowseEventsPage"));
 const HostEventPage = lazy(() => import("./pages/community/HostEventPage"));
@@ -136,6 +137,7 @@ const App = () => (
                 <Route path="/marketplace/start-project" element={<StartProjectPage />} />
                 <Route path="/marketplace/schedule-consultation" element={<ScheduleConsultationPage />} />
                 <Route path="/community" element={<CommunityPage />} />
+                <Route path="/community/my-activity" element={<MyActivityPage />} />
                 <Route path="/community/start-topic" element={<StartTopicPage />} />
                 <Route path="/community/browse-events" element={<BrowseEventsPage />} />
                 <Route path="/community/host-event" element={<HostEventPage />} />

@@ -1,0 +1,313 @@
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, MessageCircle, Calendar, TrendingUp, Heart, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useCommunity } from "@/hooks/useCommunity";
+import { useAuth } from "@/hooks/useAuth";
+import { formatDistanceToNow } from "date-fns";
+
+const MyActivityPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { useMyActivity } = useCommunity();
+  const { data: activity, isLoading } = useMyActivity();
+
+  if (!user) {
+    navigate("/auth");
+    return null;
+  }
+
+  const getInitials = (name: string | undefined, email: string | undefined) => {
+    if (name) {
+      return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    }
+    if (email) {
+      return email.slice(0, 2).toUpperCase();
+    }
+    return "U";
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <section className="bg-gradient-to-r from-primary/10 via-secondary/5 to-accent/10 py-12">
+        <div className="container mx-auto px-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/community")}
+            className="mb-4"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Community
+          </Button>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">My Activity</h1>
+          <p className="text-muted-foreground">
+            View all your posts, events, insights, and engagement from the community
+          </p>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-12">
+        {isLoading ? (
+          <div className="space-y-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i}>
+                <CardContent className="p-6">
+                  <Skeleton className="h-6 w-3/4 mb-4" />
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-2/3" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Tabs defaultValue="topics" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="topics">
+                My Topics ({activity?.topics?.length || 0})
+              </TabsTrigger>
+              <TabsTrigger value="events">
+                My Events ({activity?.events?.length || 0})
+              </TabsTrigger>
+              <TabsTrigger value="insights">
+                My Insights ({activity?.insights?.length || 0})
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Topics Tab */}
+            <TabsContent value="topics" className="space-y-6 mt-6">
+              {activity?.topics && activity.topics.length > 0 ? (
+                activity.topics.map((topic: any) => (
+                  <Card key={topic.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold mb-2">{topic.title}</h3>
+                          <p className="text-muted-foreground mb-4 line-clamp-2">
+                            {topic.content.substring(0, 150)}...
+                          </p>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <MessageCircle className="w-4 h-4" />
+                              <span>{topic.replies_count} replies</span>
+                            </div>
+                            <span>•</span>
+                            <span>
+                              {formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}
+                            </span>
+                            {topic.tags && topic.tags.length > 0 && (
+                              <>
+                                <span>•</span>
+                                <div className="flex gap-1">
+                                  {topic.tags.map((tag: string) => (
+                                    <Badge key={tag} variant="outline" className="text-xs">
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Comments from others */}
+                      {topic.topic_replies && topic.topic_replies.length > 0 && (
+                        <div className="border-t pt-4 mt-4">
+                          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                            <MessageCircle className="w-4 h-4" />
+                            Recent Comments ({topic.topic_replies.length})
+                          </h4>
+                          <div className="space-y-3">
+                            {topic.topic_replies.slice(0, 3).map((reply: any) => (
+                              <div key={reply.id} className="bg-muted/50 p-3 rounded-lg">
+                                <p className="text-sm mb-2">{reply.content}</p>
+                                <span className="text-xs text-muted-foreground">
+                                  {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
+                                </span>
+                              </div>
+                            ))}
+                            {topic.topic_replies.length > 3 && (
+                              <Button variant="link" size="sm" className="p-0 h-auto">
+                                View all {topic.topic_replies.length} comments
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-lg font-semibold mb-2">No topics yet</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Start a discussion to engage with the community!
+                    </p>
+                    <Button onClick={() => navigate("/community/start-topic")}>
+                      Start a Topic
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            {/* Events Tab */}
+            <TabsContent value="events" className="space-y-6 mt-6">
+              {activity?.events && activity.events.length > 0 ? (
+                activity.events.map((event: any) => (
+                  <Card key={event.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="secondary">{event.event_type}</Badge>
+                            {event.is_online && <Badge variant="outline">Online</Badge>}
+                            <Badge variant={event.status === 'upcoming' ? 'default' : 'secondary'}>
+                              {event.status}
+                            </Badge>
+                          </div>
+                          <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              <span>{new Date(event.event_date).toLocaleDateString()}</span>
+                            </div>
+                            <span>•</span>
+                            <span>{event.event_time}</span>
+                            <span>•</span>
+                            <div className="flex items-center gap-1">
+                              <Users className="w-4 h-4" />
+                              <span>{event.attendees_count} attendees</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Attendees */}
+                      {event.event_attendees && event.event_attendees.length > 0 && (
+                        <div className="border-t pt-4 mt-4">
+                          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                            <Users className="w-4 h-4" />
+                            Registered Attendees ({event.event_attendees.length})
+                          </h4>
+                          <div className="flex items-center gap-2">
+                            {event.event_attendees.slice(0, 5).map((attendee: any) => (
+                              <Avatar key={attendee.id} className="w-8 h-8">
+                                <AvatarFallback className="text-xs">U</AvatarFallback>
+                              </Avatar>
+                            ))}
+                            {event.event_attendees.length > 5 && (
+                              <span className="text-sm text-muted-foreground">
+                                +{event.event_attendees.length - 5} more
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-lg font-semibold mb-2">No events yet</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Host an event to bring the community together!
+                    </p>
+                    <Button onClick={() => navigate("/community/host-event")}>
+                      Host an Event
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            {/* Insights Tab */}
+            <TabsContent value="insights" className="space-y-6 mt-6">
+              {activity?.insights && activity.insights.length > 0 ? (
+                activity.insights.map((insight: any) => (
+                  <Card key={insight.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="outline">{insight.category}</Badge>
+                          </div>
+                          <h3 className="text-xl font-semibold mb-2">{insight.title}</h3>
+                          <p className="text-muted-foreground mb-4 line-clamp-3">
+                            {insight.content.substring(0, 200)}...
+                          </p>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Heart className="w-4 h-4" />
+                              <span>{insight.likes_count} likes</span>
+                            </div>
+                            <span>•</span>
+                            <div className="flex items-center gap-1">
+                              <TrendingUp className="w-4 h-4" />
+                              <span>{insight.views_count} views</span>
+                            </div>
+                            <span>•</span>
+                            <span>
+                              {formatDistanceToNow(new Date(insight.created_at), { addSuffix: true })}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Likes from others */}
+                      {insight.insight_likes && insight.insight_likes.length > 0 && (
+                        <div className="border-t pt-4 mt-4">
+                          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                            <Heart className="w-4 h-4" />
+                            Liked by {insight.insight_likes.length} {insight.insight_likes.length === 1 ? 'person' : 'people'}
+                          </h4>
+                          <div className="flex items-center gap-2">
+                            {insight.insight_likes.slice(0, 10).map((like: any) => (
+                              <Avatar key={like.id} className="w-8 h-8">
+                                <AvatarFallback className="text-xs">U</AvatarFallback>
+                              </Avatar>
+                            ))}
+                            {insight.insight_likes.length > 10 && (
+                              <span className="text-sm text-muted-foreground">
+                                +{insight.insight_likes.length - 10} more
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <TrendingUp className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-lg font-semibold mb-2">No insights yet</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Share your knowledge with the community!
+                    </p>
+                    <Button onClick={() => navigate("/community/share-insight")}>
+                      Share an Insight
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+          </Tabs>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default MyActivityPage;

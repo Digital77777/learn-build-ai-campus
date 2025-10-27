@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface CommunityTopic {
   id: string;
@@ -414,6 +415,47 @@ export const useCommunity = () => {
     });
   };
 
+  // Fetch user's own content with engagement data
+  const useMyActivity = () => {
+    const { user } = useAuth();
+    
+    return useQuery({
+      queryKey: ['my-activity', user?.id],
+      queryFn: async () => {
+        if (!user) return { topics: [], events: [], insights: [] };
+
+        const [topicsRes, eventsRes, insightsRes] = await Promise.all([
+          supabase
+            .from('community_topics')
+            .select('*, topic_replies(id, user_id, content, created_at)')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false }),
+          supabase
+            .from('community_events')
+            .select('*, event_attendees(id, user_id, joined_at)')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false }),
+          supabase
+            .from('community_insights')
+            .select('*, insight_likes(id, user_id, created_at)')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false }),
+        ]);
+
+        if (topicsRes.error) throw topicsRes.error;
+        if (eventsRes.error) throw eventsRes.error;
+        if (insightsRes.error) throw insightsRes.error;
+
+        return {
+          topics: topicsRes.data || [],
+          events: eventsRes.data || [],
+          insights: insightsRes.data || [],
+        };
+      },
+      enabled: !!user,
+    });
+  };
+
   return {
     useTopics,
     createTopic,
@@ -424,5 +466,6 @@ export const useCommunity = () => {
     createInsight,
     toggleInsightLike,
     useStats,
+    useMyActivity,
   };
 };

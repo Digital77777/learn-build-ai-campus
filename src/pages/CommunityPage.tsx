@@ -421,6 +421,16 @@ const CommunityPage = () => {
                 <CardTitle className="text-lg">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                {user && (
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start" 
+                    onClick={() => navigate("/community/my-activity")}
+                  >
+                    <TrendingUp className="mr-2 h-4 w-4" />
+                    My Activity
+                  </Button>
+                )}
                 <Button variant="outline" className="w-full justify-start" onClick={handleStartDiscussion}>
                   <Plus className="mr-2 h-4 w-4" />
                   Start Discussion
