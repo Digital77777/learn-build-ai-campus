@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TierGate } from "@/components/tier/TierGate";
+import { useTier } from "@/contexts/TierContext";
 
 const MarketplacePage = () => {
   const navigate = useNavigate();
+  const { canAccessFeature } = useTier();
+  const canSell = canAccessFeature('marketplace_sell');
 
   const marketplaceCategories = [
     {
@@ -109,18 +112,27 @@ const MarketplacePage = () => {
                 Buy, sell, and hire in the world's largest AI marketplace. Connect with experts, showcase your skills, and grow your business
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/start-selling">
-                  <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
-                    <Store className="h-5 w-5 mr-2" />
-                    Start Selling
-                  </Button>
-                </Link>
+                {canSell && (
+                  <Link to="/start-selling">
+                    <Button size="lg" className="bg-gradient-earn text-white hover:opacity-90">
+                      <Store className="h-5 w-5 mr-2" />
+                      Start Selling
+                    </Button>
+                  </Link>
+                )}
                 <Link to="/marketplace/browse">
-                  <Button size="lg" variant="outline">
+                  <Button size="lg" variant={canSell ? "outline" : "default"}>
                     Browse Marketplace
                     <ArrowRight className="h-5 w-5 ml-2" />
                   </Button>
                 </Link>
+                {!canSell && (
+                  <Link to="/subscription">
+                    <Button size="lg" variant="outline">
+                      Upgrade to Sell
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -154,43 +166,84 @@ const MarketplacePage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {marketplaceCategories.map((category) => (
-                <Card key={category.id} className="group hover:shadow-ai transition-all duration-300 border-border/50">
+              {marketplaceCategories.map((category) => {
+                // Only show selling-related categories to users who can sell
+                if (!canSell && (
+                  category.title === "Sell Your Creations" || 
+                  category.title === "Freelance Services" || 
+                  category.title === "Post Job Opportunities" ||
+                  category.title === "AI Development"
+                )) {
+                  return null;
+                }
+
+                return (
+                  <Card key={category.id} className="group hover:shadow-ai transition-all duration-300 border-border/50">
+                    <CardHeader className="pb-4">
+                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${category.gradient} flex items-center justify-center text-white mb-4`}>
+                        {category.icon}
+                      </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge variant="secondary" className="text-xs">
+                          {category.category}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs font-bold text-success">
+                          {category.feature}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                        {category.title}
+                      </CardTitle>
+                      <CardDescription className="text-muted-foreground">
+                        {category.description}
+                      </CardDescription>
+                    </CardHeader>
+                    
+                    <CardContent className="space-y-4">
+                      <Link to={
+                        category.title === "Sell Your Creations" ? "/marketplace/sell-products" :
+                        category.title === "Freelance Services" ? "/marketplace/freelance-services" :
+                        category.title === "Post Job Opportunities" ? "/marketplace/post-jobs" :
+                        "/marketplace/ai-development"
+                      }>
+                        <Button className="w-full group/btn">
+                          Get Started
+                          <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+              
+              {/* Show upgrade card for Starter users */}
+              {!canSell && (
+                <Card className="group hover:shadow-ai transition-all duration-300 border-border/50 bg-gradient-to-br from-primary/5 to-accent/5">
                   <CardHeader className="pb-4">
-                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${category.gradient} flex items-center justify-center text-white mb-4`}>
-                      {category.icon}
+                    <div className="w-16 h-16 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center text-white mb-4">
+                      <TrendingUp className="h-8 w-8" />
                     </div>
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {category.category}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs font-bold text-success">
-                        {category.feature}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                      {category.title}
+                    <Badge variant="secondary" className="text-xs w-fit">
+                      Upgrade Required
+                    </Badge>
+                    <CardTitle className="text-xl mt-2">
+                      Start Selling & Earning
                     </CardTitle>
                     <CardDescription className="text-muted-foreground">
-                      {category.description}
+                      Upgrade to Creator or Career tier to list products, offer services, and unlock unlimited earning potential
                     </CardDescription>
                   </CardHeader>
                   
                   <CardContent className="space-y-4">
-                    <Link to={
-                      category.title === "Sell Your Creations" ? "/marketplace/sell-products" :
-                      category.title === "Freelance Services" ? "/marketplace/freelance-services" :
-                      category.title === "Post Job Opportunities" ? "/marketplace/post-jobs" :
-                      "/marketplace/ai-development"
-                    }>
-                      <Button className="w-full group/btn">
-                        Get Started
+                    <Link to="/subscription">
+                      <Button className="w-full group/btn bg-gradient-earn text-white">
+                        Upgrade Now
                         <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
                   </CardContent>
                 </Card>
-              ))}
+              )}
             </div>
           </div>
         </section>

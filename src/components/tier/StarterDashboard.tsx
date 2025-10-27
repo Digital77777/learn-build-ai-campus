@@ -1,4 +1,4 @@
-import { BookOpen, Brain, Users, Sparkles, GraduationCap, PlayCircle, HeadphonesIcon } from 'lucide-react';
+import { BookOpen, Brain, Users, Sparkles, GraduationCap, PlayCircle, HeadphonesIcon, Store } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { TierHero } from './shared/TierHero';
@@ -12,6 +12,7 @@ export const StarterDashboard = () => {
   const benefits = [
     "Access to 3 essential AI learning tools",
     "Foundation-level courses and tutorials",
+    "Browse and purchase from marketplace",
     "Community discussion forums",
     "Basic learning path recommendations",
     "Progress tracking dashboard",
@@ -42,7 +43,7 @@ export const StarterDashboard = () => {
 
       <div>
         <h2 className="text-2xl font-bold text-center mb-8">Start Learning Today</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <FeatureCard
             icon={<BookOpen className="h-10 w-10 text-primary" />}
             title="Learning Paths"
@@ -58,6 +59,15 @@ export const StarterDashboard = () => {
             description="Get hands-on with 3 powerful AI tools"
             buttonText="Try Tools"
             onClick={() => navigate('/ai-tools')}
+            variant="highlighted"
+          />
+
+          <FeatureCard
+            icon={<Store className="h-10 w-10 text-primary" />}
+            title="Marketplace"
+            description="Browse and purchase AI tools and resources"
+            buttonText="Browse"
+            onClick={() => navigate('/marketplace')}
             variant="highlighted"
           />
 
