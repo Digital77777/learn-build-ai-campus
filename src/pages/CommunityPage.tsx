@@ -179,7 +179,7 @@ const CommunityPage = () => {
                   topics.map((topic) => (
                     <Card 
                       key={topic.id} 
-                      className="hover:shadow-md transition-shadow cursor-pointer"
+                      className="hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer group"
                       onClick={() => navigate(`/community/topic/${topic.id}`)}
                     >
                       <CardContent className="p-6">
@@ -202,9 +202,12 @@ const CommunityPage = () => {
                                 </div>
                               )}
                             </div>
-                            <h3 className="text-lg font-semibold mb-2 hover:text-primary transition-colors">
+                            <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                               {topic.title}
                             </h3>
+                            <p className="text-muted-foreground mb-3 line-clamp-2">
+                              {topic.content.substring(0, 200)}...
+                            </p>
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
                               <div className="flex items-center gap-2">
                                 <Avatar className="w-6 h-6">
@@ -217,13 +220,24 @@ const CommunityPage = () => {
                               <span>•</span>
                               <div className="flex items-center gap-1">
                                 <MessageCircle className="w-4 h-4" />
-                                <span>{topic.replies_count} replies</span>
+                                <span>{topic.replies_count} {topic.replies_count === 1 ? 'reply' : 'replies'}</span>
                               </div>
                               <span>•</span>
                               <span>{formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}</span>
                             </div>
                           </div>
                         </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/community/topic/${topic.id}`);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          View Discussion →
+                        </Button>
                       </CardContent>
                     </Card>
                   ))
@@ -231,8 +245,10 @@ const CommunityPage = () => {
                   <Card>
                     <CardContent className="p-12 text-center">
                       <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                      <h3 className="text-lg font-semibold mb-2">No discussions yet</h3>
-                      <p className="text-muted-foreground mb-4">Be the first to start a conversation!</p>
+                      <h3 className="text-lg font-semibold mb-2">No discussions found</h3>
+                      <p className="text-muted-foreground mb-4">
+                        {searchQuery ? "Try adjusting your search." : "Be the first to start a conversation!"}
+                      </p>
                       <Button onClick={handleStartTopic}>
                         <Plus className="mr-2 h-4 w-4" />
                         Start a Topic

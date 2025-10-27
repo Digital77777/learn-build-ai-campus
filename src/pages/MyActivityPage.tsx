@@ -85,13 +85,15 @@ const MyActivityPage = () => {
                 activity.topics.map((topic: any) => (
                   <Card 
                     key={topic.id} 
-                    className="hover:shadow-md transition-shadow cursor-pointer"
+                    className="hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer group"
                     onClick={() => navigate(`/community/topic/${topic.id}`)}
                   >
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold mb-2">{topic.title}</h3>
+                          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                            {topic.title}
+                          </h3>
                           <p className="text-muted-foreground mb-4 line-clamp-2">
                             {topic.content.substring(0, 150)}...
                           </p>
@@ -129,7 +131,14 @@ const MyActivityPage = () => {
                           </h4>
                           <div className="space-y-3">
                             {topic.topic_replies.slice(0, 3).map((reply: any) => (
-                              <div key={reply.id} className="bg-muted/50 p-3 rounded-lg">
+                              <div 
+                                key={reply.id} 
+                                className="bg-muted/50 p-3 rounded-lg cursor-pointer hover:bg-muted transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/community/topic/${topic.id}`);
+                                }}
+                              >
                                 <p className="text-sm mb-2">{reply.content}</p>
                                 <span className="text-xs text-muted-foreground">
                                   {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
@@ -137,7 +146,15 @@ const MyActivityPage = () => {
                               </div>
                             ))}
                             {topic.topic_replies.length > 3 && (
-                              <Button variant="link" size="sm" className="p-0 h-auto">
+                              <Button 
+                                variant="link" 
+                                size="sm" 
+                                className="p-0 h-auto"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/community/topic/${topic.id}`);
+                                }}
+                              >
                                 View all {topic.topic_replies.length} comments
                               </Button>
                             )}
