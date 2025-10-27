@@ -1,15 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Search, ChevronRight, Star, Home, TrendingUp, Grid3x3, BookOpen, User, Download } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Search, ChevronRight, Home, TrendingUp, BookOpen, User } from 'lucide-react';
 import { useMarketplace, MarketplaceListing } from '@/hooks/useMarketplace';
 import { ListingDetailsModal } from '@/components/marketplace/ListingDetailsModal';
 import { useAuth } from '@/hooks/useAuth';
 import { TierGate } from '@/components/tier/TierGate';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ToolCard } from '@/components/marketplace/ToolCard';
+import { TopChartCard } from '@/components/marketplace/TopChartCard';
+import { CategoryCard } from '@/components/marketplace/CategoryCard';
+
+// Memoized category section component
+const CategorySection = memo(({ 
+  categoryName, 
+  categoryListings, 
+  onViewDetails 
+}: { 
+  categoryName: string; 
+  categoryListings: MarketplaceListing[]; 
+  onViewDetails: (listing: MarketplaceListing) => void;
+}) => (
+  <div>
+    <div className="flex items-center justify-between mb-4">
+      <h2 className="text-xl font-bold">{categoryName}</h2>
+      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+    </div>
+    <ScrollArea className="w-full whitespace-nowrap">
+      <div className="flex space-x-4 pb-4">
+        {categoryListings.slice(0, 10).map((listing, idx) => (
+          <ToolCard
+            key={listing.id}
+            listing={listing}
+            onClick={() => onViewDetails(listing)}
+            colorIndex={idx}
+          />
+        ))}
+      </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
+  </div>
+));
+
+CategorySection.displayName = 'CategorySection';
 
 export default function BrowseMarketplacePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,27 +64,25 @@ export default function BrowseMarketplacePage() {
     }
   }, [user, getUserFavorites]);
 
-  const handleViewDetails = (listing: MarketplaceListing) => {
+  const handleViewDetails = useCallback((listing: MarketplaceListing) => {
     setSelectedListing(listing);
     setIsDetailsModalOpen(true);
-  };
+  }, []);
 
-  // Group listings by category for "For You" tab
-  const groupedListings = categories.reduce((acc, category) => {
-    const categoryListings = listings.filter(l => l.category_id === category.id);
-    if (categoryListings.length > 0) {
-      acc[category.name] = categoryListings;
-    }
-    return acc;
-  }, {} as Record<string, MarketplaceListing[]>);
+  // Memoize expensive computations
+  const groupedListings = useMemo(() => {
+    return categories.reduce((acc, category) => {
+      const categoryListings = listings.filter(l => l.category_id === category.id);
+      if (categoryListings.length > 0) {
+        acc[category.name] = categoryListings;
+      }
+      return acc;
+    }, {} as Record<string, MarketplaceListing[]>);
+  }, [categories, listings]);
 
-  // Add "Suggested for you" section with random selection
-  const suggestedListings = listings.slice(0, 6);
-
-  const getIconColor = (index: number) => {
-    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500', 'bg-pink-500', 'bg-teal-500'];
-    return colors[index % colors.length];
-  };
+  const suggestedListings = useMemo(() => listings.slice(0, 6), [listings]);
+  
+  const topChartListings = useMemo(() => listings.slice(0, 20), [listings]);
 
   return (
     <TierGate feature="marketplace_buy">
@@ -101,31 +133,12 @@ export default function BrowseMarketplacePage() {
                   <ScrollArea className="w-full whitespace-nowrap">
                     <div className="flex space-x-4 pb-4">
                       {suggestedListings.map((listing, idx) => (
-                        <Card 
-                          key={listing.id} 
-                          className="inline-block w-[320px] cursor-pointer hover:shadow-lg transition-shadow"
+                        <ToolCard
+                          key={listing.id}
+                          listing={listing}
                           onClick={() => handleViewDetails(listing)}
-                        >
-                          <CardContent className="p-4">
-                            <div className="flex gap-3">
-                              <div className={`w-14 h-14 rounded-lg ${getIconColor(idx)} flex items-center justify-center flex-shrink-0`}>
-                                <span className="text-2xl font-bold text-white">{listing.title.charAt(0)}</span>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-bold text-base truncate">{listing.title}</h3>
-                                <p className="text-sm text-muted-foreground truncate">{listing.description}</p>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <div className="flex items-center">
-                                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                    <span className="text-xs ml-1">4.5</span>
-                                  </div>
-                                  <Badge variant="secondary" className="text-xs">{listing.listing_type}</Badge>
-                                  {listing.price && <span className="text-xs font-semibold">${listing.price}</span>}
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
+                          colorIndex={idx}
+                        />
                       ))}
                     </div>
                     <ScrollBar orientation="horizontal" />
@@ -135,44 +148,12 @@ export default function BrowseMarketplacePage() {
 
               {/* Category Sections */}
               {Object.entries(groupedListings).map(([categoryName, categoryListings]) => (
-                <div key={categoryName}>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold">{categoryName}</h2>
-                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <ScrollArea className="w-full whitespace-nowrap">
-                    <div className="flex space-x-4 pb-4">
-                      {categoryListings.slice(0, 10).map((listing, idx) => (
-                        <Card 
-                          key={listing.id} 
-                          className="inline-block w-[320px] cursor-pointer hover:shadow-lg transition-shadow"
-                          onClick={() => handleViewDetails(listing)}
-                        >
-                          <CardContent className="p-4">
-                            <div className="flex gap-3">
-                              <div className={`w-14 h-14 rounded-lg ${getIconColor(idx)} flex items-center justify-center flex-shrink-0`}>
-                                <span className="text-2xl font-bold text-white">{listing.title.charAt(0)}</span>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-bold text-base truncate">{listing.title}</h3>
-                                <p className="text-sm text-muted-foreground truncate">{listing.description}</p>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <div className="flex items-center">
-                                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                    <span className="text-xs ml-1">4.5</span>
-                                  </div>
-                                  <Badge variant="secondary" className="text-xs">{listing.listing_type}</Badge>
-                                  {listing.price && <span className="text-xs font-semibold">${listing.price}</span>}
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                    <ScrollBar orientation="horizontal" />
-                  </ScrollArea>
-                </div>
+                <CategorySection
+                  key={categoryName}
+                  categoryName={categoryName}
+                  categoryListings={categoryListings}
+                  onViewDetails={handleViewDetails}
+                />
               ))}
 
               {listings.length === 0 && (
@@ -185,34 +166,14 @@ export default function BrowseMarketplacePage() {
 
           {selectedTab === 'top-charts' && (
             <div className="space-y-2">
-              {listings.slice(0, 20).map((listing, idx) => (
-                <Card 
-                  key={listing.id} 
-                  className="cursor-pointer hover:bg-muted/50"
+              {topChartListings.map((listing, idx) => (
+                <TopChartCard
+                  key={listing.id}
+                  listing={listing}
                   onClick={() => handleViewDetails(listing)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl font-bold text-muted-foreground w-8">{idx + 1}</span>
-                      <div className={`w-12 h-12 rounded-lg ${getIconColor(idx)} flex items-center justify-center flex-shrink-0`}>
-                        <span className="text-xl font-bold text-white">{listing.title.charAt(0)}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold truncate">{listing.title}</h3>
-                        <p className="text-sm text-muted-foreground truncate">{listing.description}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                          <span className="text-xs">4.5</span>
-                          {listing.price && <span className="text-xs">• ${listing.price}</span>}
-                        </div>
-                      </div>
-                      <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                        <Download className="h-4 w-4 mr-1" />
-                        Install
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                  rank={idx + 1}
+                  colorIndex={idx}
+                />
               ))}
             </div>
           )}
@@ -220,17 +181,11 @@ export default function BrowseMarketplacePage() {
           {selectedTab === 'categories' && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {categories.map((category, idx) => (
-                <Card 
-                  key={category.id} 
-                  className="cursor-pointer hover:shadow-lg transition-shadow"
-                >
-                  <CardContent className="p-6 text-center">
-                    <div className={`w-16 h-16 rounded-full ${getIconColor(idx)} flex items-center justify-center mx-auto mb-3`}>
-                      <Grid3x3 className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="font-semibold">{category.name}</h3>
-                  </CardContent>
-                </Card>
+                <CategoryCard
+                  key={category.id}
+                  category={category}
+                  colorIndex={idx}
+                />
               ))}
             </div>
           )}

@@ -1,4 +1,5 @@
 
+import { memo, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,9 +62,48 @@ const aiTools: AITool[] = [
   }
 ];
 
+// Memoized tool card component
+const ToolCardMemo = memo(({ tool, onClick }: { tool: AITool; onClick: () => void }) => (
+  <Card className="hover:shadow-ai transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${tool.gradient}`} />
+    
+    <CardHeader>
+      <div className="flex items-start justify-between">
+        <div className={`p-3 rounded-lg bg-gradient-to-r ${tool.gradient}`}>
+          <tool.icon className="h-6 w-6 text-white" />
+        </div>
+        <Badge variant="secondary" className="text-xs">
+          {tool.usage}
+        </Badge>
+      </div>
+      <CardTitle className="text-lg">{tool.title}</CardTitle>
+      <p className="text-muted-foreground text-sm">{tool.description}</p>
+    </CardHeader>
+    
+    <CardContent className="space-y-4">
+      <div>
+        <h4 className="font-medium mb-2">Features:</h4>
+        <div className="space-y-1">
+          {tool.features.map((feature, idx) => (
+            <div key={idx} className="text-sm text-muted-foreground flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+              {feature}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Button className="w-full" variant="outline" onClick={onClick}>
+        Try {tool.name}
+      </Button>
+    </CardContent>
+  </Card>
+));
+
+ToolCardMemo.displayName = 'ToolCardMemo';
+
 const AITools = () => {
   const navigate = useNavigate();
-  console.log("AITools component rendered with Tier 1 tools");
 
   const handleToolAccess = () => {
     navigate('/ai-tools');
@@ -86,40 +126,11 @@ const AITools = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
           {aiTools.map((tool) => (
-            <Card key={tool.id} className="hover:shadow-ai transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
-              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${tool.gradient}`} />
-              
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className={`p-3 rounded-lg bg-gradient-to-r ${tool.gradient}`}>
-                    <tool.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    {tool.usage}
-                  </Badge>
-                </div>
-                <CardTitle className="text-lg">{tool.title}</CardTitle>
-                <p className="text-muted-foreground text-sm">{tool.description}</p>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-medium mb-2">Features:</h4>
-                  <div className="space-y-1">
-                    {tool.features.map((feature, idx) => (
-                      <div key={idx} className="text-sm text-muted-foreground flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full" />
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <Button className="w-full" variant="outline" onClick={() => navigate(tool.route || '/ai-tools')}>
-                  Try {tool.name}
-                </Button>
-              </CardContent>
-            </Card>
+            <ToolCardMemo 
+              key={tool.id} 
+              tool={tool} 
+              onClick={() => navigate(tool.route || '/ai-tools')} 
+            />
           ))}
         </div>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -48,8 +48,8 @@ export const useMarketplace = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch categories
-  const fetchCategories = async () => {
+  // Fetch categories - memoized
+  const fetchCategories = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('marketplace_categories')
@@ -61,10 +61,10 @@ export const useMarketplace = () => {
     } catch (err: any) {
       setError(err.message);
     }
-  };
+  }, []);
 
-  // Fetch listings with filters
-  const fetchListings = async (filters: MarketplaceFilters = {}) => {
+  // Fetch listings with filters - memoized
+  const fetchListings = useCallback(async (filters: MarketplaceFilters = {}) => {
     setLoading(true);
     setError(null);
 
@@ -112,10 +112,10 @@ export const useMarketplace = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  // Create a new listing
-  const createListing = async (listingData: any) => {
+  // Create a new listing - memoized
+  const createListing = useCallback(async (listingData: any) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
@@ -152,10 +152,10 @@ export const useMarketplace = () => {
       setError(err.message);
       throw err;
     }
-  };
+  }, [user]);
 
-  // Update a listing
-  const updateListing = async (id: string, updates: Partial<MarketplaceListing>) => {
+  // Update a listing - memoized
+  const updateListing = useCallback(async (id: string, updates: Partial<MarketplaceListing>) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
@@ -173,10 +173,10 @@ export const useMarketplace = () => {
       setError(err.message);
       throw err;
     }
-  };
+  }, [user]);
 
-  // Delete a listing
-  const deleteListing = async (id: string) => {
+  // Delete a listing - memoized
+  const deleteListing = useCallback(async (id: string) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
@@ -191,10 +191,10 @@ export const useMarketplace = () => {
       setError(err.message);
       throw err;
     }
-  };
+  }, [user]);
 
-  // Get user's listings
-  const getUserListings = async () => {
+  // Get user's listings - memoized
+  const getUserListings = useCallback(async () => {
     if (!user) return [];
 
     try {
@@ -210,10 +210,10 @@ export const useMarketplace = () => {
       setError(err.message);
       return [];
     }
-  };
+  }, [user]);
 
-  // Add to favorites
-  const addToFavorites = async (listingId: string) => {
+  // Add to favorites - memoized
+  const addToFavorites = useCallback(async (listingId: string) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
@@ -226,10 +226,10 @@ export const useMarketplace = () => {
       setError(err.message);
       throw err;
     }
-  };
+  }, [user]);
 
-  // Remove from favorites
-  const removeFromFavorites = async (listingId: string) => {
+  // Remove from favorites - memoized
+  const removeFromFavorites = useCallback(async (listingId: string) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
@@ -244,10 +244,10 @@ export const useMarketplace = () => {
       setError(err.message);
       throw err;
     }
-  };
+  }, [user]);
 
-  // Get user's favorites
-  const getUserFavorites = async () => {
+  // Get user's favorites - memoized
+  const getUserFavorites = useCallback(async () => {
     if (!user) return [];
 
     try {
@@ -265,11 +265,11 @@ export const useMarketplace = () => {
       setError(err.message);
       return [];
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [fetchCategories]);
 
   return {
     listings,
