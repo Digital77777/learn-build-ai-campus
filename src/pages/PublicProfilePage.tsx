@@ -351,7 +351,7 @@ const PublicProfilePage = () => {
                         <div
                           key={event.id}
                           className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
-                          onClick={() => navigate(`/community/events`)}
+                          onClick={() => navigate(`/community/browse-events`)}
                         >
                           <span className="text-sm">{event.title}</span>
                           <span className="text-xs text-muted-foreground">
