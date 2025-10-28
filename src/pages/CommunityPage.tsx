@@ -146,9 +146,18 @@ const CommunityPage = () => {
             {/* Tabs Navigation */}
             <Tabs defaultValue="topics" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="topics">Discussion Topics</TabsTrigger>
-                <TabsTrigger value="events">Live Events</TabsTrigger>
-                <TabsTrigger value="insights">Insights</TabsTrigger>
+                <TabsTrigger value="topics" className="flex items-center justify-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  <span className="hidden sm:inline">Discussion Topics</span>
+                </TabsTrigger>
+                <TabsTrigger value="events" className="flex items-center justify-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span className="hidden sm:inline">Live Events</span>
+                </TabsTrigger>
+                <TabsTrigger value="insights" className="flex items-center justify-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="hidden sm:inline">Insights</span>
+                </TabsTrigger>
               </TabsList>
 
               {/* Topics Tab */}
