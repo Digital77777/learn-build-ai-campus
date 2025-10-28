@@ -1,75 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Search, Filter, MessageCircle, UserPlus } from "lucide-react";
+import { ArrowLeft, Search, MessageCircle, UserPlus, Award, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useActiveMembers, type ActiveMember } from "@/hooks/useActiveMembers";
 
 const FindMembersPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
+  const { data: members = [], isLoading } = useActiveMembers(searchQuery);
 
-  const activeMembers = [
-    {
-      id: 1,
-      name: "Sarah Chen",
-      avatar: "SC",
-      role: "AI Researcher",
-      expertise: ["Machine Learning", "NLP", "Computer Vision"],
-      contributions: 145,
-      joined: "2023",
-      status: "online"
-    },
-    {
-      id: 2,
-      name: "David Martinez",
-      avatar: "DM",
-      role: "ML Engineer",
-      expertise: ["Deep Learning", "Python", "TensorFlow"],
-      contributions: 98,
-      joined: "2023",
-      status: "online"
-    },
-    {
-      id: 3,
-      name: "Emily Johnson",
-      avatar: "EJ",
-      role: "AI Entrepreneur",
-      expertise: ["AI Strategy", "Product Management", "Business"],
-      contributions: 234,
-      joined: "2022",
-      status: "online"
-    },
-    {
-      id: 4,
-      name: "Alex Thompson",
-      avatar: "AT",
-      role: "Data Scientist",
-      expertise: ["Data Analysis", "Statistics", "R"],
-      contributions: 167,
-      joined: "2023",
-      status: "away"
-    },
-    {
-      id: 5,
-      name: "Maria Rodriguez",
-      avatar: "MR",
-      role: "AI Educator",
-      expertise: ["Teaching", "Course Design", "AI Education"],
-      contributions: 203,
-      joined: "2022",
-      status: "online"
-    }
-  ];
+  const topContributors = useMemo(() => {
+    return members.filter((m) => m.is_top_contributor);
+  }, [members]);
 
-  const topContributors = [...activeMembers].sort((a, b) => b.contributions - a.contributions);
-
-  const handleConnect = (memberId: number, memberName: string) => {
+  const handleConnect = (memberId: string, memberName: string) => {
     toast({
       title: "Connection Request Sent",
       description: `Your connection request has been sent to ${memberName}.`,
@@ -83,52 +34,71 @@ const FindMembersPage = () => {
     });
   };
 
-  const MemberCard = ({ member }: { member: typeof activeMembers[0] }) => (
+  const getInitials = (name: string | null) => {
+    if (!name) return "?";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const getJoinedYear = (date: string) => {
+    return new Date(date).getFullYear().toString();
+  };
+
+  const MemberCard = ({ member }: { member: ActiveMember }) => (
     <Card className="hover:shadow-lg transition-shadow">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-4 flex-1">
-            <div className="relative">
-              <Avatar className="h-16 w-16">
-                <AvatarFallback className="text-lg font-semibold">{member.avatar}</AvatarFallback>
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+            <div className="relative flex-shrink-0">
+              <Avatar className="h-12 w-12 sm:h-16 sm:w-16">
+                <AvatarFallback className="text-sm sm:text-lg font-semibold bg-gradient-ai text-white">
+                  {getInitials(member.full_name)}
+                </AvatarFallback>
               </Avatar>
-              <div className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-background ${
-                member.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'
-              }`} />
             </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-1">{member.name}</h3>
-              <p className="text-sm text-muted-foreground mb-3">{member.role}</p>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {member.expertise.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="text-xs">
-                    {skill}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start gap-2 mb-1">
+                <h3 className="text-base sm:text-lg font-semibold truncate">
+                  {member.full_name || "Anonymous User"}
+                </h3>
+                {member.is_top_contributor && (
+                  <Badge className="bg-amber-500 text-white flex-shrink-0 gap-1 px-2 py-0.5">
+                    <Award className="h-3 w-3" />
+                    <span className="text-xs">Top</span>
                   </Badge>
-                ))}
+                )}
               </div>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <span>{member.contributions} contributions</span>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-2 truncate">
+                {member.email}
+              </p>
+              <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground">
+                <span className="font-medium">{member.contributions} contributions</span>
                 <span>•</span>
-                <span>Joined {member.joined}</span>
+                <span>Joined {getJoinedYear(member.joined_at)}</span>
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex sm:flex-col gap-2 w-full sm:w-auto">
             <Button 
               size="sm"
-              onClick={() => handleConnect(member.id, member.name)}
-              className="bg-gradient-ai text-white"
+              onClick={() => handleConnect(member.user_id, member.full_name || "User")}
+              className="bg-gradient-ai text-white flex-1 sm:flex-initial"
             >
-              <UserPlus className="h-4 w-4 mr-1" />
-              Connect
+              <UserPlus className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Connect</span>
             </Button>
             <Button 
               size="sm"
               variant="outline"
-              onClick={() => handleMessage(member.name)}
+              onClick={() => handleMessage(member.full_name || "User")}
+              className="flex-1 sm:flex-initial"
             >
-              <MessageCircle className="h-4 w-4 mr-1" />
-              Message
+              <MessageCircle className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Message</span>
             </Button>
           </div>
         </div>
@@ -161,34 +131,60 @@ const FindMembersPage = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search by name, role, or expertise..."
+              placeholder="Search by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
-          <Button variant="outline">
-            <Filter className="mr-2 h-4 w-4" />
-            Filters
-          </Button>
         </div>
 
-        <Tabs defaultValue="active" className="w-full">
+        <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid w-full grid-cols-2 max-w-md">
-            <TabsTrigger value="active">Active Now</TabsTrigger>
-            <TabsTrigger value="top">Top Contributors</TabsTrigger>
+            <TabsTrigger value="all">All Members</TabsTrigger>
+            <TabsTrigger value="top" className="gap-2">
+              <Award className="h-4 w-4" />
+              Top Contributors
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="active" className="space-y-4 mt-6">
-            {activeMembers.filter(m => m.status === 'online').map((member) => (
-              <MemberCard key={member.id} member={member} />
-            ))}
+          <TabsContent value="all" className="space-y-3 sm:space-y-4 mt-6">
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : members.length === 0 ? (
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <p className="text-muted-foreground">No members found</p>
+                </CardContent>
+              </Card>
+            ) : (
+              members.map((member) => (
+                <MemberCard key={member.user_id} member={member} />
+              ))
+            )}
           </TabsContent>
 
-          <TabsContent value="top" className="space-y-4 mt-6">
-            {topContributors.map((member) => (
-              <MemberCard key={member.id} member={member} />
-            ))}
+          <TabsContent value="top" className="space-y-3 sm:space-y-4 mt-6">
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : topContributors.length === 0 ? (
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <Award className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground">
+                    No top contributors yet. Make 10+ posts to earn this badge!
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              topContributors.map((member) => (
+                <MemberCard key={member.user_id} member={member} />
+              ))
+            )}
           </TabsContent>
         </Tabs>
       </div>

@@ -122,13 +122,6 @@ export type Database = {
             foreignKeyName: "community_events_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "active_members"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "community_events_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
@@ -182,13 +175,6 @@ export type Database = {
             foreignKeyName: "community_insights_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "active_members"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "community_insights_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
@@ -238,13 +224,6 @@ export type Database = {
           views?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "community_topics_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "active_members"
-            referencedColumns: ["user_id"]
-          },
           {
             foreignKeyName: "community_topics_user_id_fkey"
             columns: ["user_id"]
@@ -309,13 +288,6 @@ export type Database = {
             foreignKeyName: "event_attendees_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "active_members"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "event_attendees_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
@@ -347,13 +319,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "community_insights"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "insight_likes_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "active_members"
-            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "insight_likes_user_id_fkey"
@@ -869,13 +834,6 @@ export type Database = {
             foreignKeyName: "topic_replies_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "active_members"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "topic_replies_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
@@ -948,33 +906,7 @@ export type Database = {
       }
     }
     Views: {
-      active_members: {
-        Row: {
-          contributions: number | null
-          email: string | null
-          full_name: string | null
-          is_top_contributor: boolean | null
-          joined_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          contributions?: never
-          email?: string | null
-          full_name?: string | null
-          is_top_contributor?: never
-          joined_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          contributions?: never
-          email?: string | null
-          full_name?: string | null
-          is_top_contributor?: never
-          joined_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       add_admin_user:
