@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart } from "lucide-react";
+import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,10 +11,19 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { formatDistanceToNow } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/useAuth";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 const CommunityPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("topics");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("recent");
+  const [eventType, setEventType] = useState("all");
+  const [insightCategory, setInsightCategory] = useState("all");
   const { user } = useAuth();
   const {
     useTopics,
@@ -39,8 +48,10 @@ const CommunityPage = () => {
     navigate("/community/browse-events");
   };
 
-  const handleFilters = () => {
-    console.log("Opening filters...");
+  const handleResetFilters = () => {
+    setSortBy("recent");
+    setEventType("all");
+    setInsightCategory("all");
   };
 
   const handleHostEvent = () => {
@@ -137,14 +148,102 @@ const CommunityPage = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" onClick={handleFilters}>
-                <Filter className="mr-2 h-4 w-4" />
-                Filters
-              </Button>
+              <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline">
+                    <Filter className="mr-2 h-4 w-4" />
+                    Filters
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Filter {activeTab === "topics" ? "Topics" : activeTab === "events" ? "Events" : "Insights"}</SheetTitle>
+                    <SheetDescription>
+                      Refine your search to find exactly what you're looking for
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="space-y-6 mt-6">
+                    {/* Sort By - Available for all tabs */}
+                    <div className="space-y-3">
+                      <Label htmlFor="sort">Sort By</Label>
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                        <SelectTrigger id="sort">
+                          <SelectValue placeholder="Select sorting" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="recent">Most Recent</SelectItem>
+                          <SelectItem value="popular">Most Popular</SelectItem>
+                          {activeTab === "topics" && <SelectItem value="replies">Most Replies</SelectItem>}
+                          {activeTab === "insights" && <SelectItem value="likes">Most Liked</SelectItem>}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <Separator />
+
+                    {/* Event Type Filter - Only for events tab */}
+                    {activeTab === "events" && (
+                      <div className="space-y-3">
+                        <Label htmlFor="event-type">Event Type</Label>
+                        <Select value={eventType} onValueChange={setEventType}>
+                          <SelectTrigger id="event-type">
+                            <SelectValue placeholder="Select event type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Events</SelectItem>
+                            <SelectItem value="Workshop">Workshops</SelectItem>
+                            <SelectItem value="Webinar">Webinars</SelectItem>
+                            <SelectItem value="Meetup">Meetups</SelectItem>
+                            <SelectItem value="Conference">Conferences</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+
+                    {/* Category Filter - Only for insights tab */}
+                    {activeTab === "insights" && (
+                      <div className="space-y-3">
+                        <Label htmlFor="category">Category</Label>
+                        <Select value={insightCategory} onValueChange={setInsightCategory}>
+                          <SelectTrigger id="category">
+                            <SelectValue placeholder="Select category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Categories</SelectItem>
+                            <SelectItem value="Tutorial">Tutorials</SelectItem>
+                            <SelectItem value="News">News</SelectItem>
+                            <SelectItem value="Research">Research</SelectItem>
+                            <SelectItem value="Best Practice">Best Practices</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+
+                    <Separator />
+
+                    <div className="flex gap-3 pt-4">
+                      <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={handleResetFilters}
+                      >
+                        <X className="mr-2 h-4 w-4" />
+                        Reset
+                      </Button>
+                      <Button 
+                        className="flex-1"
+                        onClick={() => setFilterOpen(false)}
+                      >
+                        Apply Filters
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
 
             {/* Tabs Navigation */}
-            <Tabs defaultValue="topics" className="w-full">
+            <Tabs defaultValue="topics" className="w-full" onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="topics" className="flex items-center justify-center gap-2">
                   <MessageCircle className="h-4 w-4" />
