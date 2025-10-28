@@ -9,10 +9,42 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, User, Briefcase, MapPin, Link as LinkIcon, Linkedin, Github, Twitter, Mail, MessageCircle, Lightbulb, Calendar } from "lucide-react";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { SEOHead } from "@/components/SEOHead";
+import { InsightDetailModal } from "@/components/community/InsightDetailModal";
+import { useState } from "react";
 
 const PublicProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const [selectedInsightId, setSelectedInsightId] = useState<string | null>(null);
+
+  const { data: selectedInsight } = useQuery({
+    queryKey: ["insight-detail", selectedInsightId],
+    queryFn: async () => {
+      if (!selectedInsightId) return null;
+      
+      const { data, error } = await supabase
+        .from("community_insights")
+        .select(`
+          *,
+          profiles:user_id (
+            user_id,
+            full_name,
+            email,
+            avatar_url
+          ),
+          insight_likes (
+            id,
+            user_id
+          )
+        `)
+        .eq("id", selectedInsightId)
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!selectedInsightId,
+  });
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ["public-profile", userId],
@@ -293,7 +325,8 @@ const PublicProfilePage = () => {
                       {activity.insights.map((insight) => (
                         <div
                           key={insight.id}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                          onClick={() => setSelectedInsightId(insight.id)}
                         >
                           <span className="text-sm">{insight.title}</span>
                           <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -317,7 +350,8 @@ const PublicProfilePage = () => {
                       {activity.events.map((event) => (
                         <div
                           key={event.id}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                          onClick={() => navigate(`/community/events`)}
                         >
                           <span className="text-sm">{event.title}</span>
                           <span className="text-xs text-muted-foreground">
@@ -333,6 +367,14 @@ const PublicProfilePage = () => {
           )}
         </div>
       </div>
+
+      {selectedInsight && (
+        <InsightDetailModal
+          insight={selectedInsight}
+          open={!!selectedInsightId}
+          onOpenChange={(open) => !open && setSelectedInsightId(null)}
+        />
+      )}
     </>
   );
 };
