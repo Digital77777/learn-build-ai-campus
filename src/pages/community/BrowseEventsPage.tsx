@@ -202,6 +202,11 @@ const BrowseEventsPage = () => {
                           <div className="flex items-center gap-2 mb-3">
                             <Badge variant="secondary" className="capitalize">{event.event_type}</Badge>
                             <Badge variant="outline">{event.is_online ? "Virtual" : "In-Person"}</Badge>
+                            {event.is_registered && (
+                              <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+                                ✓ Registered
+                              </Badge>
+                            )}
                           </div>
                           <h3 className="text-2xl font-semibold mb-2">{event.title}</h3>
                           <p className="text-muted-foreground mb-4">{event.description}</p>
@@ -229,8 +234,9 @@ const BrowseEventsPage = () => {
                         <Button 
                           onClick={() => handleJoinEvent(event.id, false)}
                           className="bg-gradient-ai text-white md:self-start"
+                          disabled={event.is_registered}
                         >
-                          Register
+                          {event.is_registered ? "Already Registered" : "Register"}
                         </Button>
                       </div>
                     </CardContent>
@@ -266,6 +272,11 @@ const BrowseEventsPage = () => {
                             <Badge variant="destructive" className="animate-pulse">● LIVE</Badge>
                             <Badge variant="secondary" className="capitalize">{event.event_type}</Badge>
                             <Badge variant="outline">{event.is_online ? "Virtual" : "In-Person"}</Badge>
+                            {event.is_registered && (
+                              <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+                                ✓ Registered
+                              </Badge>
+                            )}
                           </div>
                           <h3 className="text-2xl font-semibold mb-2">{event.title}</h3>
                           <p className="text-muted-foreground mb-4">{event.description}</p>
@@ -289,8 +300,9 @@ const BrowseEventsPage = () => {
                         <Button 
                           onClick={() => handleJoinEvent(event.id, true)}
                           className="bg-gradient-ai text-white md:self-start"
+                          disabled={event.is_registered}
                         >
-                          Join Live
+                          {event.is_registered ? "Already Registered" : "Join Live"}
                         </Button>
                       </div>
                     </CardContent>
