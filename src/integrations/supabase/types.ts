@@ -117,7 +117,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "community_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       community_insights: {
         Row: {
@@ -162,7 +170,15 @@ export type Database = {
           user_id?: string
           views_count?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "community_insights_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       community_topics: {
         Row: {
@@ -207,7 +223,15 @@ export type Database = {
           user_id?: string
           views?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "community_topics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       error_log: {
         Row: {
@@ -260,6 +284,13 @@ export type Database = {
             referencedRelation: "community_events"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "event_attendees_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       insight_likes: {
@@ -288,6 +319,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "community_insights"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insight_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -791,6 +829,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "community_topics"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "topic_replies_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
