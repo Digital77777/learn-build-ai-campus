@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Calendar, Users, Clock, MapPin, Filter } from "lucide-react";
+import { ArrowLeft, Calendar, Users, Clock, MapPin, Filter, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useCommunity } from "@/hooks/useCommunity";
+import { useAuth } from "@/hooks/useAuth";
 import { format, parseISO, isToday, isBefore, isAfter, addMinutes } from "date-fns";
 import {
   Select,
@@ -20,6 +21,7 @@ import {
 const BrowseEventsPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const highlightedEventId = searchParams.get("eventId");
   const [searchQuery, setSearchQuery] = useState("");
@@ -231,13 +233,24 @@ const BrowseEventsPage = () => {
                             )}
                           </div>
                         </div>
-                        <Button 
-                          onClick={() => handleJoinEvent(event.id, false)}
-                          className="bg-gradient-ai text-white md:self-start"
-                          disabled={event.is_registered}
-                        >
-                          {event.is_registered ? "Already Registered" : "Register"}
-                        </Button>
+                        {user?.id === event.user_id ? (
+                          <Button 
+                            onClick={() => navigate('/community/my-activity')}
+                            variant="outline"
+                            className="md:self-start"
+                          >
+                            <Edit2 className="w-4 h-4 mr-2" />
+                            Manage Event
+                          </Button>
+                        ) : (
+                          <Button 
+                            onClick={() => handleJoinEvent(event.id, false)}
+                            className="bg-gradient-ai text-white md:self-start"
+                            disabled={event.is_registered}
+                          >
+                            {event.is_registered ? "Already Registered" : "Register"}
+                          </Button>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -297,13 +310,24 @@ const BrowseEventsPage = () => {
                             )}
                           </div>
                         </div>
-                        <Button 
-                          onClick={() => handleJoinEvent(event.id, true)}
-                          className="bg-gradient-ai text-white md:self-start"
-                          disabled={event.is_registered}
-                        >
-                          {event.is_registered ? "Already Registered" : "Join Live"}
-                        </Button>
+                        {user?.id === event.user_id ? (
+                          <Button 
+                            onClick={() => navigate('/community/my-activity')}
+                            variant="outline"
+                            className="md:self-start"
+                          >
+                            <Edit2 className="w-4 h-4 mr-2" />
+                            Manage Event
+                          </Button>
+                        ) : (
+                          <Button 
+                            onClick={() => handleJoinEvent(event.id, true)}
+                            className="bg-gradient-ai text-white md:self-start"
+                            disabled={event.is_registered}
+                          >
+                            {event.is_registered ? "Already Registered" : "Join Live"}
+                          </Button>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
