@@ -11,10 +11,12 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { SEOHead } from "@/components/SEOHead";
 import { InsightDetailModal } from "@/components/community/InsightDetailModal";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const PublicProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedInsightId, setSelectedInsightId] = useState<string | null>(null);
 
   const { data: selectedInsight } = useQuery({
@@ -80,7 +82,13 @@ const PublicProfilePage = () => {
           .limit(5),
         supabase
           .from("community_events")
-          .select("id, title, event_date, created_at")
+          .select(`
+            id, 
+            title, 
+            event_date, 
+            created_at,
+            event_attendees(user_id)
+          `)
           .eq("user_id", userId)
           .order("created_at", { ascending: false })
           .limit(5),
@@ -347,18 +355,31 @@ const PublicProfilePage = () => {
                       Hosted Events
                     </h4>
                     <div className="space-y-2">
-                      {activity.events.map((event) => (
-                        <div
-                          key={event.id}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
-                          onClick={() => navigate(`/community/browse-events?eventId=${event.id}`)}
-                        >
-                          <span className="text-sm">{event.title}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(event.event_date).toLocaleDateString()}
-                          </span>
-                        </div>
-                      ))}
+                      {activity.events.map((event) => {
+                        const isRegistered = user && event.event_attendees?.some(
+                          (attendee: any) => attendee.user_id === user.id
+                        );
+                        
+                        return (
+                          <div
+                            key={event.id}
+                            className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                            onClick={() => navigate(`/community/browse-events?eventId=${event.id}`)}
+                          >
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <span className="text-sm truncate">{event.title}</span>
+                              {isRegistered && (
+                                <Badge variant="secondary" className="text-xs shrink-0">
+                                  Registered
+                                </Badge>
+                              )}
+                            </div>
+                            <span className="text-xs text-muted-foreground shrink-0 ml-2">
+                              {new Date(event.event_date).toLocaleDateString()}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
