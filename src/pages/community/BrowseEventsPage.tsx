@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Calendar, Users, Clock, MapPin, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,12 +20,27 @@ import {
 const BrowseEventsPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
+  const highlightedEventId = searchParams.get("eventId");
   const [searchQuery, setSearchQuery] = useState("");
   const [eventTypeFilter, setEventTypeFilter] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
+  const eventRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   
   const { useEvents, registerForEvent } = useCommunity();
   const { data: events = [], isLoading } = useEvents(searchQuery);
+
+  // Scroll to highlighted event
+  useEffect(() => {
+    if (highlightedEventId && eventRefs.current[highlightedEventId]) {
+      setTimeout(() => {
+        eventRefs.current[highlightedEventId]?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }, 300);
+    }
+  }, [highlightedEventId, events]);
 
   // Check if an event is live right now
   const isEventLive = (eventDate: string, eventTime: string, durationMinutes: number) => {
@@ -172,7 +187,15 @@ const BrowseEventsPage = () => {
             ) : (
               <div className="grid gap-6">
                 {filteredUpcomingEvents.map((event) => (
-                  <Card key={event.id} className="hover:shadow-lg transition-shadow">
+                  <Card 
+                    key={event.id} 
+                    ref={(el) => eventRefs.current[event.id] = el}
+                    className={`hover:shadow-lg transition-all ${
+                      highlightedEventId === event.id 
+                        ? 'ring-2 ring-primary shadow-xl' 
+                        : ''
+                    }`}
+                  >
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div className="flex-1">
@@ -227,7 +250,15 @@ const BrowseEventsPage = () => {
             ) : (
               <div className="grid gap-6">
                 {filteredLiveEvents.map((event) => (
-                  <Card key={event.id} className="hover:shadow-lg transition-shadow border-primary">
+                  <Card 
+                    key={event.id} 
+                    ref={(el) => eventRefs.current[event.id] = el}
+                    className={`hover:shadow-lg transition-all border-primary ${
+                      highlightedEventId === event.id 
+                        ? 'ring-2 ring-primary shadow-xl' 
+                        : ''
+                    }`}
+                  >
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div className="flex-1">
