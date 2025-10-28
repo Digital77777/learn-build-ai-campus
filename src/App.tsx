@@ -63,6 +63,7 @@ const HostEventPage = lazy(() => import("./pages/community/HostEventPage"));
 const ShareInsightPage = lazy(() => import("./pages/community/ShareInsightPage"));
 const FindMembersPage = lazy(() => import("./pages/community/FindMembersPage"));
 const ReferralPage = lazy(() => import("./pages/ReferralPage"));
+const PublicProfilePage = lazy(() => import("./pages/PublicProfilePage"));
 
 const queryClient = new QueryClient();
 
@@ -145,6 +146,7 @@ const App = () => (
                 <Route path="/community/host-event" element={<HostEventPage />} />
                 <Route path="/community/share-insight" element={<ShareInsightPage />} />
                 <Route path="/community/find-members" element={<FindMembersPage />} />
+                <Route path="/profile/:userId" element={<PublicProfilePage />} />
                 <Route path="/referrals" element={<ReferralPage />} />
                 <Route path="/subscription" element={<SubscriptionPage />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />

@@ -227,7 +227,14 @@ const TopicDetailPage = () => {
                             {getInitials(reply.profiles?.full_name, reply.profiles?.email)}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
+                        <div
+                          className="cursor-pointer hover:text-primary transition-colors"
+                          onClick={() => {
+                            if (reply.profiles?.user_id) {
+                              navigate(`/profile/${reply.profiles.user_id}`);
+                            }
+                          }}
+                        >
                           <p className="font-medium text-sm">
                             {reply.profiles?.full_name || reply.profiles?.email || "Anonymous"}
                             {reply.user_id === topic.user_id && (

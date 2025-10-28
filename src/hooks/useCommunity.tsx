@@ -2,70 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-
-export interface CommunityTopic {
-  id: string;
-  user_id: string;
-  title: string;
-  content: string;
-  tags: string[];
-  views: number;
-  replies_count: number;
-  is_pinned: boolean;
-  is_locked: boolean;
-  created_at: string;
-  updated_at: string;
-  last_activity_at: string;
-  profiles?: {
-    full_name: string;
-    email: string;
-  };
-}
-
-export interface CommunityEvent {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string;
-  event_type: string;
-  event_date: string;
-  event_time: string;
-  duration_minutes: number;
-  max_attendees: number | null;
-  cover_image: string | null;
-  meeting_link: string | null;
-  location: string | null;
-  is_online: boolean;
-  status: string;
-  attendees_count: number;
-  created_at: string;
-  updated_at: string;
-  profiles?: {
-    full_name: string;
-    email: string;
-  };
-  is_registered?: boolean;
-}
-
-export interface CommunityInsight {
-  id: string;
-  user_id: string;
-  title: string;
-  content: string;
-  category: string;
-  cover_image: string | null;
-  read_time: string | null;
-  likes_count: number;
-  views_count: number;
-  is_published: boolean;
-  created_at: string;
-  updated_at: string;
-  profiles?: {
-    full_name: string;
-    email: string;
-  };
-  is_liked?: boolean;
-}
+import type { CommunityTopic, CommunityEvent, CommunityInsight } from "@/types/community";
 
 export const useCommunity = () => {
   const { toast } = useToast();
@@ -93,7 +30,7 @@ export const useCommunity = () => {
           const userIds = [...new Set(data.map(t => t.user_id))];
           const { data: profiles } = await supabase
             .from("profiles")
-            .select("user_id, full_name, email")
+            .select("user_id, full_name, email, avatar_url")
             .in("user_id", userIds);
 
           const profilesMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
@@ -171,7 +108,7 @@ export const useCommunity = () => {
           const userIds = [...new Set(data.map(e => e.user_id))];
           const { data: profiles } = await supabase
             .from("profiles")
-            .select("user_id, full_name, email")
+            .select("user_id, full_name, email, avatar_url")
             .in("user_id", userIds);
 
           const profilesMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
@@ -300,7 +237,7 @@ export const useCommunity = () => {
           const userIds = [...new Set(data.map(i => i.user_id))];
           const { data: profiles } = await supabase
             .from("profiles")
-            .select("user_id, full_name, email")
+            .select("user_id, full_name, email, avatar_url")
             .in("user_id", userIds);
 
           const profilesMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
@@ -528,10 +465,10 @@ export const useCommunity = () => {
           .from('community_topics')
           .select(`
             *,
-            profiles!community_topics_user_id_fkey (full_name, email),
+            profiles!community_topics_user_id_fkey (user_id, full_name, email, avatar_url),
             topic_replies (
               *,
-              profiles!topic_replies_user_id_fkey (full_name, email)
+              profiles!topic_replies_user_id_fkey (user_id, full_name, email, avatar_url)
             )
           `)
           .eq('id', topicId)

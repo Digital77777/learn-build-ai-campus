@@ -301,7 +301,15 @@ const CommunityPage = () => {
                               {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex-1 min-w-0">
+                          <div 
+                            className="flex-1 min-w-0 cursor-pointer hover:text-primary transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (topic.profiles?.user_id) {
+                                navigate(`/profile/${topic.profiles.user_id}`);
+                              }
+                            }}
+                          >
                             <p className="font-semibold text-sm leading-tight">
                               {topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}
                             </p>
@@ -501,7 +509,15 @@ const CommunityPage = () => {
                             {insight.content.substring(0, 150)}...
                           </p>
                           <div className="flex items-center justify-between text-sm text-muted-foreground">
-                            <div className="flex items-center gap-2">
+                            <div 
+                              className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (insight.profiles?.user_id) {
+                                  navigate(`/profile/${insight.profiles.user_id}`);
+                                }
+                              }}
+                            >
                               <Avatar className="w-6 h-6">
                                 <AvatarFallback className="text-xs">
                                   {getInitials(insight.profiles?.full_name, insight.profiles?.email)}

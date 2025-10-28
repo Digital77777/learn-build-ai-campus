@@ -1,11 +1,17 @@
 // Community data types
 export interface CommunityTopic {
   id: string;
+  user_id?: string;
   title: string;
   content: string;
   created_at: string;
   replies_count: number;
   tags?: string[];
+  is_pinned?: boolean;
+  is_locked?: boolean;
+  views?: number;
+  updated_at?: string;
+  last_activity_at?: string;
   topic_replies?: TopicReply[];
   profiles?: UserProfile;
 }
@@ -21,14 +27,25 @@ export interface TopicReply {
 
 export interface CommunityEvent {
   id: string;
+  user_id?: string;
   title: string;
+  description?: string;
   event_type: string;
   event_date: string;
   event_time: string;
+  duration_minutes?: number;
+  max_attendees?: number | null;
+  cover_image?: string | null;
+  meeting_link?: string | null;
+  location?: string | null;
   is_online: boolean;
   status: string;
   attendees_count: number;
+  created_at?: string;
+  updated_at?: string;
   event_attendees?: EventAttendee[];
+  profiles?: UserProfile;
+  is_registered?: boolean;
 }
 
 export interface EventAttendee {
@@ -40,6 +57,7 @@ export interface EventAttendee {
 
 export interface CommunityInsight {
   id: string;
+  user_id?: string;
   title: string;
   content: string;
   category: string;
@@ -48,7 +66,11 @@ export interface CommunityInsight {
   views_count: number;
   cover_image?: string | null;
   read_time?: string | null;
+  is_published?: boolean;
+  updated_at?: string;
   insight_likes?: InsightLike[];
+  profiles?: UserProfile;
+  is_liked?: boolean;
 }
 
 export interface InsightLike {
