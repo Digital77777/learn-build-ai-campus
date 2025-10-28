@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MessageCircle, Calendar, TrendingUp, Heart, Users } from "lucide-react";
+import { ArrowLeft, MessageCircle, Calendar, TrendingUp, Heart, Users, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,12 +9,31 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCommunity } from "@/hooks/useCommunity";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
+import { ProfileEditForm } from "@/components/profile/ProfileEditForm";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const MyActivityPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { useMyActivity } = useCommunity();
   const { data: activity, isLoading } = useMyActivity();
+
+  // Fetch user profile
+  const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = useQuery({
+    queryKey: ["profile", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", user?.id)
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user?.id,
+  });
 
   if (!user) {
     navigate("/auth");
@@ -67,15 +86,29 @@ const MyActivityPage = () => {
           </div>
         ) : (
           <Tabs defaultValue="topics" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="topics">
-                My Topics ({activity?.topics?.length || 0})
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="topics" className="flex items-center gap-1">
+                <MessageCircle className="w-4 h-4 md:hidden" />
+                <span className="hidden md:inline">My Topics</span>
+                <span className="md:hidden">Topics</span>
+                <span className="ml-1">({activity?.topics?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="events">
-                My Events ({activity?.events?.length || 0})
+              <TabsTrigger value="events" className="flex items-center gap-1">
+                <Calendar className="w-4 h-4 md:hidden" />
+                <span className="hidden md:inline">My Events</span>
+                <span className="md:hidden">Events</span>
+                <span className="ml-1">({activity?.events?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="insights">
-                My Insights ({activity?.insights?.length || 0})
+              <TabsTrigger value="insights" className="flex items-center gap-1">
+                <TrendingUp className="w-4 h-4 md:hidden" />
+                <span className="hidden md:inline">My Insights</span>
+                <span className="md:hidden">Insights</span>
+                <span className="ml-1">({activity?.insights?.length || 0})</span>
+              </TabsTrigger>
+              <TabsTrigger value="profile" className="flex items-center gap-1">
+                <User className="w-4 h-4 md:hidden" />
+                <span className="hidden md:inline">My Profile</span>
+                <span className="md:hidden">Profile</span>
               </TabsTrigger>
             </TabsList>
 
@@ -320,6 +353,32 @@ const MyActivityPage = () => {
                     <Button onClick={() => navigate("/community/share-insight")}>
                       Share an Insight
                     </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            {/* Profile Tab */}
+            <TabsContent value="profile" className="space-y-6 mt-6">
+              {profileLoading ? (
+                <Card>
+                  <CardContent className="p-6">
+                    <Skeleton className="h-24 w-24 rounded-full mb-4" />
+                    <Skeleton className="h-6 w-3/4 mb-4" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </CardContent>
+                </Card>
+              ) : profile ? (
+                <ProfileEditForm profile={profile} onSuccess={refetchProfile} />
+              ) : (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <User className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-lg font-semibold mb-2">Profile not found</h3>
+                    <p className="text-muted-foreground">
+                      Unable to load your profile information.
+                    </p>
                   </CardContent>
                 </Card>
               )}
