@@ -10,15 +10,18 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import { ProfileEditForm } from "@/components/profile/ProfileEditForm";
+import { ProfileView } from "@/components/profile/ProfileView";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { CommunityTopic, CommunityEvent, CommunityInsight } from "@/types/community";
+import { useState } from "react";
 
 const MyActivityPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { useMyActivity } = useCommunity();
   const { data: activity, isLoading } = useMyActivity();
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   // Fetch user profile
   const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = useQuery({
@@ -371,7 +374,20 @@ const MyActivityPage = () => {
                   </CardContent>
                 </Card>
               ) : profile ? (
-                <ProfileEditForm profile={profile} onSuccess={refetchProfile} />
+                isEditingProfile ? (
+                  <ProfileEditForm 
+                    profile={profile} 
+                    onSuccess={() => {
+                      refetchProfile();
+                      setIsEditingProfile(false);
+                    }} 
+                  />
+                ) : (
+                  <ProfileView 
+                    profile={profile} 
+                    onEdit={() => setIsEditingProfile(true)} 
+                  />
+                )
               ) : (
                 <Card>
                   <CardContent className="p-12 text-center">
