@@ -46,6 +46,8 @@ export interface CommunityInsight {
   created_at: string;
   likes_count: number;
   views_count: number;
+  cover_image?: string | null;
+  read_time?: string | null;
   insight_likes?: InsightLike[];
 }
 

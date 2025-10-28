@@ -368,6 +368,69 @@ export const useCommunity = () => {
     },
   });
 
+  const updateInsight = useMutation({
+    mutationFn: async ({ insightId, data }: { 
+      insightId: string; 
+      data: { title: string; content: string; category: string; read_time?: string } 
+    }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const { error } = await supabase
+        .from("community_insights")
+        .update(data)
+        .eq("id", insightId)
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["community-insights"] });
+      queryClient.invalidateQueries({ queryKey: ["my-activity"] });
+      toast({
+        title: "Insight Updated!",
+        description: "Your changes have been saved.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteInsight = useMutation({
+    mutationFn: async (insightId: string) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const { error } = await supabase
+        .from("community_insights")
+        .delete()
+        .eq("id", insightId)
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["community-insights"] });
+      queryClient.invalidateQueries({ queryKey: ["my-activity"] });
+      toast({
+        title: "Insight Deleted",
+        description: "Your insight has been removed.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const toggleInsightLike = useMutation({
     mutationFn: async ({ insightId, isLiked }: { insightId: string; isLiked: boolean }) => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -535,6 +598,8 @@ export const useCommunity = () => {
     registerForEvent,
     useInsights,
     createInsight,
+    updateInsight,
+    deleteInsight,
     toggleInsightLike,
     useStats,
     useMyActivity,

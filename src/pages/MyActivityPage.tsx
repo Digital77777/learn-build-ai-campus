@@ -1,16 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MessageCircle, Calendar, TrendingUp, Heart, Users, User } from "lucide-react";
+import { ArrowLeft, MessageCircle, Calendar, TrendingUp, Heart, Users, User, Eye, Edit2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useCommunity } from "@/hooks/useCommunity";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import { ProfileEditForm } from "@/components/profile/ProfileEditForm";
 import { ProfileView } from "@/components/profile/ProfileView";
+import { InsightDetailModal } from "@/components/community/InsightDetailModal";
+import { EditInsightModal } from "@/components/community/EditInsightModal";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { CommunityTopic, CommunityEvent, CommunityInsight } from "@/types/community";
@@ -19,9 +22,12 @@ import { useState } from "react";
 const MyActivityPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { useMyActivity } = useCommunity();
+  const { useMyActivity, updateInsight, deleteInsight } = useCommunity();
   const { data: activity, isLoading } = useMyActivity();
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [selectedInsight, setSelectedInsight] = useState<CommunityInsight | null>(null);
+  const [editingInsight, setEditingInsight] = useState<CommunityInsight | null>(null);
+  const [deletingInsightId, setDeletingInsightId] = useState<string | null>(null);
 
   // Fetch user profile
   const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = useQuery({
@@ -299,6 +305,9 @@ const MyActivityPage = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant="outline">{insight.category}</Badge>
+                            {insight.read_time && (
+                              <Badge variant="secondary">{insight.read_time}</Badge>
+                            )}
                           </div>
                           <h3 className="text-xl font-semibold mb-2">{insight.title}</h3>
                           <p className="text-muted-foreground mb-4 line-clamp-3">
@@ -322,6 +331,35 @@ const MyActivityPage = () => {
                         </div>
                       </div>
 
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 mb-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedInsight(insight)}
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          Read Full Insight
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setEditingInsight(insight)}
+                        >
+                          <Edit2 className="w-4 h-4 mr-2" />
+                          Edit
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setDeletingInsightId(insight.id)}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </Button>
+                      </div>
+
                       {/* Likes from others */}
                       {insight.insight_likes && insight.insight_likes.length > 0 && (
                         <div className="border-t pt-4 mt-4">
@@ -332,7 +370,7 @@ const MyActivityPage = () => {
                           <div className="flex items-center gap-2">
                             {insight.insight_likes.slice(0, 10).map((like) => (
                               <Avatar key={like.id} className="w-8 h-8">
-                                <AvatarFallback className="text-xs">U</AvatarFallback>
+                                <AvatarFallback className="text-xs bg-primary/10">U</AvatarFallback>
                               </Avatar>
                             ))}
                             {insight.insight_likes.length > 10 && (
@@ -341,6 +379,14 @@ const MyActivityPage = () => {
                               </span>
                             )}
                           </div>
+                          <Button
+                            variant="link"
+                            size="sm"
+                            className="p-0 h-auto mt-2"
+                            onClick={() => setSelectedInsight(insight)}
+                          >
+                            View all who liked this insight
+                          </Button>
                         </div>
                       )}
                     </CardContent>
@@ -403,6 +449,60 @@ const MyActivityPage = () => {
           </Tabs>
         )}
       </div>
+
+      {/* Insight Detail Modal */}
+      {selectedInsight && (
+        <InsightDetailModal
+          insight={selectedInsight}
+          open={!!selectedInsight}
+          onOpenChange={(open) => !open && setSelectedInsight(null)}
+        />
+      )}
+
+      {/* Edit Insight Modal */}
+      {editingInsight && (
+        <EditInsightModal
+          insight={editingInsight}
+          open={!!editingInsight}
+          onOpenChange={(open) => !open && setEditingInsight(null)}
+          onSave={(data) => {
+            updateInsight.mutate(
+              { insightId: editingInsight.id, data },
+              {
+                onSuccess: () => setEditingInsight(null),
+              }
+            );
+          }}
+          isLoading={updateInsight.isPending}
+        />
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deletingInsightId} onOpenChange={(open) => !open && setDeletingInsightId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Insight</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this insight? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (deletingInsightId) {
+                  deleteInsight.mutate(deletingInsightId, {
+                    onSuccess: () => setDeletingInsightId(null),
+                  });
+                }
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
