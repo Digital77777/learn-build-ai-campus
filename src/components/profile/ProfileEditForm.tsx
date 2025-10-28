@@ -1,4 +1,4 @@
-import { useState } from "react";
+import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -42,9 +42,9 @@ interface ProfileEditFormProps {
 }
 
 export const ProfileEditForm = ({ profile, onSuccess }: ProfileEditFormProps) => {
-  const [skills, setSkills] = useState<string[]>(profile?.skills || []);
-  const [newSkill, setNewSkill] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [skills, setSkills] = React.useState<string[]>(profile?.skills || []);
+  const [newSkill, setNewSkill] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
