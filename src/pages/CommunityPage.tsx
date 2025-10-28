@@ -15,6 +15,8 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { InsightDetailModal } from "@/components/community/InsightDetailModal";
+import type { CommunityInsight } from "@/types/community";
 
 const CommunityPage = () => {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ const CommunityPage = () => {
   const [sortBy, setSortBy] = useState("recent");
   const [eventType, setEventType] = useState("all");
   const [insightCategory, setInsightCategory] = useState("all");
+  const [selectedInsight, setSelectedInsight] = useState<CommunityInsight | null>(null);
   const { user } = useAuth();
   const {
     useTopics,
@@ -479,10 +482,17 @@ const CommunityPage = () => {
                 <div className="space-y-6">
                   {insights && insights.length > 0 ? (
                     insights.map((insight) => (
-                      <Card key={insight.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                      <Card 
+                        key={insight.id} 
+                        className="hover:shadow-md transition-shadow cursor-pointer"
+                        onClick={() => setSelectedInsight(insight)}
+                      >
                         <CardContent className="p-6">
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant="outline">{insight.category}</Badge>
+                            {insight.read_time && (
+                              <Badge variant="secondary">{insight.read_time}</Badge>
+                            )}
                           </div>
                           <h3 className="text-xl font-semibold mb-2 hover:text-primary transition-colors">
                             {insight.title}
@@ -498,13 +508,14 @@ const CommunityPage = () => {
                                 </AvatarFallback>
                               </Avatar>
                               <span>{insight.profiles?.full_name || insight.profiles?.email || "Anonymous"}</span>
-                              <span>•</span>
-                              <span>{insight.read_time || "5 min read"}</span>
                             </div>
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleLikeInsight(insight.id, insight.is_liked || false)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleLikeInsight(insight.id, insight.is_liked || false);
+                              }}
                             >
                               <Heart
                                 className={`h-4 w-4 mr-1 ${insight.is_liked ? "fill-current text-red-500" : ""}`}
@@ -590,6 +601,15 @@ const CommunityPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Insight Detail Modal */}
+      {selectedInsight && (
+        <InsightDetailModal
+          insight={selectedInsight}
+          open={!!selectedInsight}
+          onOpenChange={(open) => !open && setSelectedInsight(null)}
+        />
+      )}
     </div>
   );
 };
