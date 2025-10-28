@@ -174,70 +174,84 @@ const CommunityPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {topics && topics.length > 0 ? (
                   topics.map((topic) => (
                     <Card 
                       key={topic.id} 
-                      className="hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer group"
+                      className="hover:shadow-md transition-all cursor-pointer border-border/40 overflow-hidden"
                       onClick={() => navigate(`/community/topic/${topic.id}`)}
                     >
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              {topic.is_pinned && (
-                                <Badge variant="secondary" className="text-xs">
-                                  <TrendingUp className="w-3 h-3 mr-1" />
-                                  Pinned
-                                </Badge>
-                              )}
-                              {topic.tags && topic.tags.length > 0 && (
-                                <div className="flex gap-1">
-                                  {topic.tags.map((tag) => (
-                                    <Badge key={tag} variant="outline" className="text-xs">
-                                      {tag}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                            <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                              {topic.title}
-                            </h3>
-                            <p className="text-muted-foreground mb-3 line-clamp-2">
-                              {topic.content.substring(0, 200)}...
+                      <CardContent className="p-0">
+                        {/* Post Header - Facebook Style */}
+                        <div className="flex items-center gap-3 p-4 pb-3">
+                          <Avatar className="w-10 h-10">
+                            <AvatarFallback className="text-sm bg-primary/10 text-primary font-medium">
+                              {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-sm leading-tight">
+                              {topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}
                             </p>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-2">
-                                <Avatar className="w-6 h-6">
-                                  <AvatarFallback className="text-xs">
-                                    {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <span>{topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}</span>
-                              </div>
-                              <span>•</span>
-                              <div className="flex items-center gap-1">
-                                <MessageCircle className="w-4 h-4" />
-                                <span>{topic.replies_count} {topic.replies_count === 1 ? 'reply' : 'replies'}</span>
-                              </div>
-                              <span>•</span>
-                              <span>{formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}</span>
-                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              {formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}
+                            </p>
                           </div>
+                          {topic.is_pinned && (
+                            <Badge variant="secondary" className="text-xs shrink-0">
+                              <TrendingUp className="w-3 h-3" />
+                            </Badge>
+                          )}
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/community/topic/${topic.id}`);
-                          }}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          View Discussion →
-                        </Button>
+
+                        {/* Post Content */}
+                        <div className="px-4 pb-3">
+                          <h3 className="text-base font-semibold mb-2 leading-snug">
+                            {topic.title}
+                          </h3>
+                          <p className="text-sm text-foreground/80 leading-relaxed line-clamp-3">
+                            {topic.content}
+                          </p>
+                        </div>
+
+                        {/* Tags */}
+                        {topic.tags && topic.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 px-4 pb-3">
+                            {topic.tags.slice(0, 3).map((tag) => (
+                              <Badge 
+                                key={tag} 
+                                variant="secondary" 
+                                className="text-xs font-normal bg-secondary/50"
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
+                            {topic.tags.length > 3 && (
+                              <Badge variant="secondary" className="text-xs font-normal bg-secondary/50">
+                                +{topic.tags.length - 3}
+                              </Badge>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Post Actions - Facebook Style */}
+                        <div className="border-t border-border/40 px-4 py-2.5 flex items-center gap-1">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="flex-1 h-9 text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/community/topic/${topic.id}`);
+                            }}
+                          >
+                            <MessageCircle className="w-4 h-4 mr-2" />
+                            <span className="text-sm font-medium">
+                              {topic.replies_count === 0 ? 'Comment' : `${topic.replies_count}`}
+                            </span>
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))
