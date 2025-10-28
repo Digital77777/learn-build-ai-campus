@@ -12,6 +12,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ProfileEditForm } from "@/components/profile/ProfileEditForm";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { CommunityTopic, CommunityEvent, CommunityInsight } from "@/types/community";
 
 const MyActivityPage = () => {
   const navigate = useNavigate();
@@ -115,7 +116,7 @@ const MyActivityPage = () => {
             {/* Topics Tab */}
             <TabsContent value="topics" className="space-y-6 mt-6">
               {activity?.topics && activity.topics.length > 0 ? (
-                activity.topics.map((topic: any) => (
+                activity.topics.map((topic: CommunityTopic) => (
                   <Card 
                     key={topic.id} 
                     className="hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer group"
@@ -163,7 +164,7 @@ const MyActivityPage = () => {
                             Recent Comments ({topic.topic_replies.length})
                           </h4>
                           <div className="space-y-3">
-                            {topic.topic_replies.slice(0, 3).map((reply: any) => (
+                            {topic.topic_replies.slice(0, 3).map((reply) => (
                               <div 
                                 key={reply.id} 
                                 className="bg-muted/50 p-3 rounded-lg cursor-pointer hover:bg-muted transition-colors"
@@ -216,7 +217,7 @@ const MyActivityPage = () => {
             {/* Events Tab */}
             <TabsContent value="events" className="space-y-6 mt-6">
               {activity?.events && activity.events.length > 0 ? (
-                activity.events.map((event: any) => (
+                activity.events.map((event: CommunityEvent) => (
                   <Card key={event.id} className="hover:shadow-md transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
@@ -253,7 +254,7 @@ const MyActivityPage = () => {
                             Registered Attendees ({event.event_attendees.length})
                           </h4>
                           <div className="flex items-center gap-2">
-                            {event.event_attendees.slice(0, 5).map((attendee: any) => (
+                            {event.event_attendees.slice(0, 5).map((attendee) => (
                               <Avatar key={attendee.id} className="w-8 h-8">
                                 <AvatarFallback className="text-xs">U</AvatarFallback>
                               </Avatar>
@@ -288,7 +289,7 @@ const MyActivityPage = () => {
             {/* Insights Tab */}
             <TabsContent value="insights" className="space-y-6 mt-6">
               {activity?.insights && activity.insights.length > 0 ? (
-                activity.insights.map((insight: any) => (
+                activity.insights.map((insight: CommunityInsight) => (
                   <Card key={insight.id} className="hover:shadow-md transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
@@ -326,7 +327,7 @@ const MyActivityPage = () => {
                             Liked by {insight.insight_likes.length} {insight.insight_likes.length === 1 ? 'person' : 'people'}
                           </h4>
                           <div className="flex items-center gap-2">
-                            {insight.insight_likes.slice(0, 10).map((like: any) => (
+                            {insight.insight_likes.slice(0, 10).map((like) => (
                               <Avatar key={like.id} className="w-8 h-8">
                                 <AvatarFallback className="text-xs">U</AvatarFallback>
                               </Avatar>

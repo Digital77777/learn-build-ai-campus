@@ -65,7 +65,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     }
   }, [initialData]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

@@ -95,8 +95,9 @@ export const useReferrals = () => {
       if (error) throw error;
       await fetchReferrals();
       return { data, error: null };
-    } catch (error: any) {
-      return { error: error.message };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create referral';
+      return { error: errorMessage };
     }
   };
 

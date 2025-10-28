@@ -178,12 +178,12 @@ const TopicDetailPage = () => {
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Avatar className="w-8 h-8">
-                <AvatarFallback>
-                  {getInitials((topic as any).profiles?.full_name, (topic as any).profiles?.email)}
-                </AvatarFallback>
-              </Avatar>
-              <span className="font-medium">
-                {(topic as any).profiles?.full_name || (topic as any).profiles?.email || "Anonymous"}
+              <AvatarFallback>
+                {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
+              </AvatarFallback>
+            </Avatar>
+            <span className="font-medium">
+              {topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}
               </span>
             </div>
             <span>•</span>
@@ -217,7 +217,7 @@ const TopicDetailPage = () => {
 
           {topic.topic_replies && topic.topic_replies.length > 0 ? (
             <div className="space-y-4">
-              {topic.topic_replies.map((reply: any) => (
+              {topic.topic_replies.map((reply) => (
                 <Card key={reply.id}>
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-3">

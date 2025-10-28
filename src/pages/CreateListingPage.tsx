@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { ListingForm } from '@/components/marketplace/ListingForm';
-import { useMarketplace } from '@/hooks/useMarketplace';
+import { useMarketplace, type MarketplaceListing } from '@/hooks/useMarketplace';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { TierGate } from '@/components/tier/TierGate';
@@ -14,7 +13,7 @@ const CreateListingPage = () => {
   const { categories, createListing } = useMarketplace();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: Partial<MarketplaceListing>) => {
     if (!user) {
       toast.error('Please sign in to create a listing');
       navigate('/auth');
@@ -25,13 +24,19 @@ const CreateListingPage = () => {
     try {
       await createListing({
         ...data,
+        user_id: user.id,
         status: 'active',
-      });
+        title: data.title || '',
+        description: data.description || '',
+        listing_type: data.listing_type || 'product',
+      } as Omit<MarketplaceListing, 'id' | 'created_at' | 'updated_at'>);
       toast.success('Listing created successfully!');
       navigate('/marketplace/browse');
     } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error creating listing:', error);
+      }
       toast.error('Failed to create listing');
-      console.error('Error creating listing:', error);
     } finally {
       setIsLoading(false);
     }

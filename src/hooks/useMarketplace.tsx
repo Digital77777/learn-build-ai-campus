@@ -107,15 +107,16 @@ export const useMarketplace = () => {
 
       if (error) throw error;
       setListings((data || []) as MarketplaceListing[]);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch listings';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   }, []);
 
   // Create a new listing - memoized
-  const createListing = useCallback(async (listingData: any) => {
+  const createListing = useCallback(async (listingData: Omit<MarketplaceListing, 'id' | 'created_at' | 'updated_at'>) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
@@ -131,13 +132,11 @@ export const useMarketplace = () => {
         currency: listingData.currency || 'USD',
         images: listingData.images || [],
         videos: listingData.videos || [],
-        creation_link: listingData.creationLink || listingData.creation_link,
+        creation_link: listingData.creation_link,
         tags: listingData.tags || [],
         requirements: listingData.requirements,
         delivery_time: listingData.delivery_time,
         is_featured: false,
-        // Store additional metadata for jobs and services
-        metadata: listingData.metadata || {}
       };
 
       const { data, error } = await supabase
@@ -148,8 +147,9 @@ export const useMarketplace = () => {
 
       if (error) throw error;
       return data as MarketplaceListing;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create listing';
+      setError(errorMessage);
       throw err;
     }
   }, [user]);

@@ -177,7 +177,7 @@ Want to dive deeper into any part of this explanation?`
     return explanations[subject] || explanations['general'];
   };
 
-  const handlePractice = useCallback((problem: any) => {
+  const handlePractice = useCallback((problem: { subject: string; question: string; hint: string; answer: string }) => {
     const practiceMessage: Message = {
       id: Date.now().toString(),
       text: `Practice Problem: ${problem.question}\n\nHint: ${problem.hint}\n\nTake your time and think it through. Type your answer when ready!`,

@@ -1,6 +1,4 @@
-// Placeholder file to resolve build errors
-// This component uses outdated interfaces that don't match the current database schema
-// TODO: Update this component to use the simplified MarketplaceListing interface
+// Updated component using current MarketplaceListing interface
 
 import React from 'react';
 import { MarketplaceListing } from '@/hooks/useMarketplace';

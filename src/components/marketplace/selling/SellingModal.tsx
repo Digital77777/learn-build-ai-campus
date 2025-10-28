@@ -78,7 +78,11 @@ export const SellingModal: React.FC<SellingModalProps> = ({ isOpen, onClose }) =
 
     setIsSubmitting(true);
     try {
-      await createListing(formData);
+      await createListing({
+        ...formData,
+        user_id: user.id,
+        status: 'active'
+      });
       toast.success('Your listing has been created successfully!');
       onClose();
       // Reset form

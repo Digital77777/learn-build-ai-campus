@@ -16,8 +16,13 @@ export const sampleVideos = [
   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
 ];
 
-export const addSampleMediaToListing = (listing: any) => ({
-  ...listing,
-  images: listing.images?.length > 0 ? listing.images : sampleImages.tech,
-  videos: listing.videos?.length > 0 ? listing.videos : [sampleVideos[0]]
-});
+export const addSampleMediaToListing = (listing: Record<string, unknown>) => {
+  const images = Array.isArray(listing.images) && listing.images.length > 0 ? listing.images : sampleImages.tech;
+  const videos = Array.isArray(listing.videos) && listing.videos.length > 0 ? listing.videos : [sampleVideos[0]];
+  
+  return {
+    ...listing,
+    images,
+    videos
+  };
+};

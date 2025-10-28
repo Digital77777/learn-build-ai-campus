@@ -66,7 +66,7 @@ const CreateJobPostingPage = () => {
     is_remote: false
   });
 
-  const handleInputChange = (field: keyof JobFormData, value: any) => {
+  const handleInputChange = (field: keyof JobFormData, value: string | number | string[] | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -115,21 +115,12 @@ const CreateJobPostingPage = () => {
         description: formData.description,
         listing_type: 'job',
         category_id: formData.category_id,
-        price: formData.salary_max, // Use max salary as price for sorting
+        price: formData.salary_max,
         currency: 'USD',
         tags: formData.skills,
-        requirements: formData.requirements,
-        // Store job-specific data in a structured way
-        metadata: {
-          employment_type: formData.employment_type,
-          experience_level: formData.experience_level,
-          salary_min: formData.salary_min,
-          salary_max: formData.salary_max,
-          location: formData.location,
-          is_remote: formData.is_remote,
-          benefits: formData.benefits,
-          application_deadline: formData.application_deadline
-        }
+        requirements: `${formData.requirements}\n\nEmployment: ${formData.employment_type}\nExperience: ${formData.experience_level}\nSalary: $${formData.salary_min}-$${formData.salary_max}\nLocation: ${formData.location}\nRemote: ${formData.is_remote ? 'Yes' : 'No'}`,
+        user_id: user!.id,
+        status: 'active'
       });
 
       toast.success('Job posted successfully! Your job is now live.');

@@ -95,8 +95,10 @@ export const useSubscription = () => {
         // Auto-assign starter tier if no subscription
         await assignStarterTier();
       }
-    } catch (error: any) {
-      console.error('Error fetching subscription:', error);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching subscription:', error);
+      }
       toast.error('Failed to load subscription data');
     } finally {
       setLoading(false);
@@ -168,8 +170,10 @@ export const useSubscription = () => {
       toast.success(`Successfully switched to ${newTier.display_name} tier!`);
       await fetchSubscriptionData();
       return true;
-    } catch (error: any) {
-      console.error('Error changing tier:', error);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error changing tier:', error);
+      }
       toast.error('Failed to change tier');
       return false;
     }
