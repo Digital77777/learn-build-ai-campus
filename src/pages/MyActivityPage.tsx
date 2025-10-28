@@ -262,17 +262,28 @@ const MyActivityPage = () => {
                             <Users className="w-4 h-4" />
                             Registered Attendees ({event.event_attendees.length})
                           </h4>
-                          <div className="flex items-center gap-2">
-                            {event.event_attendees.slice(0, 5).map((attendee) => (
-                              <Avatar key={attendee.id} className="w-8 h-8">
-                                <AvatarFallback className="text-xs">U</AvatarFallback>
-                              </Avatar>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {event.event_attendees.map((attendee) => (
+                              <div
+                                key={attendee.id}
+                                className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                                onClick={() => navigate(`/profile/${attendee.user_id}`)}
+                              >
+                                <Avatar className="w-10 h-10">
+                                  <AvatarFallback className="text-sm">
+                                    {getInitials(attendee.profiles?.full_name, attendee.profiles?.email)}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium truncate">
+                                    {attendee.profiles?.full_name || attendee.profiles?.email || 'Anonymous'}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    Registered {formatDistanceToNow(new Date(attendee.joined_at), { addSuffix: true })}
+                                  </p>
+                                </div>
+                              </div>
                             ))}
-                            {event.event_attendees.length > 5 && (
-                              <span className="text-sm text-muted-foreground">
-                                +{event.event_attendees.length - 5} more
-                              </span>
-                            )}
                           </div>
                         </div>
                       )}

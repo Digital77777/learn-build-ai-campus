@@ -432,7 +432,15 @@ export const useCommunity = () => {
             .order('created_at', { ascending: false }),
           supabase
             .from('community_events')
-            .select('*, event_attendees(id, user_id, joined_at)')
+            .select(`
+              *, 
+              event_attendees(
+                id, 
+                user_id, 
+                joined_at,
+                profiles!event_attendees_user_id_fkey (user_id, full_name, email, avatar_url)
+              )
+            `)
             .eq('user_id', user.id)
             .order('created_at', { ascending: false }),
           supabase
