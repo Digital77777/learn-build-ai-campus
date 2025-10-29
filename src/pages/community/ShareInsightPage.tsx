@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Lightbulb, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCommunity } from "@/hooks/useCommunity";
 import { useAuth } from "@/hooks/useAuth";
+import { MediaUploader } from "@/components/media/MediaUploader";
 
 const ShareInsightPage = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ const ShareInsightPage = () => {
     category: "",
     readTime: ""
   });
+  const [coverImages, setCoverImages] = useState<string[]>([]);
+  const [coverVideos, setCoverVideos] = useState<string[]>([]);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -133,15 +136,15 @@ const ShareInsightPage = () => {
 
               <div className="space-y-2">
                 <Label>Cover Image (Optional)</Label>
-                <div className="border-2 border-dashed rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
-                  <ImageIcon className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    PNG, JPG up to 5MB
-                  </p>
-                </div>
+                <MediaUploader
+                  images={coverImages}
+                  videos={coverVideos}
+                  onImagesChange={setCoverImages}
+                  onVideosChange={setCoverVideos}
+                  maxImages={1}
+                  maxVideos={0}
+                  maxFileSize={5}
+                />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
