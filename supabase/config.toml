@@ -1,1 +1,5 @@
 project_id = "uegujjkjkoohucpbdjwj"
+
+[auth]
+enable_signup = true
+enable_confirmations = false
