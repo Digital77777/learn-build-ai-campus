@@ -2,6 +2,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+import { z } from 'zod';
+
+// Message validation schema
+const messageSchema = z.object({
+  content: z.string()
+    .trim()
+    .min(1, { message: "Message cannot be empty" })
+    .max(2000, { message: "Message must be less than 2000 characters" }),
+});
+
 export interface Message {
   id: string;
   sender_id: string;
@@ -141,13 +151,19 @@ export const useMessages = () => {
   // Send a message
   const sendMessage = useMutation({
     mutationFn: async ({ receiverId, content }: { receiverId: string; content: string }) => {
+      // Validate input
+      const validation = messageSchema.safeParse({ content });
+      if (!validation.success) {
+        throw new Error(validation.error.errors[0].message);
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       const { error } = await supabase.from('messages').insert({
         sender_id: user.id,
         receiver_id: receiverId,
-        content,
+        content: validation.data.content,
       });
 
       if (error) throw error;
@@ -156,10 +172,10 @@ export const useMessages = () => {
       queryClient.invalidateQueries({ queryKey: ['messages'] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: 'Error',
-        description: 'Failed to send message',
+        description: error.message || 'Failed to send message',
         variant: 'destructive',
       });
     },

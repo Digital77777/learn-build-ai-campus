@@ -10,9 +10,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { formatDistanceToNow } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 const InboxPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,6 +47,16 @@ const InboxPage = () => {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!messageText.trim() || !selectedUserId) return;
+
+    // Validate message length
+    if (messageText.trim().length > 2000) {
+      toast({
+        title: 'Message too long',
+        description: 'Message must be less than 2000 characters',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     await sendMessage.mutateAsync({
       receiverId: selectedUserId,
@@ -147,7 +159,13 @@ const InboxPage = () => {
                     </Avatar>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center justify-between mb-1">
-                        <p className="font-semibold text-sm truncate">
+                        <p 
+                          className="font-semibold text-sm truncate hover:text-primary cursor-pointer transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/profile/${conv.user_id}`);
+                          }}
+                        >
                           {conv.full_name || conv.email || 'Unknown User'}
                         </p>
                         {conv.last_message_time && (
@@ -202,7 +220,10 @@ const InboxPage = () => {
                   {getInitials(selectedConversation?.full_name, selectedConversation?.email)}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex-1 min-w-0">
+              <div 
+                className="flex-1 min-w-0 cursor-pointer hover:text-primary transition-colors"
+                onClick={() => navigate(`/profile/${selectedUserId}`)}
+              >
                 <p className="font-semibold text-sm truncate">
                   {selectedConversation?.full_name ||
                     selectedConversation?.email ||
@@ -257,16 +278,24 @@ const InboxPage = () => {
 
             {/* Message Input */}
             <form onSubmit={handleSendMessage} className="p-4 border-t border-border bg-card">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Type a message..."
-                  value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
-                  className="flex-1"
-                />
-                <Button type="submit" size="icon" disabled={!messageText.trim()}>
-                  <Send className="h-5 w-5" />
-                </Button>
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Type a message..."
+                    value={messageText}
+                    onChange={(e) => setMessageText(e.target.value)}
+                    className="flex-1"
+                    maxLength={2000}
+                  />
+                  <Button type="submit" size="icon" disabled={!messageText.trim()}>
+                    <Send className="h-5 w-5" />
+                  </Button>
+                </div>
+                <div className="flex justify-end">
+                  <span className={`text-xs ${messageText.length > 1900 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                    {messageText.length}/2000
+                  </span>
+                </div>
               </div>
             </form>
           </div>

@@ -185,6 +185,19 @@ const PublicProfilePage = () => {
                       <p className="text-foreground whitespace-pre-wrap">{profile.bio}</p>
                     </div>
                   )}
+
+                  {/* Message Button - Only show if viewing another user's profile */}
+                  {user && user.id !== userId && (
+                    <div className="pt-2">
+                      <Button
+                        onClick={() => navigate(`/community/inbox?userId=${userId}`)}
+                        className="bg-gradient-ai text-white"
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Send Message
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>

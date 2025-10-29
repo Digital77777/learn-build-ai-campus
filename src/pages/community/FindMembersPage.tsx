@@ -27,11 +27,12 @@ const FindMembersPage = () => {
     });
   };
 
-  const handleMessage = (memberName: string) => {
-    toast({
-      title: "Opening Chat",
-      description: `Starting conversation with ${memberName}...`,
-    });
+  const handleMessage = (memberId: string) => {
+    navigate(`/community/inbox?userId=${memberId}`);
+  };
+
+  const handleViewProfile = (memberId: string) => {
+    navigate(`/profile/${memberId}`);
   };
 
   const getInitials = (name: string | null) => {
@@ -62,7 +63,10 @@ const FindMembersPage = () => {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start gap-2 mb-1">
-                <h3 className="text-base sm:text-lg font-semibold truncate">
+                <h3 
+                  className="text-base sm:text-lg font-semibold truncate hover:text-primary cursor-pointer transition-colors"
+                  onClick={() => handleViewProfile(member.user_id)}
+                >
                   {member.full_name || "Anonymous User"}
                 </h3>
                 {member.is_top_contributor && (
@@ -94,7 +98,7 @@ const FindMembersPage = () => {
             <Button 
               size="sm"
               variant="outline"
-              onClick={() => handleMessage(member.full_name || "User")}
+              onClick={() => handleMessage(member.user_id)}
               className="flex-1 sm:flex-initial"
             >
               <MessageCircle className="h-4 w-4 sm:mr-1" />
