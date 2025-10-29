@@ -130,6 +130,10 @@ const CommunityPage = () => {
                 <Calendar className="mr-2 h-5 w-5" />
                 Browse Events
               </Button>
+              <Button variant="outline" size="lg" onClick={() => navigate('/community/inbox')}>
+                <MessageCircle className="mr-2 h-5 w-5" />
+                My Inbox
+              </Button>
             </div>
           </div>
         </div>
