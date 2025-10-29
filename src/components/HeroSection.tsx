@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, Brain, Coins, Zap, Users, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import heroImage from "@/assets/hero-ai-education.jpg";
+import heroImage from "@/assets/hero-ai-education-optimized.jpg";
 const HeroSection = () => {
   const navigate = useNavigate();
   return <section className="relative py-20 overflow-hidden">
@@ -67,8 +67,8 @@ const HeroSection = () => {
                 src={heroImage} 
                 alt="Students learning with AI tools" 
                 className="w-full h-[500px] object-cover" 
-                width="1337" 
-                height="1080"
+                width="1792" 
+                height="1024"
                 fetchPriority="high"
                 loading="eager"
               />
