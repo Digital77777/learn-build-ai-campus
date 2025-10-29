@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Send, Search, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Send, Search, MoreVertical, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,6 +11,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
+import { useConnections } from '@/hooks/useConnections';
+import { Separator } from '@/components/ui/separator';
 
 const InboxPage = () => {
   const navigate = useNavigate();
@@ -27,6 +29,9 @@ const InboxPage = () => {
   const { useConversations, useConversationMessages, sendMessage } = useMessages();
   const { data: conversations, isLoading: conversationsLoading } = useConversations();
   const { data: messages, isLoading: messagesLoading } = useConversationMessages(selectedUserId);
+  
+  const { usePendingRequests, acceptConnectionRequest, ignoreConnectionRequest } = useConnections();
+  const { data: pendingRequests = [] } = usePendingRequests();
 
   const selectedConversation = conversations?.find((c) => c.user_id === selectedUserId);
 
@@ -126,6 +131,66 @@ const InboxPage = () => {
               />
             </div>
           </div>
+
+          {/* Connection Requests */}
+          {pendingRequests.length > 0 && (
+            <div className="p-3 bg-muted/30">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-semibold">Connection Requests</p>
+                <Badge variant="secondary" className="text-xs">
+                  {pendingRequests.length}
+                </Badge>
+              </div>
+              <ScrollArea className="max-h-60">
+                <div className="space-y-2">
+                  {pendingRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="p-2 rounded-lg bg-card border border-border space-y-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="text-xs bg-primary/10 text-primary">
+                            {getInitials(request.requester?.full_name, request.requester?.email)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">
+                            {request.requester?.full_name || request.requester?.email || 'Unknown User'}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            wants to connect
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          className="flex-1 h-8 text-xs bg-primary hover:bg-primary/90"
+                          onClick={() => acceptConnectionRequest.mutate(request.id)}
+                          disabled={acceptConnectionRequest.isPending}
+                        >
+                          <Check className="h-3 w-3 mr-1" />
+                          Accept
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1 h-8 text-xs"
+                          onClick={() => ignoreConnectionRequest.mutate(request.id)}
+                          disabled={ignoreConnectionRequest.isPending}
+                        >
+                          <X className="h-3 w-3 mr-1" />
+                          Ignore
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+              <Separator className="mt-3" />
+            </div>
+          )}
 
           {/* Conversations */}
           <ScrollArea className="flex-1">

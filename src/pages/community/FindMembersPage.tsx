@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Search, MessageCircle, UserPlus, Award, Loader2 } from "lucide-react";
+import { ArrowLeft, Search, MessageCircle, UserPlus, Award, Loader2, Check, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,22 +9,23 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useActiveMembers, type ActiveMember } from "@/hooks/useActiveMembers";
+import { useConnections } from "@/hooks/useConnections";
+import { useAuth } from "@/hooks/useAuth";
 
 const FindMembersPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const { data: members = [], isLoading } = useActiveMembers(searchQuery);
+  const { sendConnectionRequest } = useConnections();
 
   const topContributors = useMemo(() => {
     return members.filter((m) => m.is_top_contributor);
   }, [members]);
 
-  const handleConnect = (memberId: string, memberName: string) => {
-    toast({
-      title: "Connection Request Sent",
-      description: `Your connection request has been sent to ${memberName}.`,
-    });
+  const handleConnect = (memberId: string) => {
+    sendConnectionRequest.mutate(memberId);
   };
 
   const handleMessage = (memberId: string) => {
@@ -49,7 +50,48 @@ const FindMembersPage = () => {
     return new Date(date).getFullYear().toString();
   };
 
-  const MemberCard = ({ member }: { member: ActiveMember }) => (
+  const MemberCard = ({ member }: { member: ActiveMember }) => {
+    const { useConnectionStatus } = useConnections();
+    const { data: connectionStatus } = useConnectionStatus(member.user_id);
+    const isOwnProfile = user?.id === member.user_id;
+
+    const getConnectionButton = () => {
+      if (isOwnProfile) return null;
+
+      if (connectionStatus) {
+        if (connectionStatus.status === "accepted") {
+          return (
+            <Button size="sm" variant="outline" disabled className="bg-green-50 text-green-700 border-green-200">
+              <Check className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Connected</span>
+            </Button>
+          );
+        }
+        if (connectionStatus.status === "pending") {
+          const isPendingRequest = connectionStatus.requester_id === user?.id;
+          return (
+            <Button size="sm" variant="outline" disabled className="bg-amber-50 text-amber-700 border-amber-200">
+              <Clock className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">{isPendingRequest ? "Pending" : "Request Received"}</span>
+            </Button>
+          );
+        }
+      }
+
+      return (
+        <Button
+          size="sm"
+          onClick={() => handleConnect(member.user_id)}
+          className="bg-gradient-ai text-white flex-1 sm:flex-initial"
+          disabled={sendConnectionRequest.isPending}
+        >
+          <UserPlus className="h-4 w-4 sm:mr-1" />
+          <span className="hidden sm:inline">Connect</span>
+        </Button>
+      );
+    };
+
+    return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardContent className="p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-start gap-4">
@@ -87,28 +129,24 @@ const FindMembersPage = () => {
             </div>
           </div>
           <div className="flex sm:flex-col gap-2 w-full sm:w-auto">
-            <Button 
-              size="sm"
-              onClick={() => handleConnect(member.user_id, member.full_name || "User")}
-              className="bg-gradient-ai text-white flex-1 sm:flex-initial"
-            >
-              <UserPlus className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Connect</span>
-            </Button>
-            <Button 
-              size="sm"
-              variant="outline"
-              onClick={() => handleMessage(member.user_id)}
-              className="flex-1 sm:flex-initial"
-            >
-              <MessageCircle className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Message</span>
-            </Button>
+            {getConnectionButton()}
+            {!isOwnProfile && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleMessage(member.user_id)}
+                className="flex-1 sm:flex-initial"
+              >
+                <MessageCircle className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Message</span>
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>
     </Card>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">
