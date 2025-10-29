@@ -62,11 +62,11 @@ const HeroSection = () => {
 
           {/* Right Content - Hero Image */}
           <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-ai min-h-[500px]">
+            <div className="relative rounded-2xl overflow-hidden shadow-ai h-[500px]">
               <img 
                 src={heroImage} 
                 alt="Students learning with AI tools" 
-                className="w-full h-[500px] object-cover" 
+                className="w-full h-full object-cover" 
                 width="1792" 
                 height="1024"
                 fetchPriority="high"
