@@ -39,7 +39,7 @@ All colors MUST be HSL.
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 140 85% 45%;
+    --success: 140 85% 35%;
     --success-foreground: 0 0% 100%;
 
     /* Borders and inputs */
