@@ -160,11 +160,11 @@ const FindMembersPage = () => {
           Back to Community
         </Button>
 
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-ai bg-clip-text text-transparent">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-gradient-ai bg-clip-text text-transparent">
             Find Active Members
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Connect with AI enthusiasts, experts, and fellow learners
           </p>
         </div>
@@ -183,10 +183,15 @@ const FindMembersPage = () => {
 
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid w-full grid-cols-2 max-w-md">
-            <TabsTrigger value="all">All Members</TabsTrigger>
-            <TabsTrigger value="top" className="gap-2">
-              <Award className="h-4 w-4" />
-              Top Contributors
+            <TabsTrigger value="all" className="data-[state=active]:bg-primary/10">
+              <Search className="h-4 w-4 mr-1.5 shrink-0" />
+              <span className="hidden sm:inline">All Members</span>
+              <span className="sm:hidden text-xs">All</span>
+            </TabsTrigger>
+            <TabsTrigger value="top" className="gap-1.5 data-[state=active]:bg-primary/10">
+              <Award className="h-4 w-4 shrink-0" />
+              <span className="hidden sm:inline">Top Contributors</span>
+              <span className="sm:hidden text-xs">Top</span>
             </TabsTrigger>
           </TabsList>
 

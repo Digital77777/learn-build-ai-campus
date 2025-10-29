@@ -74,10 +74,10 @@ const HostEventPage = () => {
           Back to Community
         </Button>
 
-        <Card>
+        <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl">Host an Event</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-xl sm:text-2xl">Host an Event</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Create a workshop, Q&A session, or demo for the community
             </CardDescription>
           </CardHeader>
@@ -195,8 +195,8 @@ const HostEventPage = () => {
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <Button type="submit" className="bg-gradient-ai text-white" disabled={isSubmitting}>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button type="submit" className="w-full sm:w-auto bg-gradient-ai text-white" disabled={isSubmitting}>
                   <Calendar className="mr-2 h-4 w-4" />
                   {isSubmitting ? "Creating..." : "Create Event"}
                 </Button>
@@ -205,6 +205,7 @@ const HostEventPage = () => {
                   variant="outline" 
                   onClick={() => navigate("/community")}
                   disabled={isSubmitting}
+                  className="w-full sm:w-auto"
                 >
                   Cancel
                 </Button>

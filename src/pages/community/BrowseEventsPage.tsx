@@ -142,7 +142,7 @@ const BrowseEventsPage = () => {
               <Filter className="mr-2 h-4 w-4" />
               Filters
             </Button>
-            <Button onClick={() => navigate("/community/host-event")} className="bg-gradient-ai text-white">
+            <Button onClick={() => navigate("/community/host-event")} className="w-full sm:w-auto bg-gradient-ai text-white">
               <Calendar className="mr-2 h-4 w-4" />
               Host Event
             </Button>
@@ -175,8 +175,16 @@ const BrowseEventsPage = () => {
 
         <Tabs defaultValue="upcoming" className="w-full">
           <TabsList className="grid w-full grid-cols-2 max-w-md">
-            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-            <TabsTrigger value="live">Live Now</TabsTrigger>
+            <TabsTrigger value="upcoming" className="data-[state=active]:bg-primary/10">
+              <Calendar className="h-4 w-4 mr-1.5 shrink-0" />
+              <span className="hidden sm:inline">Upcoming</span>
+              <span className="sm:hidden text-xs">Upcoming</span>
+            </TabsTrigger>
+            <TabsTrigger value="live" className="data-[state=active]:bg-primary/10">
+              <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse mr-1.5 shrink-0" />
+              <span className="hidden sm:inline">Live Now</span>
+              <span className="sm:hidden text-xs">Live</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="upcoming" className="space-y-6 mt-6">

@@ -252,25 +252,28 @@ const CommunityPage = () => {
             {/* Tabs Navigation */}
             <Tabs defaultValue="topics" className="w-full" onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="topics" className="flex items-center justify-center gap-2">
-                  <MessageCircle className="h-4 w-4" />
-                  <span className="hidden sm:inline">Discussion Topics</span>
+                <TabsTrigger value="topics" className="flex items-center justify-center gap-1.5 data-[state=active]:bg-primary/10">
+                  <MessageCircle className="h-4 w-4 shrink-0" />
+                  <span className="hidden sm:inline">Discussion</span>
+                  <span className="sm:hidden text-xs">Topics</span>
                 </TabsTrigger>
-                <TabsTrigger value="events" className="flex items-center justify-center gap-2">
-                  <Calendar className="h-4 w-4" />
+                <TabsTrigger value="events" className="flex items-center justify-center gap-1.5 data-[state=active]:bg-primary/10">
+                  <Calendar className="h-4 w-4 shrink-0" />
                   <span className="hidden sm:inline">Live Events</span>
+                  <span className="sm:hidden text-xs">Events</span>
                 </TabsTrigger>
-                <TabsTrigger value="insights" className="flex items-center justify-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
+                <TabsTrigger value="insights" className="flex items-center justify-center gap-1.5 data-[state=active]:bg-primary/10">
+                  <TrendingUp className="h-4 w-4 shrink-0" />
                   <span className="hidden sm:inline">Insights</span>
+                  <span className="sm:hidden text-xs">Insights</span>
                 </TabsTrigger>
               </TabsList>
 
               {/* Topics Tab */}
               <TabsContent value="topics" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-semibold">Recent Discussions</h2>
-              <Button onClick={handleStartTopic}>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+              <h2 className="text-xl sm:text-2xl font-semibold">Recent Discussions</h2>
+              <Button onClick={handleStartTopic} className="w-full sm:w-auto">
                 <Plus className="mr-2 h-4 w-4" />
                 New Topic
               </Button>
@@ -399,9 +402,9 @@ const CommunityPage = () => {
 
               {/* Events Tab */}
               <TabsContent value="events" className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Upcoming Events</h2>
-                <Button onClick={handleHostEvent}>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <h2 className="text-xl sm:text-2xl font-semibold">Upcoming Events</h2>
+                <Button onClick={handleHostEvent} className="w-full sm:w-auto bg-gradient-ai text-white">
                   <Calendar className="mr-2 h-4 w-4" />
                   Host Event
                 </Button>
@@ -469,10 +472,10 @@ const CommunityPage = () => {
 
               {/* Insights Tab */}
               <TabsContent value="insights" className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Community Insights</h2>
-                <Button onClick={handleShareInsight}>
-                  <Plus className="mr-2 h-4 w-4" />
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <h2 className="text-xl sm:text-2xl font-semibold">Community Insights</h2>
+                <Button onClick={handleShareInsight} className="w-full sm:w-auto bg-gradient-ai text-white">
+                  <TrendingUp className="mr-2 h-4 w-4" />
                   Share Insight
                 </Button>
               </div>
@@ -568,53 +571,88 @@ const CommunityPage = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Community Stats */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Community Stats</CardTitle>
+            <Card className="shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">Community Stats</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Active Members</span>
-                  <span className="font-semibold">{stats?.activeMembers || 0}</span>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <div className="p-1.5 bg-primary/10 rounded-md">
+                      <Users className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium">Active Members</span>
+                  </div>
+                  <span className="font-bold text-lg">{stats?.activeMembers || 0}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Topics</span>
-                  <span className="font-semibold">{stats?.topicsToday || 0}</span>
+                <div className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <div className="p-1.5 bg-primary/10 rounded-md">
+                      <MessageCircle className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium">Topics</span>
+                  </div>
+                  <span className="font-bold text-lg">{stats?.topicsToday || 0}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Events</span>
-                  <span className="font-semibold">{stats?.eventsThisWeek || 0}</span>
+                <div className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <div className="p-1.5 bg-primary/10 rounded-md">
+                      <Calendar className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium">Events</span>
+                  </div>
+                  <span className="font-bold text-lg">{stats?.eventsThisWeek || 0}</span>
                 </div>
               </CardContent>
             </Card>
 
             {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
+            <Card className="shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">Quick Actions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-2">
                 {user && (
                   <Button 
                     variant="outline" 
-                    className="w-full justify-start" 
+                    className="w-full justify-start hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors" 
                     onClick={() => navigate("/community/my-activity")}
                   >
                     <TrendingUp className="mr-2 h-4 w-4" />
-                    My Activity
+                    <span className="font-medium">My Activity</span>
                   </Button>
                 )}
-                <Button variant="outline" className="w-full justify-start" onClick={handleStartDiscussion}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Start Discussion
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors" 
+                  onClick={handleStartDiscussion}
+                >
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  <span className="font-medium">Start Discussion</span>
                 </Button>
-                <Button variant="outline" className="w-full justify-start" onClick={handleCreateEvent}>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors" 
+                  onClick={handleCreateEvent}
+                >
                   <Calendar className="mr-2 h-4 w-4" />
-                  Create Event
+                  <span className="font-medium">Create Event</span>
                 </Button>
-                <Button variant="outline" className="w-full justify-start" onClick={handleFindMembers}>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors" 
+                  onClick={handleShareInsight}
+                >
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  <span className="font-medium">Share Insight</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors" 
+                  onClick={handleFindMembers}
+                >
                   <Users className="mr-2 h-4 w-4" />
-                  Find Members
+                  <span className="font-medium">Find Members</span>
                 </Button>
               </CardContent>
             </Card>

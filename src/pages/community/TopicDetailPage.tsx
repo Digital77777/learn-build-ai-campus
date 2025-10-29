@@ -198,20 +198,20 @@ const TopicDetailPage = () => {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-6 py-12 max-w-4xl">
+      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         {/* Topic Content */}
-        <Card className="mb-8">
-          <CardContent className="p-6">
+        <Card className="mb-6 sm:mb-8 shadow-sm">
+          <CardContent className="p-4 sm:p-6">
             <div className="prose prose-sm max-w-none">
-              <p className="whitespace-pre-wrap text-foreground">{topic.content}</p>
+              <p className="whitespace-pre-wrap text-foreground leading-relaxed">{topic.content}</p>
             </div>
           </CardContent>
         </Card>
 
         {/* Replies Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-            <MessageCircle className="w-6 h-6" />
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 flex items-center gap-2">
+            <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             Replies ({topic.topic_replies?.length || 0})
           </h2>
 
@@ -278,9 +278,9 @@ const TopicDetailPage = () => {
 
         {/* Reply Form */}
         {user ? (
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Add a Reply</h3>
+          <Card className="shadow-sm">
+            <CardContent className="p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold mb-4">Add a Reply</h3>
               <div className="space-y-4">
                 <Textarea
                   placeholder="Share your thoughts..."
