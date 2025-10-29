@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart, X } from "lucide-react";
+import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart, X, Clock, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -411,10 +411,10 @@ const CommunityPage = () => {
               </div>
 
               {eventsLoading ? (
-                <div className="grid gap-4">
+                <div className="grid gap-3 sm:gap-4">
                   {[1, 2, 3].map((i) => (
-                    <Card key={i}>
-                      <CardContent className="p-6">
+                    <Card key={i} className="shadow-sm">
+                      <CardContent className="p-4 sm:p-6">
                         <Skeleton className="h-6 w-3/4 mb-4" />
                         <Skeleton className="h-4 w-full mb-2" />
                         <Skeleton className="h-4 w-2/3" />
@@ -423,46 +423,105 @@ const CommunityPage = () => {
                   ))}
                 </div>
               ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-3 sm:gap-4">
                   {events && events.length > 0 ? (
                     events.map((event) => (
-                      <Card key={event.id} className="hover:shadow-md transition-shadow">
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Badge variant="secondary">{event.event_type}</Badge>
-                                {event.is_online && <Badge variant="outline">Online</Badge>}
+                      <Card key={event.id} className="hover:shadow-lg transition-all border-border/40 shadow-sm">
+                        <CardContent className="p-4 sm:p-6">
+                          <div className="flex flex-col gap-4">
+                            {/* Event Header */}
+                            <div className="flex flex-wrap items-center gap-2">
+                              <Badge variant="secondary" className="capitalize text-xs font-medium">
+                                {event.event_type}
+                              </Badge>
+                              {event.is_online && (
+                                <Badge variant="outline" className="text-xs">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5" />
+                                  Online
+                                </Badge>
+                              )}
+                              {event.is_registered && (
+                                <Badge className="bg-green-600 hover:bg-green-700 text-xs ml-auto">
+                                  ✓ Registered
+                                </Badge>
+                              )}
+                            </div>
+
+                            {/* Event Title */}
+                            <div>
+                              <h3 className="text-base sm:text-lg font-semibold mb-2 leading-tight">
+                                {event.title}
+                              </h3>
+                              {event.description && (
+                                <p className="text-sm text-muted-foreground line-clamp-2">
+                                  {event.description}
+                                </p>
+                              )}
+                            </div>
+
+                            {/* Event Meta */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-muted-foreground">
+                              <div className="flex items-center gap-2">
+                                <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-primary" />
+                                <span className="font-medium">
+                                  {new Date(event.event_date).toLocaleDateString('en-US', { 
+                                    month: 'short', 
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  })}
+                                </span>
                               </div>
-                              <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                                <span>{new Date(event.event_date).toLocaleDateString()}</span>
-                                <span>•</span>
-                                <span>{event.event_time}</span>
-                                <span>•</span>
-                                <span>{event.attendees_count} attendees</span>
+                              <div className="flex items-center gap-2">
+                                <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-primary" />
+                                <span className="font-medium">{event.event_time}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-primary" />
+                                <span className="font-medium">
+                                  {event.attendees_count} {event.attendees_count === 1 ? 'attendee' : 'attendees'}
+                                </span>
                               </div>
                             </div>
+
+                            {/* Action Button */}
                             <Button
                               onClick={() => handleJoinEventClick(event.id, event.is_registered || false)}
                               disabled={event.is_registered}
+                              className="w-full sm:w-auto bg-gradient-ai text-white"
+                              size="sm"
                             >
-                              {event.is_registered ? "Registered" : "Join Event"}
+                              {event.is_registered ? (
+                                <>
+                                  <Check className="mr-2 h-4 w-4" />
+                                  Already Registered
+                                </>
+                              ) : (
+                                <>
+                                  <Calendar className="mr-2 h-4 w-4" />
+                                  Register Now
+                                </>
+                              )}
                             </Button>
                           </div>
                         </CardContent>
                       </Card>
                     ))
                   ) : (
-                    <Card>
-                      <CardContent className="p-12 text-center">
-                        <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-semibold mb-2">No upcoming events</h3>
-                        <p className="text-muted-foreground mb-4">Host an event to bring the community together!</p>
-                        <Button onClick={handleHostEvent}>
-                          <Calendar className="mr-2 h-4 w-4" />
-                          Host an Event
-                        </Button>
+                    <Card className="shadow-sm">
+                      <CardContent className="p-8 sm:p-12 text-center">
+                        <div className="flex flex-col items-center">
+                          <div className="p-3 bg-primary/10 rounded-full mb-4">
+                            <Calendar className="w-8 h-8 sm:w-12 sm:h-12 text-primary" />
+                          </div>
+                          <h3 className="text-base sm:text-lg font-semibold mb-2">No upcoming events</h3>
+                          <p className="text-sm text-muted-foreground mb-4 max-w-sm">
+                            Host an event to bring the community together!
+                          </p>
+                          <Button onClick={handleHostEvent} className="w-full sm:w-auto bg-gradient-ai text-white">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Host an Event
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   )}
