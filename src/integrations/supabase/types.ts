@@ -993,9 +993,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      add_admin_user:
-        | { Args: { p_role?: string; p_user_id: string }; Returns: string }
-        | { Args: { user_email: string; user_role: string }; Returns: string }
       check_current_user_admin_status: {
         Args: never
         Returns: {
@@ -1075,6 +1072,7 @@ export type Database = {
         Args: { p_error_code: number; p_error_message: string }
         Returns: undefined
       }
+      refresh_admin_view: { Args: never; Returns: undefined }
       review_seller_profile:
         | {
             Args: {
