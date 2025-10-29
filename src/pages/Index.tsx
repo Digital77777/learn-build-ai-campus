@@ -34,10 +34,12 @@ const Index = () => {
   // Show standard landing page for non-authenticated users
   return (
     <div className="min-h-screen bg-background">
-      <HeroSection />
-      <LearningPaths />
-      <AITools />
-      <EarningsSection />
+      <main>
+        <HeroSection />
+        <LearningPaths />
+        <AITools />
+        <EarningsSection />
+      </main>
       <Footer />
       <WhatsAppReferralButton />
     </div>
