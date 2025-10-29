@@ -103,6 +103,39 @@ export const useMessages = () => {
           }
         }
 
+        // Get accepted connections
+        const { data: connections } = await supabase
+          .from('user_connections')
+          .select('requester_id, recipient_id')
+          .or(`requester_id.eq.${user.id},recipient_id.eq.${user.id}`)
+          .eq('status', 'accepted');
+
+        // Add accepted connections that don't have messages yet
+        if (connections) {
+          for (const conn of connections) {
+            const partnerId = conn.requester_id === user.id ? conn.recipient_id : conn.requester_id;
+            
+            if (!conversationsMap.has(partnerId)) {
+              // Fetch partner profile
+              const { data: profile } = await supabase
+                .from('profiles')
+                .select('user_id, full_name, email, avatar_url')
+                .eq('user_id', partnerId)
+                .single();
+
+              conversationsMap.set(partnerId, {
+                user_id: partnerId,
+                full_name: profile?.full_name,
+                email: profile?.email,
+                avatar_url: profile?.avatar_url,
+                last_message: undefined,
+                last_message_time: undefined,
+                unread_count: 0,
+              });
+            }
+          }
+        }
+
         return Array.from(conversationsMap.values());
       },
     });

@@ -145,6 +145,7 @@ export const useConnections = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pending-connection-requests"] });
       queryClient.invalidateQueries({ queryKey: ["connection-status"] });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
       toast({
         title: "Connection Accepted",
         description: "You are now connected!",
