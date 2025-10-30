@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart, X, Clock, Check } from "lucide-react";
+import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart, X, Clock, Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,8 @@ const CommunityPage = () => {
   const [eventType, setEventType] = useState("all");
   const [insightCategory, setInsightCategory] = useState("all");
   const [selectedInsight, setSelectedInsight] = useState<CommunityInsight | null>(null);
+  const [visibleTopicsCount, setVisibleTopicsCount] = useState(5);
+  const [visibleInsightsCount, setVisibleInsightsCount] = useState(5);
   const { user } = useAuth();
   const {
     useTopics,
@@ -115,6 +117,27 @@ const CommunityPage = () => {
     }
     return "U";
   };
+
+  // Pagination handlers
+  const loadMoreTopics = () => {
+    setVisibleTopicsCount(prev => prev + 5);
+  };
+
+  const loadMoreInsights = () => {
+    setVisibleInsightsCount(prev => prev + 5);
+  };
+
+  // Get visible items
+  const visibleTopics = topics?.slice(0, visibleTopicsCount) || [];
+  const hasMoreTopics = (topics?.length || 0) > visibleTopicsCount;
+
+  const filteredInsights = insights?.filter((insight) => {
+    const matchesCategory = insightCategory === "all" || insight.category === insightCategory;
+    return matchesCategory;
+  }) || [];
+  
+  const visibleInsights = filteredInsights.slice(0, visibleInsightsCount);
+  const hasMoreInsights = filteredInsights.length > visibleInsightsCount;
 
   return (
     <div className="min-h-screen bg-background">
@@ -300,8 +323,9 @@ const CommunityPage = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {topics && topics.length > 0 ? (
-                  topics.map((topic) => (
+                {visibleTopics.length > 0 ? (
+                  <>
+                    {visibleTopics.map((topic) => (
                     <Card 
                       key={topic.id} 
                       className="hover:shadow-md transition-all cursor-pointer border-border/40 overflow-hidden"
@@ -390,7 +414,22 @@ const CommunityPage = () => {
                         </div>
                       </CardContent>
                     </Card>
-                  ))
+                    ))}
+                    
+                    {hasMoreTopics && (
+                      <div className="flex justify-center py-8">
+                        <Button
+                          onClick={loadMoreTopics}
+                          variant="outline"
+                          size="lg"
+                          className="gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary transition-all"
+                        >
+                          <ChevronDown className="w-5 h-5" />
+                          Load More Discussions
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <Card>
                     <CardContent className="p-12 text-center">
@@ -564,8 +603,9 @@ const CommunityPage = () => {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {insights && insights.length > 0 ? (
-                    insights.map((insight) => (
+                  {visibleInsights.length > 0 ? (
+                    <>
+                      {visibleInsights.map((insight) => (
                       <Card 
                         key={insight.id} 
                         className="hover:shadow-md transition-shadow cursor-pointer"
@@ -630,7 +670,22 @@ const CommunityPage = () => {
                           </div>
                         </CardContent>
                       </Card>
-                    ))
+                      ))}
+                      
+                      {hasMoreInsights && (
+                        <div className="flex justify-center py-8">
+                          <Button
+                            onClick={loadMoreInsights}
+                            variant="outline"
+                            size="lg"
+                            className="gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary transition-all"
+                          >
+                            <ChevronDown className="w-5 h-5" />
+                            Load More Insights
+                          </Button>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <Card>
                       <CardContent className="p-12 text-center">
