@@ -81,12 +81,12 @@ export const InsightDetailModal = ({ insight, open, onOpenChange }: InsightDetai
 
           {/* Cover Image */}
           {insight.cover_image && (
-            <div className="rounded-lg overflow-hidden">
+            <div className="rounded-lg overflow-hidden bg-muted/30">
               <EnhancedImage
                 src={insight.cover_image}
                 alt={insight.title}
                 category="ai"
-                className="w-full h-64 object-cover"
+                className="w-full h-64 sm:h-80 object-contain"
               />
             </div>
           )}

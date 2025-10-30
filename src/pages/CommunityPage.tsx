@@ -570,12 +570,12 @@ const CommunityPage = () => {
                             )}
                           </div>
                           {insight.cover_image && (
-                            <div className="mb-4 rounded-lg overflow-hidden">
+                            <div className="mb-4 rounded-lg overflow-hidden bg-muted/30">
                               <EnhancedImage
                                 src={insight.cover_image}
                                 alt={insight.title}
                                 category="ai"
-                                className="w-full h-48 object-cover"
+                                className="w-full h-48 sm:h-56 object-contain"
                               />
                             </div>
                           )}
