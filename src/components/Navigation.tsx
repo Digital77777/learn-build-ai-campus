@@ -7,7 +7,6 @@ import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
-
 const Navigation = () => {
   const {
     user,
@@ -45,7 +44,7 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Brain className="h-8 w-8 text-primary" />
+            
             <span className="text-xl font-bold bg-gradient-ai bg-clip-text text-transparent">
               Digital Intelligence Marketplace
             </span>

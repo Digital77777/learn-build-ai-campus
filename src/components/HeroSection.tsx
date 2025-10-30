@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, Brain, Coins, Zap, Users, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 const HeroSection = () => {
   const navigate = useNavigate();
   return <section className="relative py-20 overflow-hidden">
@@ -14,10 +13,7 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full">
-                <Zap className="h-4 w-4 text-accent-foreground" />
-                <span className="text-sm font-medium text-accent-foreground">Free for University Students</span>
-              </div>
+              
               
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
                 Learn, Build & 
@@ -63,15 +59,7 @@ const HeroSection = () => {
           {/* Right Content - Hero Image */}
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden shadow-ai h-[500px]">
-              <img 
-                src="/hero-ai-education-optimized.jpg"
-                alt="Students learning with AI tools" 
-                className="w-full h-full object-cover" 
-                width="1792" 
-                height="1024"
-                fetchPriority="high"
-                loading="eager"
-              />
+              <img src="/hero-ai-education-optimized.jpg" alt="Students learning with AI tools" className="w-full h-full object-cover" width="1792" height="1024" fetchPriority="high" loading="eager" />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
             </div>
             
