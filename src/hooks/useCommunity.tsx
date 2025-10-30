@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import type { CommunityTopic, CommunityEvent, CommunityInsight } from "@/types/community";
+import { scoreTopics, scoreInsights, trackContentView } from "@/lib/recommendationAlgorithm";
 
 export const useCommunity = () => {
   const { toast } = useToast();
@@ -35,13 +36,16 @@ export const useCommunity = () => {
 
           const profilesMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
           
-          return data.map(topic => ({
+          const topicsWithProfiles = data.map(topic => ({
             ...topic,
             profiles: profilesMap.get(topic.user_id),
           })) as CommunityTopic[];
+          
+          // Apply recommendation algorithm
+          return scoreTopics(topicsWithProfiles);
         }
 
-        return data as CommunityTopic[];
+        return scoreTopics(data as CommunityTopic[]);
       },
     });
   };
@@ -255,14 +259,17 @@ export const useCommunity = () => {
             likedIds = new Set(likes?.map(l => l.insight_id) || []);
           }
           
-          return data.map(insight => ({
+          const insightsWithProfiles = data.map(insight => ({
             ...insight,
             profiles: profilesMap.get(insight.user_id),
             is_liked: likedIds.has(insight.id),
           })) as CommunityInsight[];
+          
+          // Apply recommendation algorithm
+          return scoreInsights(insightsWithProfiles);
         }
 
-        return data as CommunityInsight[];
+        return scoreInsights(data as CommunityInsight[]);
       },
     });
   };
@@ -549,5 +556,8 @@ export const useCommunity = () => {
     toggleInsightLike,
     useStats,
     useMyActivity,
+    trackContentView,
   };
 };
+
+export default useCommunity;

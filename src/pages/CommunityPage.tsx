@@ -36,6 +36,7 @@ const CommunityPage = () => {
     useStats,
     registerForEvent,
     toggleInsightLike,
+    trackContentView,
   } = useCommunity();
 
   const { data: topics, isLoading: topicsLoading } = useTopics(searchQuery);
@@ -92,12 +93,17 @@ const CommunityPage = () => {
     }
   };
 
-  const handleLikeInsight = async (insightId: string, isLiked: boolean) => {
+  const handleLikeInsight = async (insightId: string, isLiked: boolean, category?: string) => {
     if (!user) {
       navigate("/auth");
       return;
     }
     await toggleInsightLike.mutateAsync({ insightId, isLiked });
+    
+    // Track interaction for recommendation algorithm
+    if (!isLiked) {
+      trackContentView(insightId, 'insight', category);
+    }
   };
 
   const getInitials = (name: string | undefined, email: string | undefined) => {
@@ -299,7 +305,10 @@ const CommunityPage = () => {
                     <Card 
                       key={topic.id} 
                       className="hover:shadow-md transition-all cursor-pointer border-border/40 overflow-hidden"
-                      onClick={() => navigate(`/community/topic/${topic.id}`)}
+                      onClick={() => {
+                        trackContentView(topic.id, 'topic', undefined, topic.tags);
+                        navigate(`/community/topic/${topic.id}`);
+                      }}
                     >
                       <CardContent className="p-0">
                         {/* Post Header - Facebook Style */}
@@ -560,7 +569,10 @@ const CommunityPage = () => {
                       <Card 
                         key={insight.id} 
                         className="hover:shadow-md transition-shadow cursor-pointer"
-                        onClick={() => setSelectedInsight(insight)}
+                        onClick={() => {
+                          setSelectedInsight(insight);
+                          trackContentView(insight.id, 'insight', insight.category);
+                        }}
                       >
                         <CardContent className="p-6">
                           <div className="flex items-center gap-2 mb-2">
@@ -607,7 +619,7 @@ const CommunityPage = () => {
                               size="sm"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleLikeInsight(insight.id, insight.is_liked || false);
+                                handleLikeInsight(insight.id, insight.is_liked || false, insight.category);
                               }}
                             >
                               <Heart

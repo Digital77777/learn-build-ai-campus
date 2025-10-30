@@ -14,6 +14,7 @@ export interface CommunityTopic {
   last_activity_at?: string;
   topic_replies?: TopicReply[];
   profiles?: UserProfile;
+  recommendationScore?: number;
 }
 
 export interface TopicReply {
@@ -72,6 +73,7 @@ export interface CommunityInsight {
   insight_likes?: InsightLike[];
   profiles?: UserProfile;
   is_liked?: boolean;
+  recommendationScore?: number;
 }
 
 export interface InsightLike {
