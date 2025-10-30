@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { InsightDetailModal } from "@/components/community/InsightDetailModal";
 import type { CommunityInsight } from "@/types/community";
+import { EnhancedImage } from "@/components/media/EnhancedImage";
 
 const CommunityPage = () => {
   const navigate = useNavigate();
@@ -568,6 +569,16 @@ const CommunityPage = () => {
                               <Badge variant="secondary">{insight.read_time}</Badge>
                             )}
                           </div>
+                          {insight.cover_image && (
+                            <div className="mb-4 rounded-lg overflow-hidden">
+                              <EnhancedImage
+                                src={insight.cover_image}
+                                alt={insight.title}
+                                category="ai"
+                                className="w-full h-48 object-cover"
+                              />
+                            </div>
+                          )}
                           <h3 className="text-xl font-semibold mb-2 hover:text-primary transition-colors">
                             {insight.title}
                           </h3>

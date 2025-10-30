@@ -48,6 +48,7 @@ const ShareInsightPage = () => {
         content: formData.content.trim(),
         category: formData.category,
         read_time: formData.readTime || undefined,
+        cover_image: coverImages[0] || undefined,
       });
       navigate("/community");
     } finally {

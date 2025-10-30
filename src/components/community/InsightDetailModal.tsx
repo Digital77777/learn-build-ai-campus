@@ -6,6 +6,7 @@ import type { CommunityInsight } from "@/types/community";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { EnhancedImage } from "@/components/media/EnhancedImage";
 
 interface InsightDetailModalProps {
   insight: CommunityInsight;
@@ -80,11 +81,14 @@ export const InsightDetailModal = ({ insight, open, onOpenChange }: InsightDetai
 
           {/* Cover Image */}
           {insight.cover_image && (
-            <img
-              src={insight.cover_image}
-              alt={insight.title}
-              className="w-full h-64 object-cover rounded-lg"
-            />
+            <div className="rounded-lg overflow-hidden">
+              <EnhancedImage
+                src={insight.cover_image}
+                alt={insight.title}
+                category="ai"
+                className="w-full h-64 object-cover"
+              />
+            </div>
           )}
 
           {/* Content */}
