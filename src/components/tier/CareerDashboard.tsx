@@ -1,4 +1,4 @@
-import { Brain, Store, Gift, TrendingUp, Sparkles, Zap, Crown, HeadphonesIcon, Trophy, Target, Infinity } from 'lucide-react';
+import { Brain, Store, Gift, TrendingUp, Sparkles, Zap, Crown, HeadphonesIcon, Trophy, Target, Infinity, Award, Bot, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { TierHero } from './shared/TierHero';
@@ -83,8 +83,35 @@ export const CareerDashboard = () => {
             title="Premium Referrals"
             description="Earn 20% commission on every referral"
             buttonText="Maximize Earnings"
-            onClick={() => navigate('/referral')}
+            onClick={() => navigate('/referrals')}
             variant="premium"
+          />
+
+          <FeatureCard
+            icon={<Award className="h-10 w-10 text-primary" />}
+            title="Career Certification"
+            description="Earn professional AI certifications and credentials"
+            buttonText="View Certifications"
+            onClick={() => navigate('/career-certification')}
+            variant="highlighted"
+          />
+
+          <FeatureCard
+            icon={<Bot className="h-10 w-10 text-primary" />}
+            title="Personal AI Tutor"
+            description="24/7 AI-powered learning and personalized guidance"
+            buttonText="Start Learning"
+            onClick={() => navigate('/personal-ai-tutor')}
+            variant="highlighted"
+          />
+
+          <FeatureCard
+            icon={<Briefcase className="h-10 w-10 text-primary" />}
+            title="Job Placement"
+            description="Connect with top AI companies and career opportunities"
+            buttonText="Find Jobs"
+            onClick={() => navigate('/job-placement')}
+            variant="highlighted"
           />
 
           <FeatureCard
@@ -93,7 +120,7 @@ export const CareerDashboard = () => {
             description="Deep insights, forecasting, and business intelligence"
             buttonText="View Dashboard"
             onClick={() => navigate('/analytics')}
-            variant="highlighted"
+            variant="default"
           />
 
           <FeatureCard
@@ -102,7 +129,7 @@ export const CareerDashboard = () => {
             description="24/7 dedicated support with personal account manager"
             buttonText="Contact Support"
             onClick={() => navigate('/support')}
-            variant="highlighted"
+            variant="default"
           />
 
           <FeatureCard
@@ -111,7 +138,7 @@ export const CareerDashboard = () => {
             description="Be first to try new features and beta releases"
             buttonText="Explore Beta"
             onClick={() => navigate('/ai-tools')}
-            variant="highlighted"
+            variant="default"
           />
 
           <FeatureCard

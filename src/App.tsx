@@ -65,6 +65,9 @@ const FindMembersPage = lazy(() => import("./pages/community/FindMembersPage"));
 const InboxPage = lazy(() => import("./pages/community/InboxPage"));
 const ReferralPage = lazy(() => import("./pages/ReferralPage"));
 const PublicProfilePage = lazy(() => import("./pages/PublicProfilePage"));
+const CareerCertificationPage = lazy(() => import("./pages/CareerCertificationPage"));
+const PersonalAITutorPage = lazy(() => import("./pages/PersonalAITutorPage"));
+const JobPlacementPage = lazy(() => import("./pages/JobPlacementPage"));
 
 const queryClient = new QueryClient();
 
@@ -155,6 +158,9 @@ const App = () => (
                 <Route path="/support" element={<SupportPage />} />
                 <Route path="/strategy-sessions" element={<StrategySessionsPage />} />
                 <Route path="/creator-suite" element={<CreatorSuitePage />} />
+                <Route path="/career-certification" element={<CareerCertificationPage />} />
+                <Route path="/personal-ai-tutor" element={<PersonalAITutorPage />} />
+                <Route path="/job-placement" element={<JobPlacementPage />} />
                 <Route path="/auth" element={<Auth />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
