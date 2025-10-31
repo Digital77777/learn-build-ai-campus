@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart, X, Clock, Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,8 +28,8 @@ const CommunityPage = () => {
   const [eventType, setEventType] = useState("all");
   const [insightCategory, setInsightCategory] = useState("all");
   const [selectedInsight, setSelectedInsight] = useState<CommunityInsight | null>(null);
-  const [visibleTopicsCount, setVisibleTopicsCount] = useState(5);
-  const [visibleInsightsCount, setVisibleInsightsCount] = useState(5);
+  const [topicsPage, setTopicsPage] = useState(0);
+  const [insightsPage, setInsightsPage] = useState(0);
   const { user } = useAuth();
   const {
     useTopics,
@@ -45,6 +45,15 @@ const CommunityPage = () => {
   const { data: events, isLoading: eventsLoading } = useEvents(searchQuery);
   const { data: insights, isLoading: insightsLoading } = useInsights(searchQuery);
   const { data: stats } = useStats();
+
+  // Reset pagination when search query or filters change
+  useEffect(() => {
+    setTopicsPage(0);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setInsightsPage(0);
+  }, [searchQuery, insightCategory]);
 
   // Handler functions for button interactions
   const handleStartTopic = () => {
@@ -120,24 +129,28 @@ const CommunityPage = () => {
 
   // Pagination handlers
   const loadMoreTopics = () => {
-    setVisibleTopicsCount(prev => prev + 5);
+    setTopicsPage(prev => prev + 1);
   };
 
   const loadMoreInsights = () => {
-    setVisibleInsightsCount(prev => prev + 5);
+    setInsightsPage(prev => prev + 1);
   };
 
-  // Get visible items
-  const visibleTopics = topics?.slice(0, visibleTopicsCount) || [];
-  const hasMoreTopics = (topics?.length || 0) > visibleTopicsCount;
+  // Get visible items - show only 5 items per page
+  const startTopicIndex = topicsPage * 5;
+  const endTopicIndex = startTopicIndex + 5;
+  const visibleTopics = topics?.slice(startTopicIndex, endTopicIndex) || [];
+  const hasMoreTopics = (topics?.length || 0) > endTopicIndex;
 
   const filteredInsights = insights?.filter((insight) => {
     const matchesCategory = insightCategory === "all" || insight.category === insightCategory;
     return matchesCategory;
   }) || [];
   
-  const visibleInsights = filteredInsights.slice(0, visibleInsightsCount);
-  const hasMoreInsights = filteredInsights.length > visibleInsightsCount;
+  const startInsightIndex = insightsPage * 5;
+  const endInsightIndex = startInsightIndex + 5;
+  const visibleInsights = filteredInsights.slice(startInsightIndex, endInsightIndex);
+  const hasMoreInsights = filteredInsights.length > endInsightIndex;
 
   return (
     <div className="min-h-screen bg-background">
