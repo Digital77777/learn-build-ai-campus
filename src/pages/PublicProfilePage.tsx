@@ -152,46 +152,46 @@ const PublicProfilePage = () => {
         <div className="space-y-6">
           {/* Profile Header */}
           <Card>
-            <CardContent className="p-8">
-              <div className="flex flex-col md:flex-row gap-6 items-start">
-                <Avatar className="w-32 h-32">
+            <CardContent className="p-4 sm:p-6 md:p-8">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-start">
+                <Avatar className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 mx-auto md:mx-0">
                   <AvatarImage src={profile.avatar_url} />
-                  <AvatarFallback className="text-3xl">
+                  <AvatarFallback className="text-xl sm:text-2xl md:text-3xl">
                     {getInitials(profile.full_name, profile.email)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1 space-y-4">
-                  <div>
-                    <h1 className="text-3xl font-bold mb-1">
+                <div className="flex-1 space-y-3 md:space-y-4 w-full">
+                  <div className="text-center md:text-left">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 break-words">
                       {profile.full_name || "Community Member"}
                     </h1>
                     {profile.headline && (
-                      <p className="text-lg text-muted-foreground flex items-center gap-2">
-                        <Briefcase className="w-4 h-4" />
-                        {profile.headline}
+                      <p className="text-base sm:text-lg text-muted-foreground flex items-center justify-center md:justify-start gap-2 flex-wrap">
+                        <Briefcase className="w-4 h-4 flex-shrink-0" />
+                        <span className="break-words">{profile.headline}</span>
                       </p>
                     )}
                   </div>
 
                   {profile.location && (
-                    <p className="text-muted-foreground flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
-                      {profile.location}
+                    <p className="text-sm sm:text-base text-muted-foreground flex items-center justify-center md:justify-start gap-2">
+                      <MapPin className="w-4 h-4 flex-shrink-0" />
+                      <span className="break-words">{profile.location}</span>
                     </p>
                   )}
 
                   {profile.bio && (
                     <div className="pt-2">
-                      <p className="text-foreground whitespace-pre-wrap">{profile.bio}</p>
+                      <p className="text-sm sm:text-base text-foreground whitespace-pre-wrap break-words text-center md:text-left">{profile.bio}</p>
                     </div>
                   )}
 
                   {/* Message Button - Only show if viewing another user's profile */}
                   {user && user.id !== userId && (
-                    <div className="pt-2">
+                    <div className="pt-2 flex justify-center md:justify-start">
                       <Button
                         onClick={() => navigate(`/community/inbox?userId=${userId}`)}
-                        className="bg-gradient-ai text-white"
+                        className="bg-gradient-ai text-white w-full sm:w-auto"
                       >
                         <MessageCircle className="w-4 h-4 mr-2" />
                         Send Message
@@ -206,13 +206,13 @@ const PublicProfilePage = () => {
           {/* Skills & Expertise */}
           {profile.skills && profile.skills.length > 0 && (
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Skills & Expertise</CardTitle>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Skills & Expertise</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                   {profile.skills.map((skill: string) => (
-                    <Badge key={skill} variant="secondary" className="text-sm px-3 py-1">
+                    <Badge key={skill} variant="secondary" className="text-xs sm:text-sm px-2 sm:px-3 py-1">
                       {skill}
                     </Badge>
                   ))}
@@ -224,20 +224,20 @@ const PublicProfilePage = () => {
           {/* Links & Contact */}
           {(profile.website || profile.linkedin_url || profile.github_url || profile.twitter_url || profile.email) && (
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <LinkIcon className="w-5 h-5" />
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+                  <LinkIcon className="w-4 sm:w-5 h-4 sm:h-5" />
                   Links & Contact
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 p-4 sm:p-6 pt-0">
                 {profile.email && (
                   <a
                     href={`mailto:${profile.email}`}
-                    className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                    className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors break-all"
                   >
-                    <Mail className="w-5 h-5" />
-                    <span>{profile.email}</span>
+                    <Mail className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
+                    <span className="break-all">{profile.email}</span>
                   </a>
                 )}
 
@@ -248,10 +248,10 @@ const PublicProfilePage = () => {
                       href={profile.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                      className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors break-all"
                     >
-                      <LinkIcon className="w-5 h-5" />
-                      <span>{profile.website}</span>
+                      <LinkIcon className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
+                      <span className="break-all">{profile.website}</span>
                     </a>
                   </>
                 )}
@@ -263,9 +263,9 @@ const PublicProfilePage = () => {
                       href={profile.linkedin_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                      className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors"
                     >
-                      <Linkedin className="w-5 h-5" />
+                      <Linkedin className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
                       <span>LinkedIn Profile</span>
                     </a>
                   </>
@@ -278,9 +278,9 @@ const PublicProfilePage = () => {
                       href={profile.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                      className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors"
                     >
-                      <Github className="w-5 h-5" />
+                      <Github className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
                       <span>GitHub Profile</span>
                     </a>
                   </>
@@ -293,9 +293,9 @@ const PublicProfilePage = () => {
                       href={profile.twitter_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                      className="flex items-center gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors"
                     >
-                      <Twitter className="w-5 h-5" />
+                      <Twitter className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
                       <span>Twitter / X Profile</span>
                     </a>
                   </>
@@ -307,26 +307,26 @@ const PublicProfilePage = () => {
           {/* Community Activity */}
           {activity && (activity.topics.length > 0 || activity.insights.length > 0 || activity.events.length > 0) && (
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Community Contributions</CardTitle>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Community Contributions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-6 p-4 sm:p-6 pt-0">
                 {/* Topics */}
                 {activity.topics.length > 0 && (
                   <div>
-                    <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <MessageCircle className="w-4 h-4" />
+                    <h4 className="text-sm sm:text-base font-semibold mb-3 flex items-center gap-2">
+                      <MessageCircle className="w-4 h-4 flex-shrink-0" />
                       Recent Topics
                     </h4>
                     <div className="space-y-2">
                       {activity.topics.map((topic) => (
                         <div
                           key={topic.id}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                           onClick={() => navigate(`/community/topic/${topic.id}`)}
                         >
-                          <span className="text-sm">{topic.title}</span>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-sm break-words">{topic.title}</span>
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">
                             {new Date(topic.created_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -338,21 +338,22 @@ const PublicProfilePage = () => {
                 {/* Insights */}
                 {activity.insights.length > 0 && (
                   <div>
-                    <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <Lightbulb className="w-4 h-4" />
+                    <h4 className="text-sm sm:text-base font-semibold mb-3 flex items-center gap-2">
+                      <Lightbulb className="w-4 h-4 flex-shrink-0" />
                       Recent Insights
                     </h4>
                     <div className="space-y-2">
                       {activity.insights.map((insight) => (
                         <div
                           key={insight.id}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                          className="flex flex-col gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                           onClick={() => setSelectedInsightId(insight.id)}
                         >
-                          <span className="text-sm">{insight.title}</span>
-                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                            <span>{insight.likes_count} likes</span>
-                            <span>{new Date(insight.created_at).toLocaleDateString()}</span>
+                          <span className="text-sm break-words">{insight.title}</span>
+                          <div className="flex items-center gap-2 sm:gap-3 text-xs text-muted-foreground flex-wrap">
+                            <span className="whitespace-nowrap">{insight.likes_count} likes</span>
+                            <span>•</span>
+                            <span className="whitespace-nowrap">{new Date(insight.created_at).toLocaleDateString()}</span>
                           </div>
                         </div>
                       ))}
@@ -363,8 +364,8 @@ const PublicProfilePage = () => {
                 {/* Events */}
                 {activity.events.length > 0 && (
                   <div>
-                    <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
+                    <h4 className="text-sm sm:text-base font-semibold mb-3 flex items-center gap-2">
+                      <Calendar className="w-4 h-4 flex-shrink-0" />
                       Hosted Events
                     </h4>
                     <div className="space-y-2">
@@ -376,18 +377,18 @@ const PublicProfilePage = () => {
                         return (
                           <div
                             key={event.id}
-                            className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                             onClick={() => navigate(`/community/browse-events?eventId=${event.id}`)}
                           >
                             <div className="flex items-center gap-2 flex-1 min-w-0">
-                              <span className="text-sm truncate">{event.title}</span>
+                              <span className="text-sm break-words">{event.title}</span>
                               {isRegistered && (
                                 <Badge variant="secondary" className="text-xs shrink-0">
                                   Registered
                                 </Badge>
                               )}
                             </div>
-                            <span className="text-xs text-muted-foreground shrink-0 ml-2">
+                            <span className="text-xs text-muted-foreground whitespace-nowrap">
                               {new Date(event.event_date).toLocaleDateString()}
                             </span>
                           </div>
