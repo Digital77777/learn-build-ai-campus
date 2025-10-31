@@ -96,29 +96,29 @@ const MyActivityPage = () => {
           </div>
         ) : (
           <Tabs defaultValue="topics" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="topics" className="flex items-center gap-1">
-                <MessageCircle className="w-4 h-4 md:hidden" />
-                <span className="hidden md:inline">My Topics</span>
-                <span className="md:hidden">Topics</span>
+            <TabsList className="flex md:grid w-full md:grid-cols-4 overflow-x-auto">
+              <TabsTrigger value="topics" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
+                <MessageCircle className="w-4 h-4" />
+                <span className="hidden sm:inline">My Topics</span>
+                <span className="sm:hidden">Topics</span>
                 <span className="ml-1">({activity?.topics?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="events" className="flex items-center gap-1">
-                <Calendar className="w-4 h-4 md:hidden" />
-                <span className="hidden md:inline">My Events</span>
-                <span className="md:hidden">Events</span>
+              <TabsTrigger value="events" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
+                <Calendar className="w-4 h-4" />
+                <span className="hidden sm:inline">My Events</span>
+                <span className="sm:hidden">Events</span>
                 <span className="ml-1">({activity?.events?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="insights" className="flex items-center gap-1">
-                <TrendingUp className="w-4 h-4 md:hidden" />
-                <span className="hidden md:inline">My Insights</span>
-                <span className="md:hidden">Insights</span>
+              <TabsTrigger value="insights" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
+                <TrendingUp className="w-4 h-4" />
+                <span className="hidden sm:inline">My Insights</span>
+                <span className="sm:hidden">Insights</span>
                 <span className="ml-1">({activity?.insights?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="profile" className="flex items-center gap-1">
-                <User className="w-4 h-4 md:hidden" />
-                <span className="hidden md:inline">My Profile</span>
-                <span className="md:hidden">Profile</span>
+              <TabsTrigger value="profile" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">My Profile</span>
+                <span className="sm:hidden">Profile</span>
               </TabsTrigger>
             </TabsList>
 
