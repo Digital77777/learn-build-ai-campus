@@ -126,6 +126,71 @@ const learningPaths = [
     gradient: "bg-gradient-learning",
     tier: 3,
     tierName: "Career"
+  },
+  {
+    id: "ai-research-leadership",
+    title: "Pushing the Boundaries",
+    description: "Lead research labs or cutting-edge AI teams with research methods and team leadership",
+    duration: "18-22 weeks",
+    students: "654",
+    level: "Expert",
+    earnings: "$8,000-15,000",
+    modules: ["AI Research Methods", "Scientific Thinking", "Research Teams", "Publishing", "Lab Culture"],
+    gradient: "bg-gradient-earn",
+    tier: 3,
+    tierName: "Career"
+  },
+  {
+    id: "ai-global-impact",
+    title: "Solving the World's Biggest Problems",
+    description: "Apply AI to global challenges including climate, poverty, and healthcare access",
+    duration: "16-20 weeks",
+    students: "892",
+    level: "Expert",
+    earnings: "$7,000-14,000",
+    modules: ["AI for Sustainability", "Climate Modeling", "Social Good", "Public Health", "SDGs"],
+    gradient: "bg-gradient-ai",
+    tier: 3,
+    tierName: "Career"
+  },
+  {
+    id: "robotics-autonomous",
+    title: "The Future of Machines",
+    description: "Combine AI with robotics, IoT, and autonomous tech beyond software",
+    duration: "20-24 weeks",
+    students: "743",
+    level: "Expert",
+    earnings: "$9,000-18,000",
+    modules: ["Robotics Foundations", "Autonomous Systems", "Self-Driving AI", "Drones", "ROS"],
+    gradient: "bg-gradient-earn",
+    tier: 3,
+    tierName: "Career"
+  },
+  {
+    id: "ai-human-augmentation",
+    title: "The Future of Humans + AI",
+    description: "Explore how AI merges with biology, creativity, and human potential",
+    duration: "16-20 weeks",
+    students: "567",
+    level: "Expert",
+    earnings: "$8,000-16,000",
+    modules: ["AI + Creativity", "Brain-Computer Interfaces", "AR/VR AI", "Neuroscience", "Human Enhancement"],
+    gradient: "bg-gradient-ai",
+    tier: 3,
+    tierName: "Career"
+  },
+  {
+    id: "ai-policy-diplomacy",
+    title: "Shaping the AI Future",
+    description: "Become an AI policymaker, global advisor, or tech diplomat",
+    duration: "14-18 weeks",
+    students: "823",
+    level: "Expert",
+    earnings: "$7,500-14,000",
+    modules: ["AI Policy & Governance", "Digital Rights", "Global Diplomacy", "AI Geopolitics", "Policy Frameworks"],
+    gradient: "bg-gradient-learning",
+    tier: 3,
+    tierName: "Career"
   }
 ];
 
