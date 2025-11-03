@@ -96,34 +96,33 @@ const MyActivityPage = () => {
           </div>
         ) : (
           <Tabs defaultValue="topics" className="w-full">
-            <TabsList className="flex md:grid w-full md:grid-cols-4 overflow-x-auto">
-              <TabsTrigger value="topics" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
-                <MessageCircle className="w-4 h-4" />
-                <span className="hidden sm:inline">My Topics</span>
-                <span className="sm:hidden">Topics</span>
-                <span className="ml-1">({activity?.topics?.length || 0})</span>
+            <TabsList className="grid w-full grid-cols-4 gap-1">
+              <TabsTrigger value="topics" className="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 py-2 sm:py-2.5">
+                <MessageCircle className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline text-xs sm:text-sm">My Topics</span>
+                <span className="text-[10px] sm:hidden">{activity?.topics?.length || 0}</span>
+                <span className="hidden sm:inline text-xs">({activity?.topics?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="events" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
-                <Calendar className="w-4 h-4" />
-                <span className="hidden sm:inline">My Events</span>
-                <span className="sm:hidden">Events</span>
-                <span className="ml-1">({activity?.events?.length || 0})</span>
+              <TabsTrigger value="events" className="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 py-2 sm:py-2.5">
+                <Calendar className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline text-xs sm:text-sm">My Events</span>
+                <span className="text-[10px] sm:hidden">{activity?.events?.length || 0}</span>
+                <span className="hidden sm:inline text-xs">({activity?.events?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="insights" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
-                <TrendingUp className="w-4 h-4" />
-                <span className="hidden sm:inline">My Insights</span>
-                <span className="sm:hidden">Insights</span>
-                <span className="ml-1">({activity?.insights?.length || 0})</span>
+              <TabsTrigger value="insights" className="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 py-2 sm:py-2.5">
+                <TrendingUp className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline text-xs sm:text-sm">My Insights</span>
+                <span className="text-[10px] sm:hidden">{activity?.insights?.length || 0}</span>
+                <span className="hidden sm:inline text-xs">({activity?.insights?.length || 0})</span>
               </TabsTrigger>
-              <TabsTrigger value="profile" className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
-                <User className="w-4 h-4" />
-                <span className="hidden sm:inline">My Profile</span>
-                <span className="sm:hidden">Profile</span>
+              <TabsTrigger value="profile" className="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 py-2 sm:py-2.5">
+                <User className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline text-xs sm:text-sm">My Profile</span>
               </TabsTrigger>
             </TabsList>
 
             {/* Topics Tab */}
-            <TabsContent value="topics" className="space-y-6 mt-6">
+            <TabsContent value="topics" className="space-y-4 sm:space-y-6 mt-6">
               {activity?.topics && activity.topics.length > 0 ? (
                 activity.topics.map((topic: CommunityTopic) => (
                   <Card 
@@ -131,33 +130,38 @@ const MyActivityPage = () => {
                     className="hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer group"
                     onClick={() => navigate(`/community/topic/${topic.id}`)}
                   >
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start justify-between mb-3 sm:mb-4">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                          <h3 className="text-base sm:text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
                             {topic.title}
                           </h3>
-                          <p className="text-muted-foreground mb-4 line-clamp-2">
+                          <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-2">
                             {topic.content.substring(0, 150)}...
                           </p>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
-                              <MessageCircle className="w-4 h-4" />
-                              <span>{topic.replies_count} replies</span>
+                              <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                              <span>{topic.replies_count} {topic.replies_count === 1 ? 'reply' : 'replies'}</span>
                             </div>
-                            <span>•</span>
-                            <span>
+                            <span className="hidden sm:inline">•</span>
+                            <span className="hidden sm:inline">
                               {formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}
                             </span>
                             {topic.tags && topic.tags.length > 0 && (
                               <>
-                                <span>•</span>
-                                <div className="flex gap-1">
-                                  {topic.tags.map((tag: string) => (
-                                    <Badge key={tag} variant="outline" className="text-xs">
+                                <span className="hidden sm:inline">•</span>
+                                <div className="flex flex-wrap gap-1">
+                                  {topic.tags.slice(0, 2).map((tag: string) => (
+                                    <Badge key={tag} variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto">
                                       {tag}
                                     </Badge>
                                   ))}
+                                  {topic.tags.length > 2 && (
+                                    <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto">
+                                      +{topic.tags.length - 2}
+                                    </Badge>
+                                  )}
                                 </div>
                               </>
                             )}
@@ -167,23 +171,23 @@ const MyActivityPage = () => {
 
                       {/* Comments from others */}
                       {topic.topic_replies && topic.topic_replies.length > 0 && (
-                        <div className="border-t pt-4 mt-4">
-                          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
-                            <MessageCircle className="w-4 h-4" />
+                        <div className="border-t pt-3 sm:pt-4 mt-3 sm:mt-4">
+                          <h4 className="text-xs sm:text-sm font-medium mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2">
+                            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                             Recent Comments ({topic.topic_replies.length})
                           </h4>
-                          <div className="space-y-3">
+                          <div className="space-y-2 sm:space-y-3">
                             {topic.topic_replies.slice(0, 3).map((reply) => (
                               <div 
                                 key={reply.id} 
-                                className="bg-muted/50 p-3 rounded-lg cursor-pointer hover:bg-muted transition-colors"
+                                className="bg-muted/50 p-2.5 sm:p-3 rounded-lg cursor-pointer hover:bg-muted transition-colors"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   navigate(`/community/topic/${topic.id}`);
                                 }}
                               >
-                                <p className="text-sm mb-2">{reply.content}</p>
-                                <span className="text-xs text-muted-foreground">
+                                <p className="text-xs sm:text-sm mb-1.5 sm:mb-2 line-clamp-2">{reply.content}</p>
+                                <span className="text-[10px] sm:text-xs text-muted-foreground">
                                   {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
                                 </span>
                               </div>
@@ -192,7 +196,7 @@ const MyActivityPage = () => {
                               <Button 
                                 variant="link" 
                                 size="sm" 
-                                className="p-0 h-auto"
+                                className="p-0 h-auto text-xs sm:text-sm"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   navigate(`/community/topic/${topic.id}`);
@@ -209,13 +213,13 @@ const MyActivityPage = () => {
                 ))
               ) : (
                 <Card>
-                  <CardContent className="p-12 text-center">
-                    <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold mb-2">No topics yet</h3>
-                    <p className="text-muted-foreground mb-4">
+                  <CardContent className="p-8 sm:p-12 text-center">
+                    <MessageCircle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
+                    <h3 className="text-base sm:text-lg font-semibold mb-2">No topics yet</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground mb-3 sm:mb-4">
                       Start a discussion to engage with the community!
                     </p>
-                    <Button onClick={() => navigate("/community/start-topic")}>
+                    <Button onClick={() => navigate("/community/start-topic")} className="w-full sm:w-auto">
                       Start a Topic
                     </Button>
                   </CardContent>
