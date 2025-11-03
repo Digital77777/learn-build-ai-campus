@@ -348,10 +348,10 @@ const CommunityPage = () => {
                       }}
                     >
                       <CardContent className="p-0">
-                        {/* Post Header - Facebook Style */}
-                        <div className="flex items-center gap-3 p-4 pb-3">
-                          <Avatar className="w-10 h-10">
-                            <AvatarFallback className="text-sm bg-primary/10 text-primary font-medium">
+                        {/* Post Header */}
+                        <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 pb-2 sm:pb-3">
+                          <Avatar className="w-9 h-9 sm:w-10 sm:h-10 shrink-0">
+                            <AvatarFallback className="text-xs sm:text-sm bg-primary/10 text-primary font-medium">
                               {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
                             </AvatarFallback>
                           </Avatar>
@@ -364,64 +364,64 @@ const CommunityPage = () => {
                               }
                             }}
                           >
-                            <p className="font-semibold text-sm leading-tight">
+                            <p className="font-semibold text-xs sm:text-sm leading-tight truncate">
                               {topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}
                             </p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-[10px] sm:text-xs text-muted-foreground">
                               {formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}
                             </p>
                           </div>
                           {topic.is_pinned && (
-                            <Badge variant="secondary" className="text-xs shrink-0">
-                              <TrendingUp className="w-3 h-3" />
+                            <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0 px-1.5 py-0.5">
+                              <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                             </Badge>
                           )}
                         </div>
 
                         {/* Post Content */}
-                        <div className="px-4 pb-3">
-                          <h3 className="text-base font-semibold mb-2 leading-snug">
+                        <div className="px-3 sm:px-4 pb-2 sm:pb-3">
+                          <h3 className="text-sm sm:text-base font-semibold mb-1.5 sm:mb-2 leading-snug line-clamp-2">
                             {topic.title}
                           </h3>
-                          <p className="text-sm text-foreground/80 leading-relaxed line-clamp-3">
+                          <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2 sm:line-clamp-3">
                             {topic.content}
                           </p>
                         </div>
 
                         {/* Tags */}
                         {topic.tags && topic.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 px-4 pb-3">
+                          <div className="flex flex-wrap gap-1 sm:gap-1.5 px-3 sm:px-4 pb-2 sm:pb-3">
                             {topic.tags.slice(0, 3).map((tag) => (
                               <Badge 
                                 key={tag} 
                                 variant="secondary" 
-                                className="text-xs font-normal bg-secondary/50"
+                                className="text-[10px] sm:text-xs font-normal bg-secondary/50 px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto"
                               >
                                 {tag}
                               </Badge>
                             ))}
                             {topic.tags.length > 3 && (
-                              <Badge variant="secondary" className="text-xs font-normal bg-secondary/50">
+                              <Badge variant="secondary" className="text-[10px] sm:text-xs font-normal bg-secondary/50 px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto">
                                 +{topic.tags.length - 3}
                               </Badge>
                             )}
                           </div>
                         )}
 
-                        {/* Post Actions - Facebook Style */}
-                        <div className="border-t border-border/40 px-4 py-2.5 flex items-center gap-1">
+                        {/* Post Actions */}
+                        <div className="border-t border-border/40 px-2 sm:px-4 py-2 sm:py-2.5 flex items-center gap-1">
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            className="flex-1 h-9 text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                            className="flex-1 h-8 sm:h-9 text-muted-foreground hover:text-foreground hover:bg-accent/50 text-xs sm:text-sm"
                             onClick={(e) => {
                               e.stopPropagation();
                               navigate(`/community/topic/${topic.id}`);
                             }}
                           >
-                            <MessageCircle className="w-4 h-4 mr-2" />
-                            <span className="text-sm font-medium">
-                              {topic.replies_count === 0 ? 'Comment' : `${topic.replies_count}`}
+                            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 shrink-0" />
+                            <span className="font-medium">
+                              {topic.replies_count === 0 ? 'Comment' : `${topic.replies_count} ${topic.replies_count === 1 ? 'reply' : 'replies'}`}
                             </span>
                           </Button>
                         </div>
