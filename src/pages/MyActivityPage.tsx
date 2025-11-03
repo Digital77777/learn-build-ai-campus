@@ -320,35 +320,41 @@ const MyActivityPage = () => {
             </TabsContent>
 
             {/* Insights Tab */}
-            <TabsContent value="insights" className="space-y-6 mt-6">
+            <TabsContent value="insights" className="space-y-4 sm:space-y-6 mt-6">
               {activity?.insights && activity.insights.length > 0 ? (
                 activity.insights.map((insight: CommunityInsight) => (
                   <Card key={insight.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start justify-between mb-3 sm:mb-4">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="outline">{insight.category}</Badge>
+                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2">
+                            <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 h-5 sm:h-auto">
+                              {insight.category}
+                            </Badge>
                             {insight.read_time && (
-                              <Badge variant="secondary">{insight.read_time}</Badge>
+                              <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 h-5 sm:h-auto">
+                                {insight.read_time}
+                              </Badge>
                             )}
                           </div>
-                          <h3 className="text-xl font-semibold mb-2">{insight.title}</h3>
-                          <p className="text-muted-foreground mb-4 line-clamp-3">
+                          <h3 className="text-base sm:text-xl font-semibold mb-2 leading-snug line-clamp-2">
+                            {insight.title}
+                          </h3>
+                          <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
                             {insight.content.substring(0, 200)}...
                           </p>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                              <Heart className="w-4 h-4" />
-                              <span>{insight.likes_count} likes</span>
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1 sm:gap-1.5">
+                              <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                              <span>{insight.likes_count} {insight.likes_count === 1 ? 'like' : 'likes'}</span>
                             </div>
                             <span>•</span>
-                            <div className="flex items-center gap-1">
-                              <TrendingUp className="w-4 h-4" />
-                              <span>{insight.views_count} views</span>
+                            <div className="flex items-center gap-1 sm:gap-1.5">
+                              <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                              <span>{insight.views_count} {insight.views_count === 1 ? 'view' : 'views'}</span>
                             </div>
-                            <span>•</span>
-                            <span>
+                            <span className="hidden sm:inline">•</span>
+                            <span className="hidden sm:inline">
                               {formatDistanceToNow(new Date(insight.created_at), { addSuffix: true })}
                             </span>
                           </div>
@@ -356,49 +362,52 @@ const MyActivityPage = () => {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex gap-2 mb-4">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setSelectedInsight(insight)}
+                          className="flex-1 sm:flex-none text-xs sm:text-sm h-8 sm:h-9"
                         >
-                          <Eye className="w-4 h-4 mr-2" />
-                          Read Full Insight
+                          <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">Read Full Insight</span>
+                          <span className="sm:hidden ml-1">Read</span>
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setEditingInsight(insight)}
+                          className="text-xs sm:text-sm h-8 sm:h-9"
                         >
-                          <Edit2 className="w-4 h-4 mr-2" />
-                          Edit
+                          <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">Edit</span>
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setDeletingInsightId(insight.id)}
-                          className="text-destructive hover:text-destructive"
+                          className="text-destructive hover:text-destructive text-xs sm:text-sm h-8 sm:h-9"
                         >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete
+                          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">Delete</span>
                         </Button>
                       </div>
 
                       {/* Likes from others */}
                       {insight.insight_likes && insight.insight_likes.length > 0 && (
-                        <div className="border-t pt-4 mt-4">
-                          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
-                            <Heart className="w-4 h-4" />
+                        <div className="border-t pt-3 sm:pt-4 mt-3 sm:mt-4">
+                          <h4 className="text-xs sm:text-sm font-medium mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2">
+                            <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                             Liked by {insight.insight_likes.length} {insight.insight_likes.length === 1 ? 'person' : 'people'}
                           </h4>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                             {insight.insight_likes.slice(0, 10).map((like) => (
-                              <Avatar key={like.id} className="w-8 h-8">
-                                <AvatarFallback className="text-xs bg-primary/10">U</AvatarFallback>
+                              <Avatar key={like.id} className="w-7 h-7 sm:w-8 sm:h-8">
+                                <AvatarFallback className="text-[10px] sm:text-xs bg-primary/10">U</AvatarFallback>
                               </Avatar>
                             ))}
                             {insight.insight_likes.length > 10 && (
-                              <span className="text-sm text-muted-foreground">
+                              <span className="text-xs sm:text-sm text-muted-foreground">
                                 +{insight.insight_likes.length - 10} more
                               </span>
                             )}
@@ -406,7 +415,7 @@ const MyActivityPage = () => {
                           <Button
                             variant="link"
                             size="sm"
-                            className="p-0 h-auto mt-2"
+                            className="p-0 h-auto mt-2 text-xs sm:text-sm"
                             onClick={() => setSelectedInsight(insight)}
                           >
                             View all who liked this insight
@@ -418,13 +427,13 @@ const MyActivityPage = () => {
                 ))
               ) : (
                 <Card>
-                  <CardContent className="p-12 text-center">
-                    <TrendingUp className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold mb-2">No insights yet</h3>
-                    <p className="text-muted-foreground mb-4">
+                  <CardContent className="p-8 sm:p-12 text-center">
+                    <TrendingUp className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
+                    <h3 className="text-base sm:text-lg font-semibold mb-2">No insights yet</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground mb-3 sm:mb-4">
                       Share your knowledge with the community!
                     </p>
-                    <Button onClick={() => navigate("/community/share-insight")}>
+                    <Button onClick={() => navigate("/community/share-insight")} className="w-full sm:w-auto">
                       Share an Insight
                     </Button>
                   </CardContent>
