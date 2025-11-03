@@ -1,0 +1,114 @@
+import React, { memo } from "react";
+import { useNavigate } from "react-router-dom";
+import { MessageCircle, TrendingUp } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { formatDistanceToNow } from "date-fns";
+import type { CommunityTopic } from "@/types/community";
+
+interface TopicCardProps {
+  topic: CommunityTopic;
+  onTopicClick: (topicId: string, tags?: string[]) => void;
+  getInitials: (name: string | undefined, email: string | undefined) => string;
+}
+
+export const TopicCard = memo(({ topic, onTopicClick, getInitials }: TopicCardProps) => {
+  const navigate = useNavigate();
+
+  return (
+    <Card 
+      className="hover:shadow-md transition-all cursor-pointer border-border/40 overflow-hidden"
+      onClick={() => onTopicClick(topic.id, topic.tags)}
+    >
+      <CardContent className="p-0">
+        {/* Post Header */}
+        <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 pb-2 sm:pb-3">
+          <Avatar className="w-9 h-9 sm:w-10 sm:h-10 shrink-0">
+            <AvatarFallback className="text-xs sm:text-sm bg-primary/10 text-primary font-medium">
+              {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
+            </AvatarFallback>
+          </Avatar>
+          <div 
+            className="flex-1 min-w-0 cursor-pointer hover:text-primary transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (topic.profiles?.user_id) {
+                navigate(`/profile/${topic.profiles.user_id}`);
+              }
+            }}
+          >
+            <p className="font-semibold text-xs sm:text-sm leading-tight truncate">
+              {topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}
+            </p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
+              {formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}
+            </p>
+          </div>
+          {topic.is_pinned && (
+            <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0 px-1.5 py-0.5">
+              <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+            </Badge>
+          )}
+        </div>
+
+        {/* Post Content */}
+        <div className="px-3 sm:px-4 pb-2 sm:pb-3">
+          <h3 className="text-sm sm:text-base font-semibold mb-1.5 sm:mb-2 leading-snug line-clamp-2">
+            {topic.title}
+          </h3>
+          <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2 sm:line-clamp-3">
+            {topic.content}
+          </p>
+        </div>
+
+        {/* Tags */}
+        {topic.tags && topic.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 px-3 sm:px-4 pb-2 sm:pb-3">
+            {topic.tags.slice(0, 3).map((tag) => (
+              <Badge 
+                key={tag} 
+                variant="secondary" 
+                className="text-[10px] sm:text-xs font-normal bg-secondary/50 px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto"
+              >
+                {tag}
+              </Badge>
+            ))}
+            {topic.tags.length > 3 && (
+              <Badge variant="secondary" className="text-[10px] sm:text-xs font-normal bg-secondary/50 px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto">
+                +{topic.tags.length - 3}
+              </Badge>
+            )}
+          </div>
+        )}
+
+        {/* Stats Footer */}
+        <div className="flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 sm:py-3 bg-muted/30 border-t border-border/40">
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground shrink-0" />
+            <span className="text-[11px] sm:text-sm text-foreground/70 font-medium">
+              {topic.replies_count || 0} {topic.replies_count === 1 ? 'reply' : 'replies'}
+            </span>
+          </div>
+          {topic.views !== undefined && (
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground shrink-0" />
+              <span className="text-[11px] sm:text-sm text-foreground/70 font-medium">
+                {topic.views} {topic.views === 1 ? 'view' : 'views'}
+              </span>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.topic.id === nextProps.topic.id &&
+    prevProps.topic.replies_count === nextProps.topic.replies_count &&
+    prevProps.topic.views === nextProps.topic.views &&
+    prevProps.topic.is_pinned === nextProps.topic.is_pinned
+  );
+});
+
+TopicCard.displayName = "TopicCard";

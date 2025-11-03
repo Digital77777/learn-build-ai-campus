@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, Heart, X, Clock, Check, ChevronDown } from "lucide-react";
+import { Users, Plus, Calendar, MessageCircle, TrendingUp, Search, Filter, X, ChevronDown, Heart, Clock, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useCommunity } from "@/hooks/useCommunity";
-import { formatDistanceToNow } from "date-fns";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/useAuth";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -16,8 +14,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { InsightDetailModal } from "@/components/community/InsightDetailModal";
-import type { CommunityInsight } from "@/types/community";
+import { TopicCard } from "@/components/community/TopicCard";
+import { EventCard } from "@/components/community/EventCard";
+import { InsightCard } from "@/components/community/InsightCard";
+import { useCommunity } from "@/hooks/useCommunity";
+import { formatDistanceToNow } from "date-fns";
 import { EnhancedImage } from "@/components/media/EnhancedImage";
+import type { CommunityInsight } from "@/types/community";
 
 const CommunityPage = () => {
   const navigate = useNavigate();
@@ -55,46 +58,42 @@ const CommunityPage = () => {
     setInsightsPage(0);
   }, [searchQuery, insightCategory]);
 
-  // Handler functions for button interactions
-  const handleStartTopic = () => {
+  // Handler functions for button interactions - wrapped in useCallback for performance
+  const handleStartTopic = useCallback(() => {
     navigate("/community/start-topic");
-  };
+  }, [navigate]);
 
-  const handleBrowseEvents = () => {
+  const handleBrowseEvents = useCallback(() => {
     navigate("/community/browse-events");
-  };
+  }, [navigate]);
 
-  const handleResetFilters = () => {
+  const handleResetFilters = useCallback(() => {
     setSortBy("recent");
     setEventType("all");
     setInsightCategory("all");
-  };
+  }, []);
 
-  const handleHostEvent = () => {
+  const handleHostEvent = useCallback(() => {
     navigate("/community/host-event");
-  };
+  }, [navigate]);
 
-  const handleJoinEvent = (eventId: number) => {
-    navigate("/community/browse-events");
-  };
-
-  const handleShareInsight = () => {
+  const handleShareInsight = useCallback(() => {
     navigate("/community/share-insight");
-  };
+  }, [navigate]);
 
-  const handleStartDiscussion = () => {
-    navigate("/community/start-topic");
-  };
-
-  const handleCreateEvent = () => {
-    navigate("/community/host-event");
-  };
-
-  const handleFindMembers = () => {
+  const handleFindMembers = useCallback(() => {
     navigate("/community/find-members");
-  };
+  }, [navigate]);
 
-  const handleJoinEventClick = async (eventId: string, isRegistered: boolean) => {
+  const handleStartDiscussion = useCallback(() => {
+    navigate("/community/start-topic");
+  }, [navigate]);
+
+  const handleCreateEvent = useCallback(() => {
+    navigate("/community/host-event");
+  }, [navigate]);
+
+  const handleJoinEventClick = useCallback(async (eventId: string, isRegistered: boolean) => {
     if (!user) {
       navigate("/auth");
       return;
@@ -102,9 +101,9 @@ const CommunityPage = () => {
     if (!isRegistered) {
       await registerForEvent.mutateAsync(eventId);
     }
-  };
+  }, [user, navigate, registerForEvent]);
 
-  const handleLikeInsight = async (insightId: string, isLiked: boolean, category?: string) => {
+  const handleLikeInsight = useCallback(async (insightId: string, isLiked: boolean, category?: string) => {
     if (!user) {
       navigate("/auth");
       return;
@@ -115,9 +114,19 @@ const CommunityPage = () => {
     if (!isLiked) {
       trackContentView(insightId, 'insight', category);
     }
-  };
+  }, [user, navigate, toggleInsightLike, trackContentView]);
 
-  const getInitials = (name: string | undefined, email: string | undefined) => {
+  const handleTopicClick = useCallback((topicId: string, tags?: string[]) => {
+    trackContentView(topicId, 'topic', undefined, tags);
+    navigate(`/community/topic/${topicId}`);
+  }, [trackContentView, navigate]);
+
+  const handleInsightView = useCallback((insight: CommunityInsight) => {
+    setSelectedInsight(insight);
+    trackContentView(insight.id, 'insight', insight.category);
+  }, [trackContentView]);
+
+  const getInitials = useCallback((name: string | undefined, email: string | undefined) => {
     if (name) {
       return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
     }
@@ -125,32 +134,46 @@ const CommunityPage = () => {
       return email.slice(0, 2).toUpperCase();
     }
     return "U";
-  };
+  }, []);
 
   // Pagination handlers
-  const loadMoreTopics = () => {
+  const loadMoreTopics = useCallback(() => {
     setTopicsPage(prev => prev + 1);
-  };
+  }, []);
 
-  const loadMoreInsights = () => {
+  const loadMoreInsights = useCallback(() => {
     setInsightsPage(prev => prev + 1);
-  };
+  }, []);
 
-  // Get visible items - show only 5 items per page
-  const startTopicIndex = topicsPage * 5;
-  const endTopicIndex = startTopicIndex + 5;
-  const visibleTopics = topics?.slice(startTopicIndex, endTopicIndex) || [];
-  const hasMoreTopics = (topics?.length || 0) > endTopicIndex;
+  // Memoize expensive computations
+  const visibleTopics = useMemo(() => {
+    const startTopicIndex = topicsPage * 5;
+    const endTopicIndex = startTopicIndex + 5;
+    return topics?.slice(startTopicIndex, endTopicIndex) || [];
+  }, [topics, topicsPage]);
 
-  const filteredInsights = insights?.filter((insight) => {
-    const matchesCategory = insightCategory === "all" || insight.category === insightCategory;
-    return matchesCategory;
-  }) || [];
+  const hasMoreTopics = useMemo(() => {
+    const endTopicIndex = (topicsPage + 1) * 5;
+    return (topics?.length || 0) > endTopicIndex;
+  }, [topics, topicsPage]);
+
+  const filteredInsights = useMemo(() => {
+    return insights?.filter((insight) => {
+      const matchesCategory = insightCategory === "all" || insight.category === insightCategory;
+      return matchesCategory;
+    }) || [];
+  }, [insights, insightCategory]);
   
-  const startInsightIndex = insightsPage * 5;
-  const endInsightIndex = startInsightIndex + 5;
-  const visibleInsights = filteredInsights.slice(startInsightIndex, endInsightIndex);
-  const hasMoreInsights = filteredInsights.length > endInsightIndex;
+  const visibleInsights = useMemo(() => {
+    const startInsightIndex = insightsPage * 5;
+    const endInsightIndex = startInsightIndex + 5;
+    return filteredInsights.slice(startInsightIndex, endInsightIndex);
+  }, [filteredInsights, insightsPage]);
+
+  const hasMoreInsights = useMemo(() => {
+    const endInsightIndex = (insightsPage + 1) * 5;
+    return filteredInsights.length > endInsightIndex;
+  }, [filteredInsights, insightsPage]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -339,94 +362,12 @@ const CommunityPage = () => {
                 {visibleTopics.length > 0 ? (
                   <>
                     {visibleTopics.map((topic) => (
-                    <Card 
-                      key={topic.id} 
-                      className="hover:shadow-md transition-all cursor-pointer border-border/40 overflow-hidden"
-                      onClick={() => {
-                        trackContentView(topic.id, 'topic', undefined, topic.tags);
-                        navigate(`/community/topic/${topic.id}`);
-                      }}
-                    >
-                      <CardContent className="p-0">
-                        {/* Post Header */}
-                        <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 pb-2 sm:pb-3">
-                          <Avatar className="w-9 h-9 sm:w-10 sm:h-10 shrink-0">
-                            <AvatarFallback className="text-xs sm:text-sm bg-primary/10 text-primary font-medium">
-                              {getInitials(topic.profiles?.full_name, topic.profiles?.email)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div 
-                            className="flex-1 min-w-0 cursor-pointer hover:text-primary transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (topic.profiles?.user_id) {
-                                navigate(`/profile/${topic.profiles.user_id}`);
-                              }
-                            }}
-                          >
-                            <p className="font-semibold text-xs sm:text-sm leading-tight truncate">
-                              {topic.profiles?.full_name || topic.profiles?.email || "Anonymous"}
-                            </p>
-                            <p className="text-[10px] sm:text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(topic.created_at), { addSuffix: true })}
-                            </p>
-                          </div>
-                          {topic.is_pinned && (
-                            <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0 px-1.5 py-0.5">
-                              <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Post Content */}
-                        <div className="px-3 sm:px-4 pb-2 sm:pb-3">
-                          <h3 className="text-sm sm:text-base font-semibold mb-1.5 sm:mb-2 leading-snug line-clamp-2">
-                            {topic.title}
-                          </h3>
-                          <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2 sm:line-clamp-3">
-                            {topic.content}
-                          </p>
-                        </div>
-
-                        {/* Tags */}
-                        {topic.tags && topic.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1 sm:gap-1.5 px-3 sm:px-4 pb-2 sm:pb-3">
-                            {topic.tags.slice(0, 3).map((tag) => (
-                              <Badge 
-                                key={tag} 
-                                variant="secondary" 
-                                className="text-[10px] sm:text-xs font-normal bg-secondary/50 px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto"
-                              >
-                                {tag}
-                              </Badge>
-                            ))}
-                            {topic.tags.length > 3 && (
-                              <Badge variant="secondary" className="text-[10px] sm:text-xs font-normal bg-secondary/50 px-1.5 sm:px-2 py-0 sm:py-0.5 h-5 sm:h-auto">
-                                +{topic.tags.length - 3}
-                              </Badge>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Post Actions */}
-                        <div className="border-t border-border/40 px-2 sm:px-4 py-2 sm:py-2.5 flex items-center gap-1">
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            className="flex-1 h-8 sm:h-9 text-muted-foreground hover:text-foreground hover:bg-accent/50 text-xs sm:text-sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/community/topic/${topic.id}`);
-                            }}
-                          >
-                            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 shrink-0" />
-                            <span className="font-medium">
-                              {topic.replies_count === 0 ? 'Comment' : `${topic.replies_count} ${topic.replies_count === 1 ? 'reply' : 'replies'}`}
-                            </span>
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
+                      <TopicCard
+                        key={topic.id}
+                        topic={topic}
+                        onTopicClick={handleTopicClick}
+                        getInitials={getInitials}
+                      />
                     ))}
                     
                     {hasMoreTopics && (
@@ -488,85 +429,11 @@ const CommunityPage = () => {
                 <div className="grid gap-3 sm:gap-4">
                   {events && events.length > 0 ? (
                     events.map((event) => (
-                      <Card key={event.id} className="hover:shadow-lg transition-all border-border/40 shadow-sm">
-                        <CardContent className="p-4 sm:p-6">
-                          <div className="flex flex-col gap-4">
-                            {/* Event Header */}
-                            <div className="flex flex-wrap items-center gap-2">
-                              <Badge variant="secondary" className="capitalize text-xs font-medium">
-                                {event.event_type}
-                              </Badge>
-                              {event.is_online && (
-                                <Badge variant="outline" className="text-xs">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5" />
-                                  Online
-                                </Badge>
-                              )}
-                              {event.is_registered && (
-                                <Badge className="bg-green-600 hover:bg-green-700 text-xs ml-auto">
-                                  ✓ Registered
-                                </Badge>
-                              )}
-                            </div>
-
-                            {/* Event Title */}
-                            <div>
-                              <h3 className="text-base sm:text-lg font-semibold mb-2 leading-tight">
-                                {event.title}
-                              </h3>
-                              {event.description && (
-                                <p className="text-sm text-muted-foreground line-clamp-2">
-                                  {event.description}
-                                </p>
-                              )}
-                            </div>
-
-                            {/* Event Meta */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-muted-foreground">
-                              <div className="flex items-center gap-2">
-                                <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-primary" />
-                                <span className="font-medium">
-                                  {new Date(event.event_date).toLocaleDateString('en-US', { 
-                                    month: 'short', 
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                  })}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-primary" />
-                                <span className="font-medium">{event.event_time}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-primary" />
-                                <span className="font-medium">
-                                  {event.attendees_count} {event.attendees_count === 1 ? 'attendee' : 'attendees'}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Action Button */}
-                            <Button
-                              onClick={() => handleJoinEventClick(event.id, event.is_registered || false)}
-                              disabled={event.is_registered}
-                              className="w-full sm:w-auto bg-gradient-ai text-white"
-                              size="sm"
-                            >
-                              {event.is_registered ? (
-                                <>
-                                  <Check className="mr-2 h-4 w-4" />
-                                  Already Registered
-                                </>
-                              ) : (
-                                <>
-                                  <Calendar className="mr-2 h-4 w-4" />
-                                  Register Now
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <EventCard
+                        key={event.id}
+                        event={event}
+                        onJoinEvent={handleJoinEventClick}
+                      />
                     ))
                   ) : (
                     <Card className="shadow-sm">
@@ -619,70 +486,13 @@ const CommunityPage = () => {
                   {visibleInsights.length > 0 ? (
                     <>
                       {visibleInsights.map((insight) => (
-                      <Card 
-                        key={insight.id} 
-                        className="hover:shadow-md transition-shadow cursor-pointer"
-                        onClick={() => {
-                          setSelectedInsight(insight);
-                          trackContentView(insight.id, 'insight', insight.category);
-                        }}
-                      >
-                        <CardContent className="p-6">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="outline">{insight.category}</Badge>
-                            {insight.read_time && (
-                              <Badge variant="secondary">{insight.read_time}</Badge>
-                            )}
-                          </div>
-                          {insight.cover_image && (
-                            <div className="mb-4 rounded-lg overflow-hidden bg-muted/30">
-                              <EnhancedImage
-                                src={insight.cover_image}
-                                alt={insight.title}
-                                category="ai"
-                                className="w-full h-48 sm:h-56 object-contain"
-                              />
-                            </div>
-                          )}
-                          <h3 className="text-xl font-semibold mb-2 hover:text-primary transition-colors">
-                            {insight.title}
-                          </h3>
-                          <p className="text-muted-foreground mb-4 line-clamp-2">
-                            {insight.content.substring(0, 150)}...
-                          </p>
-                          <div className="flex items-center justify-between text-sm text-muted-foreground">
-                            <div 
-                              className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (insight.profiles?.user_id) {
-                                  navigate(`/profile/${insight.profiles.user_id}`);
-                                }
-                              }}
-                            >
-                              <Avatar className="w-6 h-6">
-                                <AvatarFallback className="text-xs">
-                                  {getInitials(insight.profiles?.full_name, insight.profiles?.email)}
-                                </AvatarFallback>
-                              </Avatar>
-                              <span>{insight.profiles?.full_name || insight.profiles?.email || "Anonymous"}</span>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleLikeInsight(insight.id, insight.is_liked || false, insight.category);
-                              }}
-                            >
-                              <Heart
-                                className={`h-4 w-4 mr-1 ${insight.is_liked ? "fill-current text-red-500" : ""}`}
-                              />
-                              {insight.likes_count}
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
+                        <InsightCard
+                          key={insight.id}
+                          insight={insight}
+                          onLikeClick={handleLikeInsight}
+                          onViewClick={handleInsightView}
+                          getInitials={getInitials}
+                        />
                       ))}
                       
                       {hasMoreInsights && (
