@@ -224,32 +224,45 @@ const MyActivityPage = () => {
             </TabsContent>
 
             {/* Events Tab */}
-            <TabsContent value="events" className="space-y-6 mt-6">
+            <TabsContent value="events" className="space-y-4 sm:space-y-6 mt-6">
               {activity?.events && activity.events.length > 0 ? (
                 activity.events.map((event: CommunityEvent) => (
                   <Card key={event.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start justify-between mb-3 sm:mb-4">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="secondary">{event.event_type}</Badge>
-                            {event.is_online && <Badge variant="outline">Online</Badge>}
-                            <Badge variant={event.status === 'upcoming' ? 'default' : 'secondary'}>
+                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+                            <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 h-5 sm:h-auto">
+                              {event.event_type}
+                            </Badge>
+                            {event.is_online && (
+                              <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 h-5 sm:h-auto">
+                                Online
+                              </Badge>
+                            )}
+                            <Badge 
+                              variant={event.status === 'upcoming' ? 'default' : 'secondary'}
+                              className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 h-5 sm:h-auto"
+                            >
                               {event.status}
                             </Badge>
                           </div>
-                          <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                            <div className="flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              <span>{new Date(event.event_date).toLocaleDateString()}</span>
+                          <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 leading-snug">
+                            {event.title}
+                          </h3>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1 sm:gap-1.5">
+                              <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                              <span className="truncate">
+                                {new Date(event.event_date).toLocaleDateString()}
+                              </span>
                             </div>
-                            <span>•</span>
-                            <span>{event.event_time}</span>
-                            <span>•</span>
-                            <div className="flex items-center gap-1">
-                              <Users className="w-4 h-4" />
-                              <span>{event.attendees_count} attendees</span>
+                            <span className="hidden sm:inline">•</span>
+                            <span className="truncate">{event.event_time}</span>
+                            <span className="hidden sm:inline">•</span>
+                            <div className="flex items-center gap-1 sm:gap-1.5">
+                              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                              <span>{event.attendees_count} {event.attendees_count === 1 ? 'attendee' : 'attendees'}</span>
                             </div>
                           </div>
                         </div>
@@ -257,28 +270,28 @@ const MyActivityPage = () => {
 
                       {/* Attendees */}
                       {event.event_attendees && event.event_attendees.length > 0 && (
-                        <div className="border-t pt-4 mt-4">
-                          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
-                            <Users className="w-4 h-4" />
+                        <div className="border-t pt-3 sm:pt-4 mt-3 sm:mt-4">
+                          <h4 className="text-xs sm:text-sm font-medium mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2">
+                            <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                             Registered Attendees ({event.event_attendees.length})
                           </h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                             {event.event_attendees.map((attendee) => (
                               <div
                                 key={attendee.id}
-                                className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                                className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                                 onClick={() => navigate(`/profile/${attendee.user_id}`)}
                               >
-                                <Avatar className="w-10 h-10">
-                                  <AvatarFallback className="text-sm">
+                                <Avatar className="w-8 h-8 sm:w-10 sm:h-10 shrink-0">
+                                  <AvatarFallback className="text-xs sm:text-sm">
                                     {getInitials(attendee.profiles?.full_name, attendee.profiles?.email)}
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium truncate">
+                                  <p className="text-xs sm:text-sm font-medium truncate">
                                     {attendee.profiles?.full_name || attendee.profiles?.email || 'Anonymous'}
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
                                     Registered {formatDistanceToNow(new Date(attendee.joined_at), { addSuffix: true })}
                                   </p>
                                 </div>
@@ -292,13 +305,13 @@ const MyActivityPage = () => {
                 ))
               ) : (
                 <Card>
-                  <CardContent className="p-12 text-center">
-                    <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold mb-2">No events yet</h3>
-                    <p className="text-muted-foreground mb-4">
+                  <CardContent className="p-8 sm:p-12 text-center">
+                    <Calendar className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
+                    <h3 className="text-base sm:text-lg font-semibold mb-2">No events yet</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground mb-3 sm:mb-4">
                       Host an event to bring the community together!
                     </p>
-                    <Button onClick={() => navigate("/community/host-event")}>
+                    <Button onClick={() => navigate("/community/host-event")} className="w-full sm:w-auto">
                       Host an Event
                     </Button>
                   </CardContent>
