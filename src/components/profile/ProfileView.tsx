@@ -22,46 +22,46 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Profile Header */}
       <Card>
-        <CardContent className="p-8">
-          <div className="flex flex-col md:flex-row gap-6 items-start">
-            <Avatar className="w-32 h-32">
+        <CardContent className="p-4 sm:p-6 md:p-8">
+          <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-start">
+            <Avatar className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32">
               <AvatarImage src={profile?.avatar_url} />
-              <AvatarFallback className="text-3xl">
+              <AvatarFallback className="text-xl sm:text-2xl md:text-3xl">
                 {getInitials(profile?.full_name, profile?.email)}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1 space-y-4">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-3xl font-bold mb-1">
+            <div className="flex-1 space-y-3 sm:space-y-4 w-full">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 break-words">
                     {profile?.full_name || "Anonymous User"}
                   </h2>
                   {profile?.headline && (
-                    <p className="text-lg text-muted-foreground flex items-center gap-2">
-                      <Briefcase className="w-4 h-4" />
-                      {profile.headline}
+                    <p className="text-sm sm:text-base md:text-lg text-muted-foreground flex items-center gap-1.5 sm:gap-2">
+                      <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                      <span className="break-words">{profile.headline}</span>
                     </p>
                   )}
                 </div>
-                <Button onClick={onEdit} variant="outline" size="sm">
-                  <Edit className="w-4 h-4 mr-2" />
+                <Button onClick={onEdit} variant="outline" size="sm" className="w-full sm:w-auto text-xs sm:text-sm shrink-0">
+                  <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                   Edit Profile
                 </Button>
               </div>
 
               {profile?.location && (
-                <p className="text-muted-foreground flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  {profile.location}
+                <p className="text-sm sm:text-base text-muted-foreground flex items-center gap-1.5 sm:gap-2">
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                  <span className="break-words">{profile.location}</span>
                 </p>
               )}
 
               {profile?.bio && (
-                <div className="pt-2">
-                  <p className="text-foreground whitespace-pre-wrap">{profile.bio}</p>
+                <div className="pt-1 sm:pt-2">
+                  <p className="text-sm sm:text-base text-foreground whitespace-pre-wrap break-words">{profile.bio}</p>
                 </div>
               )}
             </div>
@@ -72,13 +72,13 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
       {/* Skills & Expertise */}
       {profile?.skills && profile.skills.length > 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle className="text-xl">Skills & Expertise</CardTitle>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg md:text-xl">Skills & Expertise</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
+          <CardContent className="p-4 sm:p-6 pt-0">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {profile.skills.map((skill: string) => (
-                <Badge key={skill} variant="secondary" className="text-sm px-3 py-1">
+                <Badge key={skill} variant="secondary" className="text-xs sm:text-sm px-2 sm:px-3 py-0.5 sm:py-1">
                   {skill}
                 </Badge>
               ))}
@@ -90,19 +90,19 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
       {/* Links & Contact */}
       {(profile?.website || profile?.linkedin_url || profile?.github_url || profile?.twitter_url || profile?.email) && (
         <Card>
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <LinkIcon className="w-5 h-5" />
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg md:text-xl flex items-center gap-1.5 sm:gap-2">
+              <LinkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               Links & Contact
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
             {profile?.email && (
               <a
                 href={`mailto:${profile.email}`}
-                className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors break-all"
               >
-                <Mail className="w-5 h-5" />
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                 <span>{profile.email}</span>
               </a>
             )}
@@ -114,9 +114,9 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                  className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors break-all"
                 >
-                  <LinkIcon className="w-5 h-5" />
+                  <LinkIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                   <span>{profile.website}</span>
                 </a>
               </>
@@ -129,9 +129,9 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
                   href={profile.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                  className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors"
                 >
-                  <Linkedin className="w-5 h-5" />
+                  <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                   <span>LinkedIn Profile</span>
                 </a>
               </>
@@ -144,9 +144,9 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
                   href={profile.github_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                  className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors"
                 >
-                  <Github className="w-5 h-5" />
+                  <Github className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                   <span>GitHub Profile</span>
                 </a>
               </>
@@ -159,9 +159,9 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
                   href={profile.twitter_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                  className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors"
                 >
-                  <Twitter className="w-5 h-5" />
+                  <Twitter className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                   <span>Twitter / X Profile</span>
                 </a>
               </>

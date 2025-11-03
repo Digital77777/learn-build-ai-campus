@@ -442,12 +442,12 @@ const MyActivityPage = () => {
             </TabsContent>
 
             {/* Profile Tab */}
-            <TabsContent value="profile" className="space-y-6 mt-6">
+            <TabsContent value="profile" className="space-y-4 sm:space-y-6 mt-6">
               {profileLoading ? (
                 <Card>
-                  <CardContent className="p-6">
-                    <Skeleton className="h-24 w-24 rounded-full mb-4" />
-                    <Skeleton className="h-6 w-3/4 mb-4" />
+                  <CardContent className="p-4 sm:p-6">
+                    <Skeleton className="h-20 w-20 sm:h-24 sm:w-24 rounded-full mb-3 sm:mb-4" />
+                    <Skeleton className="h-5 sm:h-6 w-3/4 mb-3 sm:mb-4" />
                     <Skeleton className="h-4 w-full mb-2" />
                     <Skeleton className="h-4 w-2/3" />
                   </CardContent>
@@ -469,10 +469,10 @@ const MyActivityPage = () => {
                 )
               ) : (
                 <Card>
-                  <CardContent className="p-12 text-center">
-                    <User className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold mb-2">Profile not found</h3>
-                    <p className="text-muted-foreground">
+                  <CardContent className="p-8 sm:p-12 text-center">
+                    <User className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
+                    <h3 className="text-base sm:text-lg font-semibold mb-2">Profile not found</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground">
                       Unable to load your profile information.
                     </p>
                   </CardContent>

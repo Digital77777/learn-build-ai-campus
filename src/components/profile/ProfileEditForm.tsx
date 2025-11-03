@@ -106,35 +106,36 @@ export const ProfileEditForm = ({ profile, onSuccess }: ProfileEditFormProps) =>
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Profile Header Card */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="w-5 h-5" />
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="flex items-center gap-1.5 sm:gap-2 text-base sm:text-lg md:text-xl">
+            <User className="w-4 h-4 sm:w-5 sm:h-5" />
             Profile Information
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-xs sm:text-sm">
             This information will be visible to other members of the community
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
           {/* Avatar Section */}
-          <div className="flex items-center gap-4">
-            <Avatar className="w-24 h-24">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4">
+            <Avatar className="w-20 h-20 sm:w-24 sm:h-24 shrink-0">
               <AvatarImage src={form.watch("avatar_url")} />
-              <AvatarFallback className="text-xl">
+              <AvatarFallback className="text-lg sm:text-xl">
                 {form.watch("full_name") ? getInitials(form.watch("full_name")) : "U"}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1">
-              <Label htmlFor="avatar_url">Profile Picture URL</Label>
+            <div className="flex-1 w-full space-y-1.5">
+              <Label htmlFor="avatar_url" className="text-xs sm:text-sm">Profile Picture URL</Label>
               <Input
                 id="avatar_url"
                 placeholder="https://example.com/avatar.jpg"
                 {...form.register("avatar_url")}
+                className="text-sm"
               />
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground">
                 Enter a URL to your profile picture
               </p>
             </div>
@@ -221,44 +222,45 @@ export const ProfileEditForm = ({ profile, onSuccess }: ProfileEditFormProps) =>
               />
 
               {/* Skills Section */}
-              <div className="space-y-3">
-                <Label>Skills & Expertise</Label>
+              <div className="space-y-2 sm:space-y-3">
+                <Label className="text-xs sm:text-sm">Skills & Expertise</Label>
                 <div className="flex gap-2">
                   <Input
-                    placeholder="Add a skill (e.g., React, Python, Design)"
+                    placeholder="Add a skill"
                     value={newSkill}
                     onChange={(e) => setNewSkill(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
+                    className="text-sm"
                   />
-                  <Button type="button" variant="secondary" onClick={addSkill}>
-                    <Plus className="w-4 h-4" />
+                  <Button type="button" variant="secondary" onClick={addSkill} className="shrink-0" size="sm">
+                    <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </Button>
                 </div>
                 {skills.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {skills.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="gap-1">
+                      <Badge key={skill} variant="secondary" className="gap-1 text-xs">
                         {skill}
                         <button
                           type="button"
                           onClick={() => removeSkill(skill)}
-                          className="ml-1 hover:text-destructive"
+                          className="ml-0.5 hover:text-destructive"
                         >
-                          <X className="w-3 h-3" />
+                          <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                         </button>
                       </Badge>
                     ))}
                   </div>
                 )}
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[10px] sm:text-xs text-muted-foreground">
                   Add up to 50 skills. Press Enter or click + to add.
                 </p>
               </div>
 
               {/* Links Section */}
-              <div className="space-y-4 pt-4 border-t">
-                <h3 className="text-sm font-medium flex items-center gap-2">
-                  <LinkIcon className="w-4 h-4" />
+              <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4 border-t">
+                <h3 className="text-xs sm:text-sm font-medium flex items-center gap-1.5 sm:gap-2">
+                  <LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   Links & Social Media
                 </h3>
 
@@ -328,8 +330,8 @@ export const ProfileEditForm = ({ profile, onSuccess }: ProfileEditFormProps) =>
                 />
               </div>
 
-              <div className="flex gap-3 pt-4">
-                <Button type="submit" disabled={isLoading} className="flex-1">
+              <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4">
+                <Button type="submit" disabled={isLoading} className="flex-1 text-sm sm:text-base">
                   {isLoading ? "Saving..." : "Save Profile"}
                 </Button>
               </div>
