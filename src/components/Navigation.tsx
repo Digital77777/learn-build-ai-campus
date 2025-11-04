@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 const Navigation = () => {
   const {
     user,
@@ -124,10 +125,13 @@ const Navigation = () => {
                 </div>
               </SheetContent>
             </Sheet>
-            {loading ? <div className="w-20 h-8 animate-pulse bg-muted rounded" /> : user ? <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-2" aria-label="Account menu">
-                    <User className="h-4 w-4" />
+            {loading ? <div className="w-20 h-8 animate-pulse bg-muted rounded" /> : user ? (
+              <>
+                <NotificationBell />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="flex items-center gap-2" aria-label="Account menu">
+                      <User className="h-4 w-4" />
                     {!isMobile && "Account"}
                   </Button>
                 </DropdownMenuTrigger>
@@ -167,7 +171,9 @@ const Navigation = () => {
                     <span>Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu> : <>
+              </DropdownMenu>
+              </>
+            ) : <>
                 <Link to="/auth">
                   <Button variant="outline" size="sm" aria-label="Sign in">
                     <User className="h-4 w-4" />
