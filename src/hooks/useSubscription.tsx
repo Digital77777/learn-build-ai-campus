@@ -31,6 +31,7 @@ export const useSubscription = () => {
   const [tiers, setTiers] = useState<SubscriptionTier[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdminEmail, setIsAdminEmail] = useState(false);
+  const [hasAITutorAccess, setHasAITutorAccess] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -95,6 +96,12 @@ export const useSubscription = () => {
         // Auto-assign starter tier if no subscription
         await assignStarterTier();
       }
+
+      // Check for AI tutor access
+      const currentTier = subData?.tier as SubscriptionTier | undefined;
+      const access = currentTier?.features?.includes('Personal AI tutor') || false;
+      setHasAITutorAccess(access);
+
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching subscription:', error);
@@ -179,12 +186,22 @@ export const useSubscription = () => {
     }
   };
 
+  useEffect(() => {
+    if (subscription && subscription.tier) {
+      const access = subscription.tier.features.includes('Personal AI tutor');
+      setHasAITutorAccess(access);
+    } else {
+      setHasAITutorAccess(false);
+    }
+  }, [subscription]);
+
   return {
     subscription,
     tiers,
     loading,
     isAdminEmail,
     changeTier,
+    hasAITutorAccess,
     refreshSubscription: fetchSubscriptionData
   };
 };
