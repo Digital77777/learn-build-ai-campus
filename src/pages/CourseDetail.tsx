@@ -93,13 +93,11 @@ const CourseDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      
-      
       <div className="pt-20">
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
           {/* Back Button */}
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="mb-6 group"
             onClick={() => window.history.back()}
           >
@@ -107,38 +105,40 @@ const CourseDetail = () => {
             Back to Learning Paths
           </Button>
 
-          <div className="grid lg-grid-cols-3 gap-8">
-            {/* Video Player */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Content */}
             <div className="lg:col-span-2">
-              <Card className="mb-6">
+              {/* Video Player */}
+              <Card className="mb-6 shadow-soft">
                 <CardContent className="p-0">
-                  <div className="aspect-video relative bg-black rounded-lg overflow-hidden">
+                  <div className="aspect-video relative bg-black rounded-t-lg overflow-hidden">
                     <iframe
                       src={`https://www.youtube.com/embed/${currentVideo.video_id}?rel=0&modestbranding=1&showinfo=0&controls=1`}
                       title={currentVideo.title}
                       className="w-full h-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
-                      style={{
-                        border: 'none',
-                        outline: 'none'
-                      }}
+                      style={{ border: 'none', outline: 'none' }}
                     />
                   </div>
                 </CardContent>
               </Card>
 
               {/* Current Module Info */}
-              <Card>
+              <Card className="shadow-soft">
                 <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-xl">{currentVideo.title}</CardTitle>
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex-1">
+                      <CardTitle className="text-2xl font-bold">{currentVideo.title}</CardTitle>
                       <p className="text-muted-foreground mt-2">{currentVideo.description}</p>
                     </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <Badge variant="secondary">{currentVideo.duration}</Badge>
-                      <Button onClick={() => markModuleAsComplete(currentVideo.id)} disabled={currentVideo.completed}>
+                    <div className="flex flex-col items-start sm:items-end gap-2 mt-4 sm:mt-0">
+                      <Badge variant="secondary" className="text-sm">{currentVideo.duration}</Badge>
+                      <Button
+                        onClick={() => markModuleAsComplete(currentVideo.id)}
+                        disabled={currentVideo.completed}
+                        className="w-full sm:w-auto"
+                      >
                         <CheckCircle className="h-4 w-4 mr-2" />
                         {currentVideo.completed ? 'Completed' : 'Mark as Complete'}
                       </Button>
@@ -151,16 +151,16 @@ const CourseDetail = () => {
             {/* Course Sidebar */}
             <div className="space-y-6">
               {/* Course Info */}
-              <Card>
+              <Card className="shadow-soft">
                 <CardHeader>
-                  <CardTitle className="text-lg">{course.title}</CardTitle>
+                  <CardTitle className="text-xl font-semibold">{course.title}</CardTitle>
                 </CardHeader>
               </Card>
 
               {/* Module List */}
-              <Card>
+              <Card className="shadow-soft">
                 <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
+                  <CardTitle className="text-xl flex items-center gap-2 font-semibold">
                     <BookOpen className="h-5 w-5" />
                     Course Modules
                   </CardTitle>
@@ -169,22 +169,22 @@ const CourseDetail = () => {
                   {course.modules.map((module: any, index: number) => (
                     <div
                       key={index}
-                      className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         index === currentModule
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/50'
+                          ? 'border-primary bg-primary/10 shadow-ai'
+                          : 'border-border hover:border-primary/50 hover:bg-muted/50'
                       }`}
                       onClick={() => setCurrentModule(index)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="font-medium text-sm">{module.title}</h4>
-                          <p className="text-xs text-muted-foreground mt-1">{module.description}</p>
+                          <h4 className="font-semibold">{module.title}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">{module.description}</p>
                         </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <span className="text-xs text-muted-foreground">{module.duration}</span>
+                        <div className="flex items-center gap-2 ml-4">
+                          <span className="text-sm text-muted-foreground">{module.duration}</span>
                           {module.completed && (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-5 w-5 text-green-500" />
                           )}
                         </div>
                       </div>
