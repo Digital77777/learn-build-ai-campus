@@ -17,6 +17,7 @@ export interface Message {
   sender_id: string;
   receiver_id: string;
   content: string;
+  voice_note_url?: string;
   is_read: boolean;
   created_at: string;
   sender_profile?: {
@@ -63,6 +64,7 @@ export const useMessages = () => {
             sender_id,
             receiver_id,
             content,
+            voice_note_url,
             is_read,
             created_at
           `)
@@ -158,6 +160,7 @@ export const useMessages = () => {
             sender_id,
             receiver_id,
             content,
+            voice_note_url,
             is_read,
             created_at
           `)
@@ -183,20 +186,58 @@ export const useMessages = () => {
 
   // Send a message
   const sendMessage = useMutation({
-    mutationFn: async ({ receiverId, content }: { receiverId: string; content: string }) => {
-      // Validate input
-      const validation = messageSchema.safeParse({ content });
-      if (!validation.success) {
-        throw new Error(validation.error.errors[0].message);
-      }
-
+    mutationFn: async ({
+      receiverId,
+      content,
+      voiceNote,
+    }: {
+      receiverId: string;
+      content?: string;
+      voiceNote?: File;
+    }) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      let voice_note_url: string | undefined = undefined;
+      let messageContent = content;
+
+      if (voiceNote) {
+        // Create a unique path for the voice note
+        const filePath = `voice_notes/${user.id}/${Date.now()}.${voiceNote.type.split('/')[1]}`;
+
+        // Upload the voice note to Supabase Storage
+        const { error: uploadError } = await supabase.storage
+          .from('community')
+          .upload(filePath, voiceNote);
+
+        if (uploadError) {
+          throw new Error(`Failed to upload voice note: ${uploadError.message}`);
+        }
+
+        // Get the public URL of the uploaded voice note
+        const { data: { publicUrl } } = supabase.storage
+          .from('community')
+          .getPublicUrl(filePath);
+
+        voice_note_url = publicUrl;
+        messageContent = 'Voice message'; // Placeholder content
+      } else if (content) {
+        // Validate text message
+        const validation = messageSchema.safeParse({ content });
+        if (!validation.success) {
+          throw new Error(validation.error.errors[0].message);
+        }
+        messageContent = validation.data.content;
+      } else {
+        throw new Error('Message must have content or a voice note.');
+      }
+
+      // Insert the message into the database
       const { error } = await supabase.from('messages').insert({
         sender_id: user.id,
         receiver_id: receiverId,
-        content: validation.data.content,
+        content: messageContent,
+        voice_note_url: voice_note_url,
       });
 
       if (error) throw error;

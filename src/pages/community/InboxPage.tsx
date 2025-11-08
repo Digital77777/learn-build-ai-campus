@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Send, Search, MoreVertical, Check, X } from 'lucide-react';
+import { ArrowLeft, Send, Search, MoreVertical, Check, X, Mic, StopCircle, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,6 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { useConnections } from '@/hooks/useConnections';
 import { Separator } from '@/components/ui/separator';
+import VoiceNotePlayer from '@/components/media/VoiceNotePlayer';
 
 const InboxPage = () => {
   const navigate = useNavigate();
@@ -25,6 +26,11 @@ const InboxPage = () => {
     searchParams.get('userId') || undefined
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const { useConversations, useConversationMessages, sendMessage } = useMessages();
   const { data: conversations, isLoading: conversationsLoading } = useConversations();
@@ -49,26 +55,88 @@ const InboxPage = () => {
     }
   }, [selectedUserId, setSearchParams]);
 
+  const handleToggleRecording = async () => {
+    if (isRecording) {
+      // Stop recording
+      mediaRecorderRef.current?.stop();
+      if (recordingIntervalRef.current) {
+        clearInterval(recordingIntervalRef.current);
+      }
+      setIsRecording(false);
+    } else {
+      // Start recording
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+
+        const audioChunks: BlobPart[] = [];
+        mediaRecorder.ondataavailable = (event) => {
+          audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+          setAudioBlob(audioBlob);
+          // Stop all audio tracks to release the microphone
+          stream.getTracks().forEach(track => track.stop());
+        };
+
+        mediaRecorder.start();
+        setIsRecording(true);
+        setRecordingTime(0);
+        recordingIntervalRef.current = setInterval(() => {
+          setRecordingTime((prevTime) => prevTime + 1);
+        }, 1000);
+      } catch (error) {
+        console.error('Error accessing microphone:', error);
+        toast({
+          title: 'Microphone access denied',
+          description: 'Please allow microphone access in your browser settings.',
+          variant: 'destructive',
+        });
+      }
+    }
+  };
+
+  const handleCancelRecording = () => {
+    if (isRecording) {
+      mediaRecorderRef.current?.stop();
+      if (recordingIntervalRef.current) {
+        clearInterval(recordingIntervalRef.current);
+      }
+    }
+    setIsRecording(false);
+    setAudioBlob(null);
+    setRecordingTime(0);
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!messageText.trim() || !selectedUserId) return;
+    if (!selectedUserId) return;
 
-    // Validate message length
-    if (messageText.trim().length > 2000) {
-      toast({
-        title: 'Message too long',
-        description: 'Message must be less than 2000 characters',
-        variant: 'destructive',
-      });
-      return;
+    if (audioBlob) {
+        const fileExtension = audioBlob.type.split('/')[1];
+        await sendMessage.mutateAsync({
+            receiverId: selectedUserId,
+            voiceNote: new File([audioBlob], `voice-note.${fileExtension}`),
+        });
+        setAudioBlob(null);
+    } else if (messageText.trim()) {
+        if (messageText.trim().length > 2000) {
+            toast({
+              title: 'Message too long',
+              description: 'Message must be less than 2000 characters',
+              variant: 'destructive',
+            });
+            return;
+        }
+        await sendMessage.mutateAsync({
+            receiverId: selectedUserId,
+            content: messageText.trim(),
+        });
+        setMessageText('');
     }
-
-    await sendMessage.mutateAsync({
-      receiverId: selectedUserId,
-      content: messageText.trim(),
-    });
-
-    setMessageText('');
   };
 
   const getInitials = (name?: string, email?: string) => {
@@ -324,7 +392,11 @@ const InboxPage = () => {
                               : 'bg-muted text-foreground'
                           }`}
                         >
-                          <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
+                          {msg.voice_note_url ? (
+                            <VoiceNotePlayer audioUrl={msg.voice_note_url} />
+                          ) : (
+                            <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
+                          )}
                           <p
                             className={`text-xs mt-1 ${
                               isSender ? 'text-primary-foreground/70' : 'text-muted-foreground'
@@ -344,23 +416,52 @@ const InboxPage = () => {
             {/* Message Input */}
             <form onSubmit={handleSendMessage} className="p-4 border-t border-border bg-card">
               <div className="space-y-2">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Type a message..."
-                    value={messageText}
-                    onChange={(e) => setMessageText(e.target.value)}
-                    className="flex-1"
-                    maxLength={2000}
-                  />
-                  <Button type="submit" size="icon" disabled={!messageText.trim()}>
-                    <Send className="h-5 w-5" />
-                  </Button>
-                </div>
-                <div className="flex justify-end">
-                  <span className={`text-xs ${messageText.length > 1900 ? 'text-destructive' : 'text-muted-foreground'}`}>
-                    {messageText.length}/2000
-                  </span>
-                </div>
+                {isRecording || audioBlob ? (
+                  <div className="flex items-center gap-2">
+                    {isRecording && (
+                      <div className="flex items-center gap-2 text-sm text-destructive animate-pulse">
+                        <StopCircle className="h-5 w-5" />
+                        <span>{new Date(recordingTime * 1000).toISOString().substr(14, 5)}</span>
+                      </div>
+                    )}
+                    {audioBlob && !isRecording && (
+                        <div className="flex items-center gap-2 w-full">
+                            <VoiceNotePlayer audioUrl={URL.createObjectURL(audioBlob)} />
+                        </div>
+                    )}
+                    <div className="flex items-center gap-2 ml-auto">
+                        <Button type="button" variant="ghost" size="icon" onClick={handleCancelRecording} className="text-muted-foreground">
+                            <Trash2 className="h-5 w-5" />
+                        </Button>
+                        <Button type="submit" size="icon">
+                            <Send className="h-5 w-5" />
+                        </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Type a message..."
+                      value={messageText}
+                      onChange={(e) => setMessageText(e.target.value)}
+                      className="flex-1"
+                      maxLength={2000}
+                    />
+                    <Button type="button" size="icon" variant="ghost" onClick={handleToggleRecording}>
+                      <Mic className="h-5 w-5" />
+                    </Button>
+                    <Button type="submit" size="icon" disabled={!messageText.trim()}>
+                      <Send className="h-5 w-5" />
+                    </Button>
+                  </div>
+                )}
+                {!isRecording && !audioBlob && (
+                    <div className="flex justify-end">
+                        <span className={`text-xs ${messageText.length > 1900 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                        {messageText.length}/2000
+                        </span>
+                    </div>
+                )}
               </div>
             </form>
           </div>
