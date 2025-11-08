@@ -26,58 +26,39 @@ const CourseDetail = () => {
 
   const fetchCourseData = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('course_modules')
-      .select('*')
-      .eq('course_id', courseId);
-
-    if (error) {
-      console.error('Error fetching course data:', error);
-    } else {
-      const courseDetails = {
-        id: courseId,
-        title: courseId?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        modules: data,
-      };
-      setCourse(courseDetails);
-    }
+    // Mock data for course modules since table doesn't exist yet
+    const mockData = [
+      {
+        id: 1,
+        title: 'Introduction',
+        description: 'Get started with the basics',
+        video_id: 'dQw4w9WgXcQ',
+        duration: '10 min',
+        completed: false
+      }
+    ];
+    
+    const courseDetails = {
+      id: courseId,
+      title: courseId?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+      modules: mockData,
+    };
+    setCourse(courseDetails);
     setLoading(false);
   };
 
   const fetchCourseProgress = async () => {
-    const { data, error } = await supabase
-      .from('user_course_progress')
-      .select('module_id')
-      .eq('user_id', user.id)
-      .eq('course_id', course.id)
-      .eq('is_completed', true);
-
-    if (error) {
-      console.error('Error fetching course progress:', error);
-    } else {
-      const completedModules = data.map((progress) => progress.module_id);
-      const updatedModules = course.modules.map((module: any) => ({
-        ...module,
-        completed: completedModules.includes(module.id),
-      }));
-      setCourse({ ...course, modules: updatedModules });
-    }
+    // Mock implementation since table doesn't exist yet
+    console.log('Course progress would be fetched here');
   };
 
   const markModuleAsComplete = async (moduleId: number) => {
     if (user) {
-      const { error } = await supabase.from('user_course_progress').upsert({
-        user_id: user.id,
-        course_id: course.id,
-        module_id: moduleId,
-        is_completed: true,
-        completed_at: new Date().toISOString(),
-      });
-      if (error) {
-        console.error('Error marking module as complete:', error);
-      } else {
-        fetchCourseProgress();
-      }
+      // Mock implementation - update local state
+      const updatedModules = course.modules.map((module: any) => 
+        module.id === moduleId ? { ...module, completed: true } : module
+      );
+      setCourse({ ...course, modules: updatedModules });
     }
   };
   

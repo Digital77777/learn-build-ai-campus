@@ -235,7 +235,7 @@ const AISnapBuilder = () => {
                         {uploadedFiles.map((file, index) => (
                           <div key={index} className="text-sm text-muted-foreground flex items-center gap-2">
                             <div className="w-2 h-2 bg-primary rounded-full" />
-                            {file}
+                            {file.name}
                           </div>
                         ))}
                       </div>

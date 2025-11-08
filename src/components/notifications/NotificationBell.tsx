@@ -70,12 +70,23 @@ export const NotificationBell = () => {
 
   const fetchNotifications = async () => {
     if (user) {
-      const { data, error } = await supabase.rpc('get_notifications', { p_user_id: user.id });
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
       if (error) {
         console.error('Error fetching notifications:', error);
       } else {
-        setNotifications(data || []);
-        setUnreadCount(data?.filter((n: Notification) => !n.is_read).length || 0);
+        const notificationsWithActors = (data || []).map(n => ({
+          ...n,
+          actors: null,
+          metadata: n.metadata as Record<string, any>
+        }));
+        setNotifications(notificationsWithActors);
+        setUnreadCount(notificationsWithActors.filter((n: Notification) => !n.is_read).length || 0);
       }
     }
   };
