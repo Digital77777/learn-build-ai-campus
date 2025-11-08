@@ -2,6 +2,4 @@ project_id = "uegujjkjkoohucpbdjwj"
 
 [auth]
 enable_signup = true
-
-[auth.email]
 enable_confirmations = false
