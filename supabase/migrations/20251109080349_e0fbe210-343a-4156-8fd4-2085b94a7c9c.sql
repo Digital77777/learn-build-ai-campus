@@ -119,7 +119,7 @@ BEGIN
   INSERT INTO public.notifications (user_id, type, message, metadata)
   VALUES (
     NEW.receiver_id,
-    'new_message',
+    'community_new_message',
     v_sender_name || ' sent you a message',
     jsonb_build_object(
       'message_id', NEW.id,
