@@ -299,11 +299,11 @@ export const useMarketplace = () => {
   }, [user]);
 
   const fetchSuggestedListings = useCallback(async () => {
-    fetchListings({ sortBy: 'popular', limit: 6 }).then(data => setSuggestedListings(data || []));
+    fetchListings({ sortBy: 'popular', limit: 6 }).then(data => setSuggestedListings((data || []) as MarketplaceListing[]));
   }, [fetchListings]);
 
   const fetchTopChartListings = useCallback(async () => {
-    fetchListings({ sortBy: 'rating', limit: 20 }).then(data => setTopChartListings(data || []));
+    fetchListings({ sortBy: 'rating', limit: 20 }).then(data => setTopChartListings((data || []) as MarketplaceListing[]));
   }, [fetchListings]);
 
   const fetchCategoryListings = useCallback(async () => {
@@ -315,7 +315,7 @@ export const useMarketplace = () => {
       if (!acc[categoryName]) {
         acc[categoryName] = [];
       }
-      acc[categoryName].push(listing);
+      acc[categoryName].push(listing as MarketplaceListing);
       return acc;
     }, {} as Record<string, MarketplaceListing[]>);
 

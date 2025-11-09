@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Blocks, Sliders, BarChart3, GraduationCap, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AITool } from "@/types/aiTools";
+import { useAuth } from "@/hooks/useAuth";
 
 const aiTools: AITool[] = [
   {
@@ -104,6 +105,15 @@ ToolCardMemo.displayName = 'ToolCardMemo';
 
 const AITools = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleToolClick = (path: string) => {
+    if (!user) {
+      navigate('/auth');
+    } else {
+      navigate(path);
+    }
+  };
 
   const handleToolAccess = () => {
     navigate('/ai-tools');
@@ -129,7 +139,7 @@ const AITools = () => {
             <ToolCardMemo 
               key={tool.id} 
               tool={tool} 
-              onClick={() => navigate(tool.route || '/ai-tools')} 
+              onClick={() => handleToolClick(tool.route || '/ai-tools')} 
             />
           ))}
         </div>

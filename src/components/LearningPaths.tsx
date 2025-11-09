@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, Trophy, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const learningPaths = [
   // Tier 1 Paths
@@ -256,9 +257,22 @@ PathCard.displayName = 'PathCard';
 
 const LearningPaths = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handlePathClick = (path: string) => {
+    if (!user) {
+      navigate('/auth');
+    } else {
+      navigate(path);
+    }
+  };
   
   const handleNavigate = (id: string) => {
-    navigate(`/course/${id}`);
+    if (!user) {
+      navigate('/auth');
+    } else {
+      navigate(`/course/${id}`);
+    }
   };
 
   return (
