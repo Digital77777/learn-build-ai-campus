@@ -2,19 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, Brain, Users, Trophy, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-
-  const handleNavigation = (path: string) => {
-    if (!user) {
-      navigate('/auth');
-    } else {
-      navigate(path);
-    }
-  };
   
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
@@ -69,7 +59,7 @@ const HeroSection = () => {
                 <Button 
                   size="lg" 
                   className="bg-primary hover:bg-primary/90 text-primary-foreground group h-14 px-8 text-base"
-                  onClick={() => handleNavigation('/learning-paths')}
+                  onClick={() => navigate('/learning-paths')}
                 >
                   <BookOpen className="h-5 w-5 mr-2" />
                   Start Learning Free
@@ -79,7 +69,7 @@ const HeroSection = () => {
                   variant="outline" 
                   size="lg"
                   className="h-14 px-8 text-base border-2"
-                  onClick={() => handleNavigation('/ai-tools')}
+                  onClick={() => navigate('/ai-tools')}
                 >
                   <Brain className="h-5 w-5 mr-2" />
                   Explore AI Tools

@@ -39,20 +39,14 @@ export interface MarketplaceFilters {
   isRemote?: boolean;
   search?: string;
   sortBy?: 'newest' | 'price_low' | 'price_high' | 'rating' | 'popular';
-  page?: number;
-  limit?: number;
 }
 
 export const useMarketplace = () => {
   const { user } = useAuth();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
-  const [suggestedListings, setSuggestedListings] = useState<MarketplaceListing[]>([]);
-  const [topChartListings, setTopChartListings] = useState<MarketplaceListing[]>([]);
-  const [categoryListings, setCategoryListings] = useState<Record<string, MarketplaceListing[]>>({});
   const [categories, setCategories] = useState<MarketplaceCategory[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
 
   // Fetch categories - memoized
   const fetchCategories = useCallback(async () => {
@@ -70,19 +64,14 @@ export const useMarketplace = () => {
   }, []);
 
   // Fetch listings with filters - memoized
-  const fetchListings = useCallback(async (filters: MarketplaceFilters = {}, reset = false) => {
+  const fetchListings = useCallback(async (filters: MarketplaceFilters = {}) => {
     setLoading(true);
     setError(null);
-
-    const page = filters.page || 1;
-    const limit = filters.limit || 20;
-    const from = (page - 1) * limit;
-    const to = page * limit - 1;
 
     try {
       let query = supabase
         .from('marketplace_listings')
-        .select('*', { count: 'exact' })
+        .select('*')
         .eq('status', 'active');
 
       // Apply filters
@@ -114,30 +103,10 @@ export const useMarketplace = () => {
           query = query.order('created_at', { ascending: false });
       }
 
-      query = query.range(from, to);
-
-      const { data, error, count } = await query;
+      const { data, error } = await query;
 
       if (error) throw error;
-
-      const newLen = data?.length || 0;
-      setHasMore(newLen === limit);
-
-      if (reset) {
-        if (filters.sortBy === 'rating') {
-          setTopChartListings((data || []) as MarketplaceListing[]);
-        } else {
-          setListings((data || []) as MarketplaceListing[]);
-        }
-      } else {
-        if (filters.sortBy === 'rating') {
-            setTopChartListings(prev => [...prev, ...(data || [])] as MarketplaceListing[]);
-        } else {
-            setListings(prev => [...prev, ...(data || [])] as MarketplaceListing[]);
-        }
-      }
-
-      return data;
+      setListings((data || []) as MarketplaceListing[]);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch listings';
       setError(errorMessage);
@@ -298,47 +267,15 @@ export const useMarketplace = () => {
     }
   }, [user]);
 
-  const fetchSuggestedListings = useCallback(async () => {
-    fetchListings({ sortBy: 'popular', limit: 6 }).then(data => setSuggestedListings((data || []) as MarketplaceListing[]));
-  }, [fetchListings]);
-
-  const fetchTopChartListings = useCallback(async () => {
-    fetchListings({ sortBy: 'rating', limit: 20 }).then(data => setTopChartListings((data || []) as MarketplaceListing[]));
-  }, [fetchListings]);
-
-  const fetchCategoryListings = useCallback(async () => {
-    const { data: allListings } = await supabase.from('marketplace_listings').select('*, marketplace_categories(name)').eq('status', 'active');
-    if (!allListings) return;
-
-    const listingsPerCategory = allListings.reduce((acc, listing) => {
-      const categoryName = listing.marketplace_categories.name;
-      if (!acc[categoryName]) {
-        acc[categoryName] = [];
-      }
-      acc[categoryName].push(listing as MarketplaceListing);
-      return acc;
-    }, {} as Record<string, MarketplaceListing[]>);
-
-    setCategoryListings(listingsPerCategory);
-  }, []);
-
-
   useEffect(() => {
     fetchCategories();
-    fetchSuggestedListings();
-    fetchTopChartListings();
-    fetchCategoryListings();
-  }, [fetchCategories, fetchSuggestedListings, fetchTopChartListings, fetchCategoryListings]);
+  }, [fetchCategories]);
 
   return {
     listings,
-    suggestedListings,
-    topChartListings,
-    categoryListings,
     categories,
     loading,
     error,
-    hasMore,
     fetchListings,
     createListing,
     updateListing,

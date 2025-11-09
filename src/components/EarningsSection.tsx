@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Coins, TrendingUp, Users, DollarSign, Star, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
 
 const earningOpportunities = [
   {
@@ -64,15 +63,6 @@ const successStories = [
 
 const EarningsSection = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-
-  const handleEarningClick = (path: string) => {
-    if (!user) {
-      navigate('/auth');
-    } else {
-      navigate(path);
-    }
-  };
 
   return (
     <section className="py-20 bg-muted/30">
@@ -126,7 +116,7 @@ const EarningsSection = () => {
                   </div>
                 </div>
 
-                <Button className="w-full" variant="earn" onClick={() => handleEarningClick('/marketplace')}>
+                <Button className="w-full" variant="earn" onClick={() => navigate('/marketplace')}>
                   Get Started
                 </Button>
               </CardContent>
@@ -167,7 +157,7 @@ const EarningsSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="earn" size="lg" className="px-8 group" onClick={() => handleEarningClick('/marketplace')}>
+          <Button variant="earn" size="lg" className="px-8 group" onClick={() => navigate('/marketplace')}>
             Start Earning Today
             <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
