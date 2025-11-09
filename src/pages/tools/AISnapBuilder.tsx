@@ -18,7 +18,6 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 const AISnapBuilder = () => {
   const { toast } = useToast();
@@ -26,8 +25,7 @@ const AISnapBuilder = () => {
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
   const [isTraining, setIsTraining] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [previewResult, setPreviewResult] = useState<string | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
 
   const aiBlocks = [
     { id: 'classifier', name: 'Image Classifier', icon: ImageIcon, description: 'Classify images into categories' },
@@ -39,7 +37,8 @@ const AISnapBuilder = () => {
   const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      setUploadedFiles(prev => [...prev, ...Array.from(files)]);
+      const fileNames = Array.from(files).map(file => file.name);
+      setUploadedFiles(prev => [...prev, ...fileNames]);
       toast({
         title: "Files uploaded",
         description: `${files.length} training examples added`,
@@ -60,7 +59,7 @@ const AISnapBuilder = () => {
     setIsTraining(true);
     setProgress(0);
 
-    // Simulate training progress - for the sake of the demo, we'll still use a timer
+    // Simulate training progress
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
@@ -77,41 +76,11 @@ const AISnapBuilder = () => {
     }, 500);
   }, [selectedBlock, uploadedFiles.length, toast]);
 
-  const handlePreview = async () => {
-    if (uploadedFiles.length === 0) {
-      toast({
-        title: "No file selected",
-        description: "Please upload an image to preview",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const file = uploadedFiles[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = async () => {
-      const base64Image = reader.result;
-
-      const { data, error } = await supabase.functions.invoke('imagga-proxy', {
-        body: { image: base64Image }
-      });
-
-      if (error) {
-        toast({
-          title: "Error analyzing image",
-          description: error.message,
-          variant: "destructive"
-        });
-        return;
-      }
-
-      setPreviewResult(data.result.tags[0].tag.en);
-      toast({
-        title: "Preview generated",
-        description: "The analysis of your image is complete"
-      });
-    };
+  const handlePreview = () => {
+    toast({
+      title: "Preview opened",
+      description: "Testing your model with sample data"
+    });
   };
 
   const handleExport = () => {
@@ -235,7 +204,7 @@ const AISnapBuilder = () => {
                         {uploadedFiles.map((file, index) => (
                           <div key={index} className="text-sm text-muted-foreground flex items-center gap-2">
                             <div className="w-2 h-2 bg-primary rounded-full" />
-                            {file.name}
+                            {file}
                           </div>
                         ))}
                       </div>
@@ -299,7 +268,7 @@ const AISnapBuilder = () => {
                     <Play className="h-8 w-8 text-primary" />
                   </div>
                   <p className="text-muted-foreground">
-                    {previewResult ? previewResult : progress === 100 ? "Model ready for testing" : "Train your model to see live preview"}
+                    {progress === 100 ? "Model ready for testing" : "Train your model to see live preview"}
                   </p>
                 </div>
               </div>
