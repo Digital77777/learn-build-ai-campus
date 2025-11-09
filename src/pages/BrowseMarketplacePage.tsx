@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, memo, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -50,13 +50,41 @@ export default function BrowseMarketplacePage() {
   const [selectedTab, setSelectedTab] = useState('for-you');
   const [selectedListing, setSelectedListing] = useState<MarketplaceListing | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  const { listings, categories, fetchListings, getUserFavorites } = useMarketplace();
+  const { listings, categories, suggestedListings, topChartListings, categoryListings, loading, hasMore, fetchListings, getUserFavorites } = useMarketplace();
   const { user } = useAuth();
   const [userFavorites, setUserFavorites] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const observer = useRef<IntersectionObserver>();
+
+  const lastListingElementRef = useCallback(node => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
 
   useEffect(() => {
-    fetchListings({ search: searchQuery });
-  }, [searchQuery, fetchListings]);
+    setPage(1);
+    if (selectedTab === 'top-charts') {
+      fetchListings({ search: searchQuery, page: 1, sortBy: 'rating' }, true);
+    } else {
+      fetchListings({ search: searchQuery, page: 1 }, true);
+    }
+  }, [searchQuery, selectedTab, fetchListings]);
+
+  useEffect(() => {
+    if (page > 1) {
+      if (selectedTab === 'top-charts') {
+        fetchListings({ search: searchQuery, page, sortBy: 'rating' });
+      } else {
+        fetchListings({ search: searchQuery, page });
+      }
+    }
+  }, [page, fetchListings, searchQuery, selectedTab]);
 
   useEffect(() => {
     if (user) {
@@ -69,20 +97,6 @@ export default function BrowseMarketplacePage() {
     setIsDetailsModalOpen(true);
   }, []);
 
-  // Memoize expensive computations
-  const groupedListings = useMemo(() => {
-    return categories.reduce((acc, category) => {
-      const categoryListings = listings.filter(l => l.category_id === category.id);
-      if (categoryListings.length > 0) {
-        acc[category.name] = categoryListings;
-      }
-      return acc;
-    }, {} as Record<string, MarketplaceListing[]>);
-  }, [categories, listings]);
-
-  const suggestedListings = useMemo(() => listings.slice(0, 6), [listings]);
-  
-  const topChartListings = useMemo(() => listings.slice(0, 20), [listings]);
 
   return (
     <TierGate feature="marketplace_buy">
@@ -147,16 +161,23 @@ export default function BrowseMarketplacePage() {
               )}
 
               {/* Category Sections */}
-              {Object.entries(groupedListings).map(([categoryName, categoryListings]) => (
-                <CategorySection
-                  key={categoryName}
-                  categoryName={categoryName}
-                  categoryListings={categoryListings}
-                  onViewDetails={handleViewDetails}
-                />
-              ))}
+              {Object.entries(categoryListings).map(([categoryName, listingsResult], index) => {
+                const isLastCategory = index === Object.entries(categoryListings).length - 1;
+                return (
+                  <div key={categoryName} ref={isLastCategory ? lastListingElementRef : null}>
+                    <CategorySection
+                      categoryName={categoryName}
+                      categoryListings={listingsResult}
+                      onViewDetails={handleViewDetails}
+                    />
+                  </div>
+                );
+              })}
 
-              {listings.length === 0 && (
+              {loading && <div className="text-center py-4">Loading more...</div>}
+              {!hasMore && listings.length > 0 && <div className="text-center py-4 text-muted-foreground">No more results</div>}
+
+              {listings.length === 0 && !loading && (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">No tools found</p>
                 </div>
@@ -166,15 +187,29 @@ export default function BrowseMarketplacePage() {
 
           {selectedTab === 'top-charts' && (
             <div className="space-y-2">
-              {topChartListings.map((listing, idx) => (
-                <TopChartCard
+              {topChartListings.map((listing, idx) => {
+                if (topChartListings.length === idx + 1) {
+                  return (
+                    <div ref={lastListingElementRef} key={listing.id}>
+                       <TopChartCard
+                        listing={listing}
+                        onClick={() => handleViewDetails(listing)}
+                        rank={idx + 1}
+                        colorIndex={idx}
+                      />
+                    </div>
+                  )
+                }
+                return <TopChartCard
                   key={listing.id}
                   listing={listing}
                   onClick={() => handleViewDetails(listing)}
                   rank={idx + 1}
                   colorIndex={idx}
                 />
-              ))}
+              })}
+              {loading && <div className="text-center py-4">Loading more...</div>}
+              {!hasMore && <div className="text-center py-4 text-muted-foreground">No more results</div>}
             </div>
           )}
 

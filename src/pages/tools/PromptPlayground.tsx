@@ -17,6 +17,7 @@ import {
   GitCompare
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const PromptPlayground = () => {
   const { toast } = useToast();
@@ -75,21 +76,30 @@ const PromptPlayground = () => {
 
     setIsGenerating(true);
     
-    // Simulate AI generation
-    setTimeout(() => {
-      const sampleResults = [
-        `Result A (Creativity: ${creativity[0]}, Tone: ${tone}, Style: ${style})\n\nThis is a sample generated response based on your prompt: "${prompt}". The creativity level affects how unconventional the response is, while tone and style shape the overall approach and presentation.`,
-        `Result B (Alternative approach)\n\nHere's an alternative perspective on: "${prompt}". This version explores different angles while maintaining the selected tone and style preferences you've configured.`
-      ];
-      
-      setResults(sampleResults);
+    try {
+      const { data, error } = await supabase.functions.invoke('hugging-face-proxy', {
+        body: { prompt }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      const generatedTexts = data[0].generated_text;
+      setResults([generatedTexts]);
+    } catch (error) {
+      toast({
+        title: "Error generating results",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
       setIsGenerating(false);
-      
       toast({
         title: "Results generated",
         description: "Your prompt has been processed successfully"
       });
-    }, 2000);
+    }
   }, [prompt, creativity, tone, style, toast]);
 
   const handleCopy = useCallback((text: string) => {
