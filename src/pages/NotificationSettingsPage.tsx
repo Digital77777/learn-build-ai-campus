@@ -19,6 +19,7 @@ const NOTIFICATION_TYPES = [
   { id: 'new_reply', label: 'New Replies to your Topics' },
   { id: 'new_like', label: 'New Likes on your Insights' },
   { id: 'new_event', label: 'New Community Events' },
+  { id: 'community_new_message', label: 'New Community Messages' },
 ];
 
 const NotificationSettingsPage = () => {
