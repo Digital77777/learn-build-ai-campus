@@ -307,15 +307,51 @@ export const useMarketplace = () => {
   }, [fetchListings]);
 
   const fetchCategoryListings = useCallback(async () => {
-    const { data: allListings } = await supabase.from('marketplace_listings').select('*, marketplace_categories(name)').eq('status', 'active');
-    if (!allListings) return;
+    const { data: allListings, error } = await supabase
+      .from('marketplace_listings')
+      .select('*, marketplace_categories(name)')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching category listings:', error);
+      return;
+    }
+    
+    if (!allListings || allListings.length === 0) return;
 
     const listingsPerCategory = allListings.reduce((acc, listing) => {
-      const categoryName = listing.marketplace_categories.name;
+      // Type assertion for the joined data
+      const categoryData = listing.marketplace_categories as { name: string } | null;
+      const categoryName = categoryData?.name || 'Uncategorized';
+      
       if (!acc[categoryName]) {
         acc[categoryName] = [];
       }
-      acc[categoryName].push(listing as MarketplaceListing);
+      
+      // Create a proper MarketplaceListing object
+      const marketplaceListing: MarketplaceListing = {
+        id: listing.id,
+        user_id: listing.user_id,
+        category_id: listing.category_id,
+        title: listing.title,
+        description: listing.description,
+        listing_type: listing.listing_type as 'product' | 'service' | 'job',
+        status: listing.status as 'draft' | 'active' | 'paused' | 'sold' | 'expired',
+        price: listing.price,
+        currency: listing.currency,
+        images: listing.images,
+        videos: listing.videos,
+        creation_link: listing.creation_link,
+        tags: listing.tags,
+        requirements: listing.requirements,
+        delivery_time: listing.delivery_time,
+        is_featured: listing.is_featured,
+        created_at: listing.created_at,
+        updated_at: listing.updated_at
+      };
+      
+      acc[categoryName].push(marketplaceListing);
       return acc;
     }, {} as Record<string, MarketplaceListing[]>);
 
