@@ -8,6 +8,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Brain, BookOpen, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+
+const authSchema = z.object({
+  email: z.string().trim().email('Please enter a valid email address').max(255, 'Email is too long'),
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(72, 'Password is too long')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+});
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -31,12 +41,22 @@ const Auth = () => {
     setError('');
     setSuccess('');
 
-    const { error } = await signUp(email, password);
-    
-    if (error) {
-      setError(error.message);
-    } else {
-      setSuccess('Check your email for confirmation link!');
+    try {
+      const validated = authSchema.parse({ email: email.trim(), password });
+      
+      const { error } = await signUp(validated.email, validated.password);
+      
+      if (error) {
+        setError('Unable to create account. Please try again.');
+      } else {
+        setSuccess('Check your email for confirmation link!');
+      }
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setError(err.errors[0].message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
     setLoading(false);
   };
@@ -46,10 +66,20 @@ const Auth = () => {
     setLoading(true);
     setError('');
 
-    const { error } = await signIn(email, password);
-    
-    if (error) {
-      setError(error.message);
+    try {
+      const validated = authSchema.parse({ email: email.trim(), password });
+      
+      const { error } = await signIn(validated.email, validated.password);
+      
+      if (error) {
+        setError('Invalid email or password');
+      }
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setError(err.errors[0].message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
     setLoading(false);
   };
@@ -136,7 +166,7 @@ const Auth = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
                       required
-                      minLength={6}
+                      minLength={8}
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
