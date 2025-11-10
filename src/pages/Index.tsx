@@ -38,12 +38,10 @@ const Index = () => {
       <Helmet>
         <link rel="preload" as="image" href="/hero-ai-education-optimized-889x500.jpg" fetchPriority="high" />
       </Helmet>
-      <main className="pb-16 md:pb-0">
-        <HeroSection />
-        <LearningPaths />
-        <AITools />
-        <EarningsSection />
-      </main>
+      <HeroSection />
+      <LearningPaths />
+      <AITools />
+      <EarningsSection />
       <Footer />
       <WhatsAppReferralButton />
     </div>

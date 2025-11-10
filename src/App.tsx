@@ -105,10 +105,10 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-          <div className="min-h-screen bg-background pb-16 md:pb-0">
+          <div className="min-h-screen bg-background">
             <ScrollToTop />
             <Navigation />
-            <main>
+            <main className="pb-20 md:pb-0">
               <Suspense fallback={<LoadingScreen />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
