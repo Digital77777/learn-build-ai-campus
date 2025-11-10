@@ -181,7 +181,7 @@ const Navigation = () => {
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button variant="ai" size="sm" className="min-h-[44px] px-4" aria-label="Get started free">
+                  <Button variant="ai" size="sm" className="min-h-[44px] min-w-[44px] px-4" aria-label="Get started free">
                     <ArrowRight className="h-4 w-4" />
                     {!isMobile && <span className="ml-2">Get Started Free</span>}
                   </Button>
