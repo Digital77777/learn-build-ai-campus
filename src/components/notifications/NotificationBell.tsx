@@ -126,7 +126,7 @@ export const NotificationBell = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
             <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center text-xs" variant="destructive">
@@ -139,7 +139,7 @@ export const NotificationBell = () => {
         <div className="p-2 flex justify-between items-center">
           <div className="font-semibold">Notifications</div>
           <Link to="/notification-settings">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Notification settings">
               <Settings className="h-4 w-4" />
             </Button>
           </Link>
