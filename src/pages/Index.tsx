@@ -33,8 +33,8 @@ const Index = () => {
 
   // Show standard landing page for non-authenticated users
   return (
-    <div className="min-h-screen bg-background">
-      <main>
+    <div className="min-h-screen bg-background" style={{ minHeight: '100vh', willChange: 'auto' }}>
+      <main style={{ minHeight: '100vh' }}>
         <HeroSection />
         <LearningPaths />
         <AITools />

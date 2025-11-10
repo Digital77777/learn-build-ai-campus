@@ -7,7 +7,11 @@ Modern educational platform with AI-focused color palette
 All colors MUST be HSL.
 */
 
+/* Prevent layout shifts from font loading */
 @layer base {
+  * {
+    font-display: optional;
+  }
   :root {
     /* Base colors - Clean white background with dark text */
     --background: 0 0% 99%;
@@ -124,5 +128,15 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Prevent layout shifts during initial render */
+  #root {
+    min-height: 100vh;
+  }
+  
+  /* Optimize rendering */
+  main {
+    contain-intrinsic-size: auto 3000px;
   }
 }
