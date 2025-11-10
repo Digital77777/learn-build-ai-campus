@@ -40,7 +40,7 @@ const MobileFooter = () => {
   };
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border/50 safe-area-bottom">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border shadow-sm">
       <div className="flex items-center justify-around h-16 px-2">
         {navigationItems.map((item) => {
           const isActive = location.pathname === item.path;
