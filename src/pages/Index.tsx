@@ -36,7 +36,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background" style={{ minHeight: '100vh' }}>
       <Helmet>
-        <link rel="preload" as="image" href="/hero-ai-education-optimized.jpg" fetchPriority="high" />
+        <link rel="preload" as="image" href="/hero-ai-education-optimized-889x500.jpg" fetchPriority="high" />
       </Helmet>
       <main style={{ minHeight: '100vh', contain: 'layout' }}>
         <HeroSection />

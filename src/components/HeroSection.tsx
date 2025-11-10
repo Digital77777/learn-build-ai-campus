@@ -108,7 +108,7 @@ const HeroSection = () => {
               {/* Main image container with refined shadow */}
               <div className="relative rounded-3xl overflow-hidden border border-border/50" style={{ aspectRatio: '889/500' }}>
                 <img 
-                  src="/hero-ai-education-optimized.jpg" 
+                  src="/hero-ai-education-optimized-889x500.jpg" 
                   alt="Students learning with AI tools" 
                   className="w-full h-auto object-cover"
                   width="889" 
