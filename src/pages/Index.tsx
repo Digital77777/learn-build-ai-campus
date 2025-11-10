@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import HeroSection from "@/components/HeroSection";
 import LearningPaths from "@/components/LearningPaths";
 import AITools from "@/components/AITools";
@@ -34,6 +35,9 @@ const Index = () => {
   // Show standard landing page for non-authenticated users
   return (
     <div className="min-h-screen bg-background" style={{ minHeight: '100vh' }}>
+      <Helmet>
+        <link rel="preload" as="image" href="/hero-ai-education-optimized.jpg" fetchPriority="high" />
+      </Helmet>
       <main style={{ minHeight: '100vh', contain: 'layout' }}>
         <HeroSection />
         <LearningPaths />
