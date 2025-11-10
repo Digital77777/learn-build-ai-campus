@@ -133,10 +133,17 @@ All colors MUST be HSL.
   /* Prevent layout shifts during initial render */
   #root {
     min-height: 100vh;
+    contain: layout style;
   }
   
   /* Optimize rendering */
   main {
     contain-intrinsic-size: auto 3000px;
+    contain: layout;
+  }
+  
+  /* Prevent layout shifts in main wrappers */
+  .min-h-screen {
+    contain: layout;
   }
 }
