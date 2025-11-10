@@ -17,7 +17,7 @@ const HeroSection = () => {
   };
   
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden" style={{ minHeight: '720px' }}>
       {/* Subtle background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.05),transparent_50%)]" />
@@ -104,9 +104,9 @@ const HeroSection = () => {
             </div>
 
             {/* Right Content - Enhanced Image Display */}
-            <div className="relative lg:h-[600px]">
+            <div className="relative lg:h-[600px] h-[400px]">
               {/* Main image container with refined shadow */}
-              <div className="relative rounded-3xl overflow-hidden border border-border/50 h-full">
+              <div className="relative rounded-3xl overflow-hidden border border-border/50 h-full" style={{ aspectRatio: '1792/1024' }}>
                 <img 
                   src="/hero-ai-education-optimized.jpg" 
                   alt="Students learning with AI tools" 
@@ -114,7 +114,8 @@ const HeroSection = () => {
                   width="1792" 
                   height="1024" 
                   fetchPriority="high" 
-                  loading="eager" 
+                  loading="eager"
+                  style={{ aspectRatio: '1792/1024' }}
                 />
                 {/* Subtle overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent" />
