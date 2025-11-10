@@ -111,11 +111,12 @@ const HeroSection = () => {
                   src="/hero-ai-education-optimized.jpg" 
                   alt="Students learning with AI tools" 
                   className="w-full h-full object-cover"
-                  width="1792" 
-                  height="1024" 
+                  width="889" 
+                  height="500" 
                   fetchPriority="high" 
                   loading="eager"
-                  style={{ aspectRatio: '1792/1024' }}
+                  decoding="async"
+                  style={{ aspectRatio: '1792/1024', contentVisibility: 'auto' }}
                 />
                 {/* Subtle overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent" />
