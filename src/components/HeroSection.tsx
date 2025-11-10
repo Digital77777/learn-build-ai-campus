@@ -104,19 +104,19 @@ const HeroSection = () => {
             </div>
 
             {/* Right Content - Enhanced Image Display */}
-            <div className="relative lg:h-[600px] h-[400px]">
+            <div className="relative">
               {/* Main image container with refined shadow */}
-              <div className="relative rounded-3xl overflow-hidden border border-border/50 h-full" style={{ aspectRatio: '1792/1024' }}>
+              <div className="relative rounded-3xl overflow-hidden border border-border/50" style={{ aspectRatio: '889/500' }}>
                 <img 
                   src="/hero-ai-education-optimized.jpg" 
                   alt="Students learning with AI tools" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-cover"
                   width="889" 
                   height="500" 
                   fetchPriority="high" 
                   loading="eager"
                   decoding="async"
-                  style={{ aspectRatio: '1792/1024', contentVisibility: 'auto' }}
+                  style={{ display: 'block' }}
                 />
                 {/* Subtle overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent" />
