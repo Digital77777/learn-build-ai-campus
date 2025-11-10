@@ -34,11 +34,11 @@ const Index = () => {
 
   // Show standard landing page for non-authenticated users
   return (
-    <div className="min-h-screen bg-background" style={{ minHeight: '100vh' }}>
+    <div className="min-h-screen bg-background">
       <Helmet>
         <link rel="preload" as="image" href="/hero-ai-education-optimized-889x500.jpg" fetchPriority="high" />
       </Helmet>
-      <main style={{ minHeight: '100vh', contain: 'layout' }}>
+      <main className="pb-16 md:pb-0">
         <HeroSection />
         <LearningPaths />
         <AITools />

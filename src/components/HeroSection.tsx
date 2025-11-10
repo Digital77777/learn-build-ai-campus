@@ -17,12 +17,12 @@ const HeroSection = () => {
   };
   
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden" style={{ minHeight: '720px' }}>
+    <section className="relative min-h-[70vh] md:min-h-[90vh] flex items-center overflow-hidden pb-8 md:pb-0">
       {/* Subtle background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.05),transparent_50%)]" />
       
-      <div className="container mx-auto px-6 py-20 relative">
+      <div className="container mx-auto px-4 md:px-6 py-12 md:py-20 relative">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
@@ -104,9 +104,9 @@ const HeroSection = () => {
             </div>
 
             {/* Right Content - Enhanced Image Display */}
-            <div className="relative">
+            <div className="relative px-4 md:px-0">
               {/* Main image container with refined shadow */}
-              <div className="relative rounded-3xl overflow-hidden border border-border/50" style={{ aspectRatio: '889/500' }}>
+              <div className="relative rounded-2xl md:rounded-3xl overflow-hidden border border-border/50">
                 <img 
                   src="/hero-ai-education-optimized-889x500.jpg" 
                   alt="Students learning with AI tools" 
@@ -116,14 +116,14 @@ const HeroSection = () => {
                   fetchPriority="high" 
                   loading="eager"
                   decoding="async"
-                  style={{ display: 'block' }}
+                  style={{ display: 'block', aspectRatio: '889/500' }}
                 />
                 {/* Subtle overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent" />
               </div>
               
-              {/* Floating Stats Cards - More professional */}
-              <Card className="absolute top-8 -left-6 bg-background/95 backdrop-blur-xl border-border/50 shadow-xl">
+              {/* Floating Stats Cards - Hidden on mobile, shown on md+ */}
+              <Card className="hidden md:block absolute top-8 -left-6 bg-background/95 backdrop-blur-xl border-border/50 shadow-xl">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-gradient-learning rounded-xl">
@@ -137,7 +137,7 @@ const HeroSection = () => {
                 </CardContent>
               </Card>
 
-              <Card className="absolute bottom-8 -right-6 bg-background/95 backdrop-blur-xl border-border/50 shadow-xl">
+              <Card className="hidden md:block absolute bottom-8 -right-6 bg-background/95 backdrop-blur-xl border-border/50 shadow-xl">
                 <CardContent className="p-5">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-gradient-earn rounded-xl">
