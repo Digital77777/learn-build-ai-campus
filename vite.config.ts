@@ -34,28 +34,16 @@ export default defineConfig(({ mode }) => ({
         start_url: '/',
         icons: [
           {
-            src: '/icons/manifest-icon-192.maskable.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: '/hero-ai-education-optimized-889x500.jpg',
+            sizes: '889x500',
+            type: 'image/jpeg',
             purpose: 'any'
           },
           {
-            src: '/icons/manifest-icon-192.maskable.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'maskable'
-          },
-          {
-            src: '/icons/manifest-icon-512.maskable.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any'
-          },
-          {
-            src: '/icons/manifest-icon-512.maskable.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable'
+            src: '/hero-ai-education-optimized.jpg',
+            sizes: '1920x1080',
+            type: 'image/jpeg',
+            purpose: 'any maskable'
           }
         ]
       },
