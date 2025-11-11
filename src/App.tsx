@@ -10,6 +10,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Navigation from "./components/Navigation";
 import MobileFooter from "./components/MobileFooter";
 import { LoadingScreen } from "./components/LoadingScreen";
+import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 
 // Eager load critical pages
 import Index from "./pages/Index";
@@ -108,6 +109,7 @@ const App = () => (
             <BrowserRouter>
           <div className="min-h-screen bg-background">
             <ScrollToTop />
+            <PWAInstallPrompt />
             <Navigation />
             <main className="pb-20 md:pb-0">
               <Suspense fallback={<LoadingScreen />}>
