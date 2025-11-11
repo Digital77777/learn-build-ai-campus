@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface Actor {
   id: string;
@@ -45,6 +45,7 @@ const renderNotificationMessage = (notification: Notification) => {
 
 export const NotificationBell = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -91,9 +92,47 @@ export const NotificationBell = () => {
     }
   };
 
-  const markAsRead = async (notification: Notification) => {
+  const getNavigationPath = (notification: Notification): string | null => {
+    const { type, metadata } = notification;
+
+    switch (type) {
+      case 'insight_like':
+      case 'insight_comment':
+        if (metadata?.insight_id) {
+          return `/community?insight=${metadata.insight_id}`;
+        }
+        break;
+      case 'topic_reply':
+      case 'topic_mention':
+        if (metadata?.topic_id) {
+          return `/community/topic/${metadata.topic_id}`;
+        }
+        break;
+      case 'new_message':
+      case 'message':
+        return '/community/inbox';
+      case 'event_registration':
+      case 'event_update':
+        if (metadata?.event_id) {
+          return `/community/events?event=${metadata.event_id}`;
+        }
+        break;
+      case 'listing_comment':
+      case 'listing_purchase':
+        if (metadata?.listing_id) {
+          return `/marketplace?listing=${metadata.listing_id}`;
+        }
+        break;
+      default:
+        return null;
+    }
+    return null;
+  };
+
+  const handleNotificationClick = async (notification: Notification) => {
     if (!user) return;
 
+    // Mark as read
     let query = supabase
       .from('notifications')
       .update({ is_read: true, read_at: new Date().toISOString() })
@@ -118,9 +157,14 @@ export const NotificationBell = () => {
         query = query.eq('id', notification.id);
     }
 
-
     await query;
     fetchNotifications();
+
+    // Navigate to relevant page
+    const path = getNavigationPath(notification);
+    if (path) {
+      navigate(path);
+    }
   };
 
   return (
@@ -151,7 +195,7 @@ export const NotificationBell = () => {
           notifications.map((notification) => (
             <DropdownMenuItem 
               key={notification.id} 
-              onSelect={() => markAsRead(notification)}
+              onSelect={() => handleNotificationClick(notification)}
               className="cursor-pointer focus:outline-none"
             >
               <div className={`p-3 rounded-lg w-full transition-all duration-200 hover:scale-[0.98] active:scale-95 ${
