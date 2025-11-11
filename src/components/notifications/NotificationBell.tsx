@@ -146,14 +146,27 @@ export const NotificationBell = () => {
         </div>
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
-          <div className="p-2 text-sm text-muted-foreground">No new notifications</div>
+          <div className="p-4 text-sm text-muted-foreground text-center">No new notifications</div>
         ) : (
           notifications.map((notification) => (
-            <DropdownMenuItem key={notification.id} onSelect={() => markAsRead(notification)}>
-              <div className={`p-2 rounded-lg w-full ${!notification.is_read ? 'bg-blue-50' : ''}`}>
-                <div className="text-sm font-semibold">{notification.type}</div>
-                <div className="text-sm">{renderNotificationMessage(notification)}</div>
-                <div className="text-xs text-muted-foreground">{new Date(notification.created_at).toLocaleString()}</div>
+            <DropdownMenuItem 
+              key={notification.id} 
+              onSelect={() => markAsRead(notification)}
+              className="cursor-pointer focus:outline-none"
+            >
+              <div className={`p-3 rounded-lg w-full transition-all duration-200 hover:scale-[0.98] active:scale-95 ${
+                !notification.is_read 
+                  ? 'bg-primary/10 hover:bg-primary/15 border border-primary/20' 
+                  : 'hover:bg-muted/50'
+              }`}>
+                <div className="text-sm font-semibold capitalize">{notification.type.replace(/_/g, ' ')}</div>
+                <div className="text-sm mt-1">{renderNotificationMessage(notification)}</div>
+                <div className="text-xs text-muted-foreground mt-2">
+                  {new Date(notification.created_at).toLocaleString()}
+                </div>
+                {!notification.is_read && (
+                  <div className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary animate-pulse" />
+                )}
               </div>
             </DropdownMenuItem>
           ))
