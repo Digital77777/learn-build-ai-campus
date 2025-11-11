@@ -69,6 +69,7 @@ const CareerCertificationPage = lazy(() => import("./pages/CareerCertificationPa
 const PersonalAITutorPage = lazy(() => import("./pages/PersonalAITutorPage"));
 const JobPlacementPage = lazy(() => import("./pages/JobPlacementPage"));
 const NotificationSettingsPage = lazy(() => import("./pages/NotificationSettingsPage"));
+const InstallPWAPage = lazy(() => import("./pages/InstallPWAPage"));
 
 const queryClient = new QueryClient();
 
@@ -164,6 +165,7 @@ const App = () => (
                   <Route path="/personal-ai-tutor" element={<PersonalAITutorPage />} />
                   <Route path="/job-placement" element={<JobPlacementPage />} />
                   <Route path="/notification-settings" element={<NotificationSettingsPage />} />
+                  <Route path="/install" element={<InstallPWAPage />} />
                   <Route path="/auth" element={<Auth />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
