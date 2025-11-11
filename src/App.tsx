@@ -172,8 +172,8 @@ const App = () => (
                 </Routes>
               </Suspense>
             </main>
-          <MobileFooter />
-        </div>
+            <MobileFooter />
+          </div>
         </BrowserRouter>
         </TooltipProvider>
       </TierProvider>
