@@ -2,23 +2,22 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "0.0.0.0",
-    port: 8080,
-  },
-  plugins: [
-    react(),
-    mode === 'development' &&
-    componentTagger(),
-    visualizer({
-      open: true,
-      filename: "stats.html",
-    }),
+export default defineConfig(({ mode }) => {
+  const plugins: any[] = [react()];
+  
+  if (mode === 'development') {
+    const tagger = componentTagger();
+    if (Array.isArray(tagger)) {
+      plugins.push(...tagger);
+    } else {
+      plugins.push(tagger);
+    }
+  }
+  
+  plugins.push(
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
@@ -57,7 +56,14 @@ export default defineConfig(({ mode }) => ({
         enabled: true,
       },
     })
-  ].filter(Boolean),
+  );
+  
+  return {
+    server: {
+      host: "0.0.0.0",
+      port: 8080,
+    },
+    plugins,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -66,4 +72,5 @@ export default defineConfig(({ mode }) => ({
   build: {
     sourcemap: true,
   },
-}));
+};
+});

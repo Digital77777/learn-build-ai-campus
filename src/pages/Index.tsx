@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import HeroSection from "@/components/HeroSection";
-import LearningPaths from "@/components/LearningPaths";
-import AITools from "@/components/AITools";
-import EarningsSection from "@/components/EarningsSection";
+import NewHeroSection from "@/components/NewHeroSection";
 import Footer from "@/components/Footer";
 import { WhatsAppReferralButton } from "@/components/WhatsAppReferralButton";
 import { useAuth } from "@/hooks/useAuth";
@@ -36,12 +33,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <link rel="preload" as="image" href="/hero-ai-education-optimized-889x500.jpg" fetchPriority="high" />
+        <title>AI Learning Platform - Learn, Build & Earn with AI</title>
+        <meta name="description" content="Empowering the next generation with AI skills through interactive learning paths, professional tools, and real earning opportunities." />
       </Helmet>
-      <HeroSection />
-      <LearningPaths />
-      <AITools />
-      <EarningsSection />
+      <NewHeroSection />
       <Footer />
       <WhatsAppReferralButton />
     </div>

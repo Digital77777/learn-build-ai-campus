@@ -121,12 +121,6 @@ const routeGroups: AppRoute[] = [
 ];
 
 const App = () => {
-  useEffect(() => {
-    // Example prefetch
-    DashboardPage.preload?.();
-    AIToolsPage.preload?.();
-  }, []);
-
   const renderRoute = ({ path, component: Component, protected: isProtected }: AppRoute) => (
     <Route
       key={path}
@@ -136,7 +130,7 @@ const App = () => {
   );
 
   return (
-    <ErrorBoundary onError={(err, info) => console.error(err, info)}>
+    <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TierProvider>
