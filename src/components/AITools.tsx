@@ -3,7 +3,7 @@ import { memo, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Blocks, Sliders, BarChart3, GraduationCap, Sparkles } from "lucide-react";
+import { Code2, Terminal, Wrench, Sparkles, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AITool } from "@/types/aiTools";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,55 +11,42 @@ import { useAuth } from "@/hooks/useAuth";
 const aiTools: AITool[] = [
   {
     id: 1,
-    name: "AI SnapBuilder",
-    title: "AI SnapBuilder",
-    description: "Drag-and-drop AI blocks with visual training interface. Upload 5-10 examples and get instant mini models.",
-    icon: Blocks,
+    name: "Lovable.dev",
+    title: "Lovable.dev",
+    description: "Build full-stack web applications with AI assistance. Create, iterate, and deploy production-ready apps in minutes.",
+    icon: Code2,
     category: "Development",
-    features: ["Drag-and-drop AI blocks", "Visual training interface", "Live preview window"],
-    usage: "Free unlimited",
+    features: ["AI-powered development", "Full-stack capabilities", "Instant deployment"],
+    usage: "Free to start",
     pricing: "Free",
     gradient: "from-blue-500 to-cyan-500",
-    route: "/tools/ai-snapbuilder"
+    route: "https://lovable.dev"
   },
   {
     id: 2,
-    name: "PromptPlayground",
-    title: "PromptPlayground",
-    description: "Sliders and dropdowns for creativity, tone, style instead of raw prompt writing. Side-by-side results comparison.",
-    icon: Sliders,
-    category: "Creative",
-    features: ["Creativity sliders", "Tone controls", "Built-in prompt library"],
-    usage: "Free unlimited",
+    name: "Replit",
+    title: "Replit",
+    description: "Collaborative coding platform with instant execution. Write, run, and share code in 50+ programming languages.",
+    icon: Terminal,
+    category: "Development",
+    features: ["Real-time collaboration", "Cloud IDE", "Instant hosting"],
+    usage: "Free tier available",
     pricing: "Free",
     gradient: "from-purple-500 to-pink-500",
-    route: "/tools/prompt-playground"
+    route: "https://replit.com"
   },
   {
     id: 3,
-    name: "Data2App",
-    title: "Data2App",
-    description: "Upload spreadsheet and instantly get charts, dashboards, and search bars. Export as a simple web app.",
-    icon: BarChart3,
-    category: "Analytics",
-    features: ["Instant dashboards", "No-code filters", "Web app export"],
-    usage: "Free unlimited",
+    name: "Cursor",
+    title: "Cursor",
+    description: "AI-first code editor built for productivity. Write code faster with intelligent AI pair programming.",
+    icon: Wrench,
+    category: "Development",
+    features: ["AI code completion", "Natural language editing", "Advanced refactoring"],
+    usage: "Free trial available",
     pricing: "Free",
     gradient: "from-emerald-500 to-teal-500",
-    route: "/tools/data2app"
-  },
-  {
-    id: 4,
-    name: "AI TutorLab",
-    title: "AI TutorLab",
-    description: "Students type questions, AI explains concepts in plain language. Interactive sandbox for learning.",
-    icon: GraduationCap,
-    category: "Research",
-    features: ["Plain language explanations", "Practice problems", "Interactive sandbox"],
-    usage: "Free unlimited",
-    pricing: "Free",
-    gradient: "from-orange-500 to-red-500",
-    route: "/tools/ai-tutorlab"
+    route: "https://cursor.sh"
   }
 ];
 
@@ -96,6 +83,7 @@ const ToolCardMemo = memo(({ tool, onClick }: { tool: AITool; onClick: () => voi
 
       <Button className="w-full" variant="outline" onClick={onClick}>
         Try {tool.name}
+        <ExternalLink className="h-4 w-4 ml-2" />
       </Button>
     </CardContent>
   </Card>
@@ -111,7 +99,12 @@ const AITools = () => {
     if (!user) {
       navigate('/auth');
     } else {
-      navigate(path);
+      // Open external links in new tab
+      if (path.startsWith('http')) {
+        window.open(path, '_blank', 'noopener,noreferrer');
+      } else {
+        navigate(path);
+      }
     }
   };
 
@@ -125,16 +118,16 @@ const AITools = () => {
         <div className="text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full">
             <Sparkles className="h-4 w-4 text-accent-foreground" />
-            <span className="text-sm font-medium text-accent-foreground">4 Beginner-Friendly Tools</span>
+            <span className="text-sm font-medium text-accent-foreground">3 Powerful Development Tools</span>
           </div>
-          <h2 className="text-4xl font-bold">Tier 1 AI Tools</h2>
+          <h2 className="text-4xl font-bold">Build Anything with AI</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Fun, simple tools that lower the barrier to entry. Build your first AI projects 
-            with drag-and-drop interfaces and visual training tools.
+            Access professional development tools to create websites, apps, and AI-powered projects. 
+            Build whatever you imagine with these powerful platforms.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
           {aiTools.map((tool) => (
             <ToolCardMemo 
               key={tool.id} 
