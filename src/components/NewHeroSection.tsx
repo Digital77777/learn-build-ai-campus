@@ -36,7 +36,7 @@ const NewHeroSection = () => {
           <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight animate-fade-in">
             Learn, Build & Earn
             <br />
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent [text-shadow:none] [-webkit-text-fill-color:transparent] [background-clip:text] [-webkit-background-clip:text] font-bold">
               with AI Technology
             </span>
           </h1>
