@@ -48,6 +48,10 @@ const TopicDetailPage = lazy(() => import("./pages/community/TopicDetailPage"));
 // Misc / Support
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
 const SupportPage = lazy(() => import("./pages/SupportPage"));
+const SubscriptionPage = lazy(() => import("./pages/SubscriptionPage"));
+const MyListingsPage = lazy(() => import("./pages/MyListingsPage"));
+const CreateListingPage = lazy(() => import("./pages/CreateListingPage"));
+const ReferralPage = lazy(() => import("./pages/ReferralPage"));
 
 // React Query client
 const queryClient = new QueryClient({
@@ -118,6 +122,10 @@ const routeGroups: AppRoute[] = [
   // Misc
   { path: "/analytics", component: AnalyticsPage, protected: true },
   { path: "/support", component: SupportPage, protected: true },
+  { path: "/subscription", component: SubscriptionPage, protected: true },
+  { path: "/referrals", component: ReferralPage, protected: true },
+  { path: "/marketplace/my-listings", component: MyListingsPage, protected: true },
+  { path: "/marketplace/create", component: CreateListingPage, protected: true },
 ];
 
 const App = () => {
