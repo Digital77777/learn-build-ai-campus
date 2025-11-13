@@ -43,7 +43,12 @@ const SellProductsPage = lazy(() => import("./pages/SellProductsPage"));
 const CommunityPage = lazy(() => import("./pages/CommunityPage"));
 const MyActivityPage = lazy(() => import("./pages/MyActivityPage"));
 const TopicDetailPage = lazy(() => import("./pages/community/TopicDetailPage"));
-// ... add other community pages
+const BrowseEventsPage = lazy(() => import("./pages/community/BrowseEventsPage"));
+const FindMembersPage = lazy(() => import("./pages/community/FindMembersPage"));
+const HostEventPage = lazy(() => import("./pages/community/HostEventPage"));
+const InboxPage = lazy(() => import("./pages/community/InboxPage"));
+const ShareInsightPage = lazy(() => import("./pages/community/ShareInsightPage"));
+const StartTopicPage = lazy(() => import("./pages/community/StartTopicPage"));
 
 // Misc / Support
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
@@ -118,6 +123,12 @@ const routeGroups: AppRoute[] = [
   { path: "/community", component: CommunityPage, protected: true },
   { path: "/community/my-activity", component: MyActivityPage, protected: true },
   { path: "/community/topic/:topicId", component: TopicDetailPage, protected: true },
+  { path: "/community/browse-events", component: BrowseEventsPage, protected: true },
+  { path: "/community/find-members", component: FindMembersPage, protected: true },
+  { path: "/community/host-event", component: HostEventPage, protected: true },
+  { path: "/community/inbox", component: InboxPage, protected: true },
+  { path: "/community/share-insight", component: ShareInsightPage, protected: true },
+  { path: "/community/start-topic", component: StartTopicPage, protected: true },
 
   // Misc
   { path: "/analytics", component: AnalyticsPage, protected: true },
