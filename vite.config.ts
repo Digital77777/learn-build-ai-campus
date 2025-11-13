@@ -22,7 +22,12 @@ export default defineConfig(({ mode }) => {
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -49,9 +54,40 @@ export default defineConfig(({ mode }) => {
               },
             },
           },
+          {
+            urlPattern: /\.(?:js|css)$/,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'static-resources',
+            },
+          },
         ],
       },
       includeAssets: ['favicon.ico', 'apple-icon-180.png', 'robots.txt'],
+      manifest: {
+        name: 'AI Learning Platform',
+        short_name: 'AI Platform',
+        description: 'Learn, Build & Earn with AI',
+        theme_color: '#000000',
+        background_color: '#000000',
+        display: 'standalone',
+        start_url: '/',
+        scope: '/',
+        icons: [
+          {
+            src: '/icons/manifest-icon-192.maskable.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/icons/manifest-icon-512.maskable.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          }
+        ]
+      },
       devOptions: {
         enabled: true,
       },
