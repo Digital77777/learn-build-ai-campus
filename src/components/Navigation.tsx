@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { usePrefetch } from "@/hooks/usePrefetch";
 const Navigation = () => {
   const {
     user,
@@ -16,6 +17,7 @@ const Navigation = () => {
   } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { handleMouseEnter, handleTouchStart } = usePrefetch();
   const navigationItems = [{
     icon: Home,
     label: "Home",
@@ -52,7 +54,12 @@ const Navigation = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-6">
-            {navigationItems.map(item => <Link key={item.path} to={item.path}>
+            {navigationItems.map(item => <Link 
+                key={item.path} 
+                to={item.path}
+                onMouseEnter={() => handleMouseEnter(item.path)}
+                onTouchStart={() => handleTouchStart(item.path)}
+              >
                 <Button variant="ghost" size="sm" className="flex items-center gap-2">
                   <item.icon className="h-4 w-4" />
                   {item.label}
@@ -81,7 +88,12 @@ const Navigation = () => {
                   
                   <ScrollArea className="flex-1 px-4">
                     <div className="py-6 space-y-2">
-                      {navigationItems.map(item => <Link key={item.path} to={item.path} onClick={() => setIsMobileMenuOpen(false)}>
+                      {navigationItems.map(item => <Link 
+                          key={item.path} 
+                          to={item.path} 
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          onTouchStart={() => handleTouchStart(item.path)}
+                        >
                           <Button variant="ghost" className="w-full justify-start gap-3 h-12 px-4 text-left">
                             <item.icon className="h-5 w-5" />
                             <span className="font-medium">{item.label}</span>
