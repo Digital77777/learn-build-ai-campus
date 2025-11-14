@@ -15,7 +15,7 @@ export const TierGate = ({ feature, children, fallback }: TierGateProps) => {
   const { canAccessFeature, loading } = useTier();
   const navigate = useNavigate();
 
-  if (loading) return null;
+  if (loading) return <div className="animate-pulse">{children}</div>;
 
   if (!canAccessFeature(feature)) {
     return fallback || (

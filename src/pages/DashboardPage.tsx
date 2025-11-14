@@ -11,7 +11,7 @@ const DashboardPage = () => {
     return (
       <div className="min-h-screen bg-background py-12">
         <div className="container mx-auto px-6">
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fade-in">
             <Skeleton className="h-12 w-64 mx-auto" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
@@ -25,7 +25,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-background py-12 animate-fade-in">
       <div className="container mx-auto px-6">
         {tierName === 'starter' && <StarterDashboard />}
         {tierName === 'creator' && <CreatorDashboard />}

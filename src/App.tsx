@@ -8,39 +8,38 @@ import { TierProvider } from "@/contexts/TierContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Navigation from "./components/Navigation";
 import MobileFooter from "./components/MobileFooter";
-import { LoadingScreen } from "./components/LoadingScreen";
 
-// Eager-loaded pages
+// Eager-loaded pages for instant navigation
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import DashboardPage from "./pages/DashboardPage";
+import AIToolsPage from "./pages/AIToolsPage";
+import MarketplacePage from "./pages/MarketplacePage";
+import CommunityPage from "./pages/CommunityPage";
+import ReferralPage from "./pages/ReferralPage";
+import SubscriptionPage from "./pages/SubscriptionPage";
 
-// Lazy-loaded pages grouped by category
-const DashboardPage = lazy(() => import("./pages/DashboardPage"));
-
-// Learning
+// Learning - Lazy loaded
 const LearningPaths = lazy(() => import("./pages/LearningPaths"));
 const FoundationPath = lazy(() => import("./pages/course/FoundationPath"));
 const PracticalSkills = lazy(() => import("./pages/course/PracticalSkills"));
 const TechnicalDeveloper = lazy(() => import("./pages/course/TechnicalDeveloper"));
 const BusinessCareers = lazy(() => import("./pages/course/BusinessCareers"));
 
-// AI Tools
-const AIToolsPage = lazy(() => import("./pages/AIToolsPage"));
+// AI Tools - Lazy loaded
 const AICodeAssistant = lazy(() => import("./pages/tools/AICodeAssistant"));
 const NeuralImageGenerator = lazy(() => import("./pages/tools/NeuralImageGenerator"));
 const SmartAnalytics = lazy(() => import("./pages/tools/SmartAnalytics"));
 const ConversationalAI = lazy(() => import("./pages/tools/ConversationalAI"));
-// ... add other AI tools
 
-// Marketplace
-const MarketplacePage = lazy(() => import("./pages/MarketplacePage"));
+// Marketplace - Lazy loaded
 const BrowseMarketplacePage = lazy(() => import("./pages/BrowseMarketplacePage"));
 const SellProductsPage = lazy(() => import("./pages/SellProductsPage"));
-// ... add other marketplace pages
+const MyListingsPage = lazy(() => import("./pages/MyListingsPage"));
+const CreateListingPage = lazy(() => import("./pages/CreateListingPage"));
 
-// Community
-const CommunityPage = lazy(() => import("./pages/CommunityPage"));
+// Community - Lazy loaded
 const MyActivityPage = lazy(() => import("./pages/MyActivityPage"));
 const TopicDetailPage = lazy(() => import("./pages/community/TopicDetailPage"));
 const BrowseEventsPage = lazy(() => import("./pages/community/BrowseEventsPage"));
@@ -50,23 +49,27 @@ const InboxPage = lazy(() => import("./pages/community/InboxPage"));
 const ShareInsightPage = lazy(() => import("./pages/community/ShareInsightPage"));
 const StartTopicPage = lazy(() => import("./pages/community/StartTopicPage"));
 
-// Misc / Support
+// Misc / Support - Lazy loaded
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
 const SupportPage = lazy(() => import("./pages/SupportPage"));
-const SubscriptionPage = lazy(() => import("./pages/SubscriptionPage"));
-const MyListingsPage = lazy(() => import("./pages/MyListingsPage"));
-const CreateListingPage = lazy(() => import("./pages/CreateListingPage"));
-const ReferralPage = lazy(() => import("./pages/ReferralPage"));
 
-// React Query client
+// Optimized QueryClient with aggressive caching for instant data access
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 1000 * 60, retry: 1, refetchOnWindowFocus: false } },
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh longer
+      gcTime: 10 * 60 * 1000, // 10 minutes - cache persists longer
+      retry: 1,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    },
+  },
 });
 
-// PrivateRoute wrapper
+// PrivateRoute wrapper - minimal loading state
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { user, loading } = useAuth();
-  if (loading) return <LoadingScreen />;
+  if (loading) return <div className="min-h-screen" />;
   return user ? children : <Navigate to="/auth" replace />;
 };
 
@@ -160,7 +163,7 @@ const App = () => {
                   <ScrollToTop />
                   <Navigation />
                   <main className="pb-20 md:pb-0">
-                    <Suspense fallback={<LoadingScreen />}>
+                    <Suspense fallback={<div className="min-h-screen" />}>
                       <Routes>
                         {routeGroups.map(renderRoute)}
                         <Route path="*" element={<NotFound />} />
