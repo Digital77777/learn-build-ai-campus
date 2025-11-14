@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, Brain, Users, Trophy, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { OptimizedImage } from "@/components/media/OptimizedImage";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -107,16 +108,15 @@ const HeroSection = () => {
             <div className="relative px-4 md:px-0">
               {/* Main image container with refined shadow */}
               <div className="relative rounded-2xl md:rounded-3xl overflow-hidden border border-border/50">
-                <img 
-                  src="/hero-ai-education-optimized-889x500.jpg" 
-                  alt="Students learning with AI tools" 
-                  className="w-full h-auto object-cover"
-                  width="889" 
-                  height="500" 
-                  fetchPriority="high" 
-                  loading="eager"
-                  decoding="async"
-                  style={{ display: 'block', aspectRatio: '889/500' }}
+                <OptimizedImage
+                  src="/hero-ai-education-optimized-889x500.jpg"
+                  alt="Students learning with AI tools"
+                  width={889}
+                  height={500}
+                  priority={true}
+                  quality={90}
+                  className="w-full h-auto"
+                  objectFit="cover"
                 />
                 {/* Subtle overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent" />
