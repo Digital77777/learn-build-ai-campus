@@ -2,10 +2,12 @@ import { Home, BookOpen, Brain, Store, Users } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { usePrefetch } from "@/hooks/usePrefetch";
 
 const MobileFooter = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const { handleTouchStart } = usePrefetch();
   
   const navigationItems = [
     {
@@ -49,6 +51,7 @@ const MobileFooter = () => {
               key={item.path}
               to={item.path}
               onClick={handleNavClick}
+              onTouchStart={() => handleTouchStart(item.path)}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-xl transition-all min-w-0 flex-1 active:scale-95",
                 isActive 
