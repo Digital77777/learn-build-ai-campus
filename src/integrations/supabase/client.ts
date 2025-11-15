@@ -5,6 +5,15 @@ import type { Database } from './types';
 const SUPABASE_URL = "https://uegujjkjkoohucpbdjwj.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlZ3Vqamtqa29vaHVjcGJkandqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MzkxNzIsImV4cCI6MjA2ODAxNTE3Mn0.tIR1Pldwu-Ncp0W43vIwsjf3RvrDF3PNKOJ4r0x5Nf8";
 
+// Validate environment configuration
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  console.error('❌ DEPLOYMENT ERROR: Supabase configuration missing!');
+  console.error('Please ensure these environment variables are set in Vercel:');
+  console.error('- VITE_SUPABASE_URL');
+  console.error('- VITE_SUPABASE_ANON_KEY');
+  throw new Error('Missing Supabase configuration. Check deployment environment variables.');
+}
+
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 

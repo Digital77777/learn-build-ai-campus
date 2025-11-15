@@ -8,6 +8,7 @@ import { TierProvider } from "@/contexts/TierContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Navigation from "./components/Navigation";
 import MobileFooter from "./components/MobileFooter";
+import { DeploymentDiagnostics } from "./components/DeploymentDiagnostics";
 
 // Eager-loaded pages for instant navigation
 import Index from "./pages/Index";
@@ -157,6 +158,7 @@ const App = () => {
         <AuthProvider>
           <TierProvider>
             <TooltipProvider>
+              <DeploymentDiagnostics />
               <Toaster position="top-right" />
               <BrowserRouter>
                 <div className="min-h-screen bg-background">
