@@ -1,0 +1,28 @@
+# Development files
+.env
+.env.local
+.env.*.local
+node_modules/
+.git/
+
+# Build artifacts
+dist/
+.vite/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Documentation (already included in repo)
+# DEPLOYMENT.md is intentionally NOT ignored - keep for reference
